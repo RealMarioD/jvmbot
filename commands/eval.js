@@ -13,7 +13,7 @@ exports.run = (client, message, args) => {
             const code = args.join(" ")
             let evaled = eval(code)
             if(typeof evaled !== "string") evaled = require("util").inspect(evaled)
-            message.channel.send(`Out:` + clean(evaled), {code:"xl"})
+            message.channel.send(`\`OUT:\`\n\`\`\`xl\n${clean(evaled)}\`\`\``)
         } catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``)
         }
