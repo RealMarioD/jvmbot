@@ -1,0 +1,15 @@
+{
+  "name": "jvmbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jvm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0"
+  }
+}
