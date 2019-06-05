@@ -6,6 +6,7 @@ const clean = text => {
 }
 
 exports.run = (client, message, args) => {
+    const config = require("../config.json");
     if(message.author.id === config.ownerID) {
 
         try {

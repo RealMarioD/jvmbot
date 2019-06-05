@@ -17,8 +17,8 @@ const clean = text => {
 }
 
 client.on('message', message => { // Command handler
-    if(message.author.id !== config.ownerID || !message.content.startsWith(config.prefix)) return
-    
+    if(!message.content.startsWith(config.prefix)) return
+
     const args = message.content.slice(1).trim().split(/ +/g)
     const command = args.shift().toLowerCase()
 
