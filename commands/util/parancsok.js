@@ -1,15 +1,15 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 
-module.exports = class CommandsCommand extends Command {
+module.exports = class ParancsokCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'commands',
+            name: 'parancsok',
             group: 'util',
-            memberName: 'commands',
-            aliases: ['cmds'],
-            description: 'Shows the commands.',
-            examples: ['p/commands, p/commands prefix'],
+            memberName: 'parancsok',
+            aliases: ['cmds', 'commands'],
+            description: 'Megmutatja a parancsokat.',
+            examples: ['p/parancsok, p/commands prefix'],
             args: [
                 {
                     key: 'command',
