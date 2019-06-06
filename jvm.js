@@ -25,7 +25,9 @@ client.on('message', message => { // Command handler
     try {
         let commandFile = require(`./commands/${command}.js`)
         commandFile.run(client, message, args)
-    } catch(err) { }
+    } catch(err) {
+        message.channel.send({embed: {color: 0xff0000, title: `Nem találtam a parancsot (${config.prefix}${command}). \nHasználd: \`\`${config.prefix}parancsok\`\``}})
+    }
 
 })
     .on('guildMemberAdd', member => { // Welcome message

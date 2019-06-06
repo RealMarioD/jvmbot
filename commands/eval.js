@@ -20,3 +20,10 @@ exports.run = (client, message, args) => {
 
     }
 }
+
+exports.info = {
+
+  syntax: '',
+  description: 'Teszt parancs a fejlesztőknek'
+
+}
