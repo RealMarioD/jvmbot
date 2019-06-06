@@ -27,7 +27,7 @@ exports.run = (client, message, args) => {
 
 exports.info = {
 
-  syntax: '',
+  syntax: '<js kód>',
   description: 'Teszt parancs a fejlesztőknek'
 
 }
