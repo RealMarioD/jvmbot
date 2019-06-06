@@ -26,7 +26,8 @@ client.on('message', message => { // Command handler
         let commandFile = require(`./commands/${command}.js`)
         commandFile.run(client, message, args)
     } catch(err) {
-        message.channel.send({embed: {color: 0xff0000, title: `Nem találtam a parancsot (${config.prefix}${command}). \nHasználd: \`\`${config.prefix}parancsok\`\``}})
+        message.channel.send({embed: {color: 0xff0000, title: `Hiba a paranccsal (${config.prefix}${command}). \nHasználd: \`\`${config.prefix}parancsok\`\``}})
+        console.log(err);
     }
 
 })
