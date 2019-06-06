@@ -31,7 +31,7 @@ client.on('message', message => { // Command handler
     .on('guildMemberAdd', member => { // Welcome message
         if(member.guild.id === '584337831254818816') {
             member.addRole('584408550365724672')
-            member.send(`<:vidman_logo:584352979818250257> __**Üdvözöllek a szerveren!**__ Én <@${client.user.id}> vagyok, egy **Bot** vagyok, a szervert szolgálom. A szerveren jelenleg egy csatornát látsz az #igazolás -t. Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot, ezt **ott** teheted meg, az "!igazol" parancs beírásával! Sok sikert, és jó szórakozást!\n\n\n<:vidman_logo:584352979818250257> __${member.guild.name}__`)
+            member.send(`<:vidman_logo:584352979818250257> __**Üdvözöllek a szerveren!**__ Én <@${client.user.id}> vagyok, egy **Bot** vagyok, a szervert szolgálom. A szerveren jelenleg egy csatornát látsz az #igazolás -t. Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot, ezt **ott** teheted meg, az ".igazol" parancs beírásával! Sok sikert, és jó szórakozást!\n\n\n<:vidman_logo:584352979818250257> __${member.guild.name}__`)
         }
     })
 
