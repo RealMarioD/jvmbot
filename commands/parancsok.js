@@ -3,7 +3,7 @@ exports.run = (client, message, args) => {
   var helpEmbed = {
 
     color: 0x56f442,
-    title: 'Parancsok',
+    title: '🗒 **| Parancsok**',
     fields: []
 
   };
@@ -14,24 +14,23 @@ exports.run = (client, message, args) => {
 
     fs.readdir(`./commands/`, (err, commandFiles) => {
 
+      helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`
+
       commandFiles.forEach(commandFile => {
 
         let cmd = require(`./${commandFile}`);
 
-        helpEmbed.fields.push({
-
-          name: `\`\`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\`\``,
-          value: cmd.info.description
-
-        });
+        helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` |\n`
 
       });
+
+      helpEmbed.description = helpEmbed.description.replace('undefined', '')
 
       message.channel.send({embed: helpEmbed});
 
     });
 
-  }else {
+  } else {
 
     try {
 

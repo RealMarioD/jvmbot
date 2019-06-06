@@ -20,28 +20,32 @@ exports.run = (client, message, args) => {
         {
 
           name: 'Tagok',
-          value: message.guild.memberCount
+          value: message.guild.memberCount,
+          inline: true
 
         },
 
         {
 
           name: 'Online',
-          value: message.guild.members.filter(u => u.presence.status === 'online').size
+          value: message.guild.members.filter(u => u.presence.status === 'online').size,
+          inline: true
 
         },
 
         {
 
           name: 'Tulajdonos',
-          value: message.guild.owner.user.tag
+          value: message.guild.owner.user.tag,
+          inline: true
 
         },
 
         {
 
           name: 'Rangok',
-          value: message.guild.roles.map(r => r.name).length
+          value: message.guild.roles.size,
+          inline: true
 
         }
 
