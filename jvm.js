@@ -25,10 +25,7 @@ client.on('message', message => { // Command handler
     try {
         let commandFile = require(`./commands/${command}.js`)
         commandFile.run(client, message, args)
-    } catch(err) {
-        message.channel.send({embed: {color: 0xff0000, title: `Hiba a paranccsal (${config.prefix}${command}). \nHasználd: \`\`${config.prefix}parancsok\`\``}})
-        console.log(err);
-    }
+    } catch(err) {  }
 
 })
     .on('guildMemberAdd', member => { // Welcome message
