@@ -25,7 +25,9 @@ client.on('message', message => { // Command handler
     try {
         let commandFile = require(`./commands/${command}.js`)
         commandFile.run(client, message, args)
-    } catch(err) {  }
+    } catch(err) {
+        console.error(err)
+    }
 
 })
     .on('guildMemberAdd', member => { // Welcome message
