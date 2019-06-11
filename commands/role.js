@@ -26,14 +26,23 @@ exports.run = (client, message, args) => {
             if(!sar[id] || sar[id].enabled === false) {
                 message.channel.send('❌ **| Ez a rank nem választható!**')
             } else {
-                message.guild.members.get(message.author.id).addRole(id)
+                if(message.member.roles.has(id) === true) {
+                    message.guild.members.get(message.author.id).removeRole(id)
+                    message.channel.send(`✅ **| Elvetted a(z) \`${message.guild.roles.get(id).name}\` role-t!**`)
+                } else {
+                    message.guild.members.get(message.author.id).addRole(id)
+                    message.channel.send(`✅ **| Megkaptad a(z) \`${message.guild.roles.get(id).name}\` role-t!**`)
+                }
             }
 
-
-            message.channel.send(`✅ **| Megkaptad a(z) \`${message.guild.roles.get(id).name}\` role-t!**`)
         }
-
-        
 
     }
 }
+
+exports.info = {
+
+    syntax: '<role>',
+    description: 'Ezzel a paranccsal tudsz role-okat szerezni'
+  
+  }
