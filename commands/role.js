@@ -11,27 +11,32 @@ exports.run = (client, message, args) => {
     if(args.length === 0) {
         var r
         for(var role in sar){
-            r = message.guild.roles.get(role)
-            msgembed.description += `<@&${r.id}> | .role \`${r.name}\`\n`
+            if(sar[role].enabled === true) {
+                r = message.guild.roles.get(role)
+                msgembed.description += `<@&${r.id}> | .role \`${r.name}\`\n`
+            }
         };
         msgembed.description = msgembed.description.replace('undefined', '')
         message.channel.send({embed: msgembed})
     } else {
-        let id = args[0].replace('<@&', '')
-        id = id.replace('>', '')
 
-        if(!message.guild.roles.get(id)) {
+        let arg = args[0]
+        arg = arg.charAt(0).toUpperCase() + arg.slice(1)
+
+        let r = message.guild.roles.find(r => r.name == arg)
+
+        if(!r) {
             message.channel.send('❌ **| Nem létezik ilyen rank!**')
         } else {
-            if(!sar[id] || sar[id].enabled === false) {
+            if(!sar[r.id] || sar[r.id].enabled === false) {
                 message.channel.send('❌ **| Ez a rank nem választható!**')
             } else {
-                if(message.member.roles.has(id) === true) {
-                    message.guild.members.get(message.author.id).removeRole(id)
-                    message.channel.send(`✅ **| Elvetted a(z) \`${message.guild.roles.get(id).name}\` role-t!**`)
+                if(message.member.roles.has(r.id) === true) {
+                    message.guild.members.get(message.author.id).removeRole(r.id)
+                    message.channel.send(`✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
                 } else {
-                    message.guild.members.get(message.author.id).addRole(id)
-                    message.channel.send(`✅ **| Megkaptad a(z) \`${message.guild.roles.get(id).name}\` role-t!**`)
+                    message.guild.members.get(message.author.id).addRole(r.id)
+                    message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
                 }
             }
 
