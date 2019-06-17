@@ -37,9 +37,6 @@ exports.run = (client, message, args) => {
                     }
                 }
             }
-            if(cangetr === false){
-                message.channel.send('❌ **| Már van egy rankod!**')
-            } else {
                 if(!sar[r.id] || sar[r.id].enabled === false) {
                     message.channel.send('❌ **| Ez a rank nem választható!**')
                 } else {
@@ -47,8 +44,12 @@ exports.run = (client, message, args) => {
                         message.guild.members.get(message.author.id).removeRole(r.id)
                         message.channel.send(`✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
                     } else {
-                        message.guild.members.get(message.author.id).addRole(r.id)
-                        message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
+                        if(cangetr === true){
+                            message.guild.members.get(message.author.id).addRole(r.id)
+                            message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
+                        } else {
+                            message.channel.send(`❌ **| Már van egy rankod!**`)
+                        }
                     }
                 }
             }
