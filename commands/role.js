@@ -50,6 +50,7 @@ exports.run = (client, message, args) => {
                         message.guild.members.get(message.author.id).addRole(r.id)
                         message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
                     }
+                }
             }
 
         }
