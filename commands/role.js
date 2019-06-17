@@ -28,16 +28,28 @@ exports.run = (client, message, args) => {
         if(!r) {
             message.channel.send('❌ **| Nem létezik ilyen rank!**')
         } else {
-            if(!sar[r.id] || sar[r.id].enabled === false) {
-                message.channel.send('❌ **| Ez a rank nem választható!**')
-            } else {
-                if(message.member.roles.has(r.id) === true) {
-                    message.guild.members.get(message.author.id).removeRole(r.id)
-                    message.channel.send(`✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
-                } else {
-                    message.guild.members.get(message.author.id).addRole(r.id)
-                    message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
+            
+            let cangetr = true
+            for(var role in sar){
+                if(sar[role].enabled === true){
+                    if(message.member.roles.has(role)){
+                        cangetr = false
+                    }
                 }
+            }
+            if(cangetr === false){
+                message.channel.send('❌ **| Már van egy rankod!**')
+            } else {
+                if(!sar[r.id] || sar[r.id].enabled === false) {
+                    message.channel.send('❌ **| Ez a rank nem választható!**')
+                } else {
+                    if(message.member.roles.has(r.id) === true) {
+                        message.guild.members.get(message.author.id).removeRole(r.id)
+                        message.channel.send(`✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
+                    } else {
+                        message.guild.members.get(message.author.id).addRole(r.id)
+                        message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
+                    }
             }
 
         }
