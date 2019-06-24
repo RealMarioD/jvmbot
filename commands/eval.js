@@ -7,15 +7,15 @@ const clean = text => {
 
 exports.run = (client, message, args) => {
     const config = require("../config.json");
-    if (message.member.roles.has("584740600033837069")) { //van fejlesztő rangja?
+    if(message.author.id == config.ownerID) {
 
         try {
-            const code = args.join(" ");
-            let evaled = eval(code);
-            if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-            message.channel.send(`\`OUT:\`\n\`\`\`xl\n${clean(evaled)}\`\`\``)
+            const code = args.join(" ")
+            let evaled = eval(code)
+            if(typeof evaled !== "string") evaled = require("util").inspect(evaled)
+            message.channel.send(`\`OUT:\`\n\`\`\`xl\n${clean(evaled)}\`\`\``).catch(err => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
         } catch (err) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``)
+            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``).catch(err => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
         }
 
     } else {
@@ -23,7 +23,7 @@ exports.run = (client, message, args) => {
         message.channel.send({
             embed: {
                 color: 0xff0000,
-                title: `Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!`
+                title: `Ennek a parancsnak a végrehajtásához adminnak kell lenned!`
             }
         });
 
