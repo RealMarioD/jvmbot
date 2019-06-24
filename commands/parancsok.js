@@ -1,55 +1,66 @@
 exports.run = (client, message, args) => {
 
-  var helpEmbed = {
+    var helpEmbed = {
 
-    color: 0x56f442,
-    title: '🗒 **| Parancsok**',
-    fields: []
+        color: 0x56f442,
+        title: '🗒 **| Parancsok**',
+        fields: []
 
-  };
+    };
 
-  if(args.length == 0) {
+    if (args.length === 0) {
 
-    const fs = require('fs');
+        const fs = require('fs');
 
-    fs.readdir(`./commands/`, (err, commandFiles) => {
+        fs.readdir(`./commands/`, (err, commandFiles) => {
 
-      helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`
+            helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`;
 
-      commandFiles.forEach(commandFile => {
+            commandFiles.forEach(commandFile => {
 
-        let cmd = require(`./${commandFile}`);
+                let cmd = require(`./${commandFile}`);
 
-        helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` |\n`
+                helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` |\n`
 
-      });
+            });
 
-      helpEmbed.description = helpEmbed.description.replace('undefined', '')
+            helpEmbed.description = helpEmbed.description.replace('undefined', '');
 
-      message.channel.send({embed: helpEmbed});
+            message.channel.send({embed: helpEmbed});
 
-    });
+        });
 
-  } else {
+    } else {
 
-    try {
+        try {
 
-      let commandFile = require(`./${args[0].toLowerCase()}.js`);
-      message.channel.send({embed: {color: 0x56f442, title: `\`\`${client.config.prefix}${args[0].toLowerCase()}\`\``, description: (commandFile.info.syntax == '' ? `` : `Értékek: ${commandFile.info.syntax}\n`) + `Információ: ${commandFile.info.description}`}});
+            let commandFile = require(`./${args[0].toLowerCase()}.js`);
+            message.channel.send({
+                embed: {
+                    color: 0x56f442,
+                    title: `\`\`${client.config.prefix}${args[0].toLowerCase()}\`\``,
+                    description: (commandFile.info.syntax === '' ? `` : `Értékek: ${commandFile.info.syntax}\n`) + `Információ: ${commandFile.info.description}`
+                }
+            });
 
-    }catch(e) {
+        } catch (e) {
 
-      message.channel.send({embed: {color: 0xff0000, title: `Nem találtam a parancsot. \n\`\`${client.config.prefix}parancsok\`\``}});
+            message.channel.send({
+                embed: {
+                    color: 0xff0000,
+                    title: `Nem találtam a parancsot. \n\`\`${client.config.prefix}parancsok\`\``
+                }
+            });
+
+        }
 
     }
 
-  }
-
-}
+};
 
 exports.info = {
 
-  syntax: '<parancs>',
-  description: 'Visszaadja az összes parancsot'
+    syntax: '<parancs>',
+    description: 'Visszaadja az összes parancsot'
 
-}
+};
