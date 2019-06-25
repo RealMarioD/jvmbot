@@ -7,10 +7,11 @@ exports.run = (client, message, args) => {
         if (args.length === 0) {
             message.channel.send(`❌ **| Nem adtál meg rankot!**`)
         } else {
-            let id = args[0].replace('<@&', '');
-            id = id.replace('>', '');
+            let arg = args[0].toLowerCase();
 
-            if (!message.guild.roles.get(id)) {
+            let r = message.guild.roles.find(r => r.name.toLowerCase() == arg);
+
+            if (!r) {
                 message.channel.send('❌ **| Nem létezik ilyen rank!**')
             } else {
                 if (!sar[id]) {

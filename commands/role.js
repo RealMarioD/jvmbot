@@ -20,10 +20,9 @@ exports.run = (client, message, args) => {
         message.channel.send({embed: msgembed})
     } else {
 
-        let arg = args[0];
-        arg = arg.charAt(0).toUpperCase() + arg.slice(1);
+        let arg = args[0].toLowerCase();
 
-        let r = message.guild.roles.find(r => r.name === arg);
+        let r = message.guild.roles.find(r => r.name.toLowerCase() == arg);
 
         if (!r) {
             message.channel.send('❌ **| Nem létezik ilyen rank!**')
