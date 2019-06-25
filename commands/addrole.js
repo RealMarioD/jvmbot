@@ -1,5 +1,5 @@
 exports.run = (client, message, args) => {
-    if (message.member.roles.has('584740600033837069')) {
+    if (message.member.roles.has(config.fejlesztoID)) {
 
         const sar = require('../assets/sar.json');
         const fs = require('fs');

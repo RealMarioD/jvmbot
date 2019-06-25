@@ -7,7 +7,7 @@ const clean = text => {
 
 exports.run = (client, message, args) => {
     const config = require("../config.json");
-    if(message.author.id == config.ownerID) {
+    if(message.member.roles.has(config.fejlesztoID)) {
 
         try {
             const code = args.join(" ")
@@ -23,7 +23,7 @@ exports.run = (client, message, args) => {
         message.channel.send({
             embed: {
                 color: 0xff0000,
-                title: `Ennek a parancsnak a végrehajtásához adminnak kell lenned!`
+                title: `Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!`
             }
         });
 
