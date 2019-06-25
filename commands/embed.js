@@ -13,6 +13,9 @@ exports.run = (client, message, args) => {
     }
     else {
         colour = colourNameToHex(args[0])
+        if (!colour) {
+            message.channel.send({embed: {color: 0xff0000, title: 'Helytelen használat. `.parancsok embed`'}});
+        }
     }
     message.channel.send({
 
