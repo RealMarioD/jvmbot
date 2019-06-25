@@ -14,16 +14,16 @@ exports.run = (client, message, args) => {
             if (!r) {
                 message.channel.send('❌ **| Nem létezik ilyen rank!**')
             } else {
-                if (!sar[id]) {
-                    sar[id] = {
+                if (!sar[r.id]) {
+                    sar[r.id] = {
                         enabled: true
                     };
                 }
-                if (sar[id].enabled === false) {
-                    sar[id].enabled = true
+                if (sar[r.id].enabled === false) {
+                    sar[r.id].enabled = true
                 }
                 fs.writeFileSync('./assets/sar.json', JSON.stringify(sar, null, 2));
-                message.channel.send(`✅ **| Rank \`${message.guild.roles.get(id).name}\` hozzáadva a listához!**`)
+                message.channel.send(`✅ **| Rank \`${r.name}\` hozzáadva a listához!**`)
             }
         }
     } else {
