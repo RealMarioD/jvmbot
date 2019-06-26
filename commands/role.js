@@ -29,10 +29,12 @@ exports.run = (client, message, args) => {
         } else {
 
             let cangetr = true;
+            let crrole;
             for (var role in sar) {
                 if (sar[role].enabled === true) {
                     if (message.member.roles.has(role)) {
                         cangetr = false
+                        crrole = role
                     }
                 }
             }
@@ -47,7 +49,7 @@ exports.run = (client, message, args) => {
                         message.guild.members.get(message.author.id).addRole(r.id);
                         message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
                     } else {
-                        message.channel.send(`❌ **| Már van egy rankod!**`)
+                        message.channel.send(`❌ **| Már van egy rankod! \`(Így vedd le: .role ${message.guild.roles.get(crrole).name})\`**`)
                     }
                 }
             }
