@@ -20,7 +20,7 @@ exports.run = (client, message, args) => {
 
                 let cmd = require(`./${commandFile}`);
 
-                helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` |\n`
+                helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`
 
             });
 
@@ -39,7 +39,7 @@ exports.run = (client, message, args) => {
                 embed: {
                     color: 0x56f442,
                     title: `\`\`${client.config.prefix}${args[0].toLowerCase()}\`\``,
-                    description: (commandFile.info.syntax === '' ? `` : `Értékek: ${commandFile.info.syntax}\n`) + `Információ: ${commandFile.info.description}`
+                    description: (commandFile.info.syntax === '' ? `` : `**Értékek:** ${commandFile.info.syntax}\n`) + `**Információ:** ${commandFile.info.description}\n${commandFile.info.adminOnly === true ? '__Ezt a parancsot csak fejlesztők/adminok tudják használni!__' : ''}`
                 }
             });
 
@@ -61,6 +61,6 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '<parancs>',
-    description: 'Visszaadja az összes parancsot'
+    description: 'Visszaadja az összes parancsot.'
 
 };

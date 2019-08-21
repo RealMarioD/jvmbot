@@ -39,6 +39,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '<role>',
-    description: 'Ezzel tudsz törölni role-okat a listáról'
+    description: 'Ezzel a paranccsal role-okat lehet törölni a kérhető role-ok listájáról',
+    adminOnly: true
 
 };

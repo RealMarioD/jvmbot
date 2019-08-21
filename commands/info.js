@@ -60,6 +60,6 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '',
-    description: 'Információ a szerverről'
+    description: 'Információ a szerverről.'
 
 };

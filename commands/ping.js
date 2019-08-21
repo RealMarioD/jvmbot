@@ -5,6 +5,6 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '',
-    description: 'Megmondja a pinget'
+    description: 'Megmondja a válaszidőt.'
 
 }

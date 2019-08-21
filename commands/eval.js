@@ -33,6 +33,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '<js kód>',
-    description: 'Teszt parancs a fejlesztőknek'
+    description: 'Teszt parancs a fejlesztőknek.',
+    adminOnly: true
 
 };

@@ -60,6 +60,6 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     syntax: '<role>',
-    description: 'Ezzel a paranccsal tudsz role-okat szerezni'
+    description: 'Ezzel a paranccsal tudsz role-okat szerezni.'
 
 };
