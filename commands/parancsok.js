@@ -18,7 +18,7 @@ exports.run = (client, message, args) => {
 
             commandFiles.forEach(commandFile => {
 
-                let cmd = require(`./commands/${commandFile}`);
+                let cmd = require(`../commands/${commandFile}`);
 
                 helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`
 
