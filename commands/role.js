@@ -33,8 +33,8 @@ exports.run = (client, message, args) => {
             for (var role in sar) {
                 if (sar[role].enabled === true) {
                     if (message.member.roles.has(role)) {
-                        cangetr = false
-                        crrole = role
+                        cangetr = false;
+                        crrole = role;
                     }
                 }
             }

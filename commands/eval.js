@@ -1,3 +1,4 @@
+const {devOnly} = require("../util");
 const clean = text => {
     if (typeof (text) === "string")
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
@@ -19,14 +20,7 @@ exports.run = (client, message, args) => {
         }
 
     } else {
-
-        message.channel.send({
-            embed: {
-                color: 0xff0000,
-                title: `Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!`
-            }
-        });
-
+        devOnly(message.channel)
     }
 };
 

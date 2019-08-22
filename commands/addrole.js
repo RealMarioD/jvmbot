@@ -1,3 +1,4 @@
+const {devOnly} = require("../util");
 exports.run = (client, message, args) => {
     if (message.member.roles.has(client.config.fejlesztoID)) {
 
@@ -27,12 +28,7 @@ exports.run = (client, message, args) => {
             }
         }
     } else {
-        message.channel.send({
-            embed: {
-                color: 0xff0000,
-                title: `Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!`
-            }
-        });
+        devOnly(message.channel)
     }
 };
 

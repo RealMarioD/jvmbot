@@ -3,14 +3,15 @@ const client = new Discord.Client();
 const util = require('util');
 const {execSync} = require('child_process');
 const config = require("./config.json");
+const {getMention, getEmoji} = require("./util");
 client.config = config;
 
 client.on('ready', () => {
     console.log(`~~~ Bejelentkezve mint: ${client.user.tag} ~~~`);
-    client.user.setActivity('.parancsok')
+    client.user.setActivity('.parancsok');
 })
 .on('reconnecting', () => {
-    console.log(`Újra csatlakozás...`)
+    console.log(`Újracsatlakozás...`)
 })
 .on('disconnected', () => {
     console.log(`Szétcsatlakoztatva!`)
@@ -31,7 +32,7 @@ client.on('message', message => { // Command handler
 
     try {
         let commandFile = require(`./commands/${command}.js`);
-        commandFile.run(client, message, args)
+        commandFile.run(client, message, args);
         console.log(`${command} parancs futtatva`)
     } catch (err) {
         if(err.code === "MODULE_NOT_FOUND") {
@@ -43,10 +44,14 @@ client.on('message', message => { // Command handler
 
 })
     .on('guildMemberAdd', member => { // Welcome message
-        if (member.guild.id === '584337831254818816') {
-            console.log(`${member.user.tag} belépett a szerverbe.`)
-            member.addRole('584408550365724672');
-            member.send(`<:vidman_logo:588027207772012544> __**Üdvözöllek a szerveren!**__ Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot. Az \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **<#584445312312147996>** csatornán. Mindenféleképpen olvasd el az **<#584671116472221709>** csatornát is értékes infókért!\n\n Sok sikert, és jó szórakozást!\n\n\n<:vidman_logo:588027207772012544> __${member.guild.name}__`)
+        if (member.guild.id === config.serverID) {
+            console.log(`${member.user.tag} belépett a szerverbe.`);
+            member.addRole(config.ideiglenestagID);
+            member.send(`${getEmoji(client, "vidman_logo")} __**Üdvözöllek a szerveren!**
+            __ Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.
+             Az \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **${getMention(config.igazolID)}** csatornán.
+              Mindenféleképpen olvasd el az ***${getMention(config.udvozlegyID)}** csatornát is értékes infókért!\n\n
+               Sok sikert, és jó szórakozást!\n\n\n${getEmoji(client, "vidman_logo")} __${member.guild.name}__`)
         }
     });
 

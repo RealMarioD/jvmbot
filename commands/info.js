@@ -1,15 +1,10 @@
 exports.run = (client, message, args) => {
-
     message.channel.send({
-
         embed: {
-
             color: 0xDB6206,
             title: `\`\`${message.guild.name}\`\``,
             thumbnail: {
-
                 url: message.guild.iconURL
-
             },
             author: {
                 name: 'JustVidman',
@@ -18,48 +13,31 @@ exports.run = (client, message, args) => {
             },
             fields: [
                 {
-
                     name: 'Tagok',
                     value: message.guild.memberCount,
                     inline: true
-
                 },
-
                 {
-
                     name: 'Online',
                     value: message.guild.members.filter(u => u.presence.status === 'online').size,
                     inline: true
-
                 },
-
                 {
-
                     name: 'Tulajdonos',
                     value: message.guild.owner.user.tag,
                     inline: true
-
                 },
-
                 {
-
                     name: 'Rangok',
                     value: message.guild.roles.size,
                     inline: true
-
                 }
-
             ]
-
         }
-
     });
-
 };
 
 exports.info = {
-
     syntax: '',
     description: 'Információ a szerverről.'
-
 };

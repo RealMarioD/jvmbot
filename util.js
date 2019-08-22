@@ -1,6 +1,28 @@
 /* nesze mindenfele szar aminek nem talaltunk meg helyet */
+const config = require("./config.json");
+
 function error(channel) {
     channel.send({embed: {color: 0xff0000, title: 'Helytelen használat. `.parancsok embed`'}});
+}
+
+function devOnly(channel) {
+    channel.send({
+        embed: {
+            color: 0xff0000,
+            title: `Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!`
+        }
+    });
+}
+
+function getMention(channel) {
+    return `<#${channel}>`
+}
+
+// Beirsz egy nevet, es kikop egy emojit. Hasznos.
+function getEmoji(client, name) {
+    const vidmanserver = client.guilds.get(config.serverID);
+    var emoji = vidmanserver.emojis.find(emoji => emoji.name === name);
+    return emoji.toString();
 }
 
 function colourNameToHex(colour)
@@ -154,3 +176,11 @@ function colourNameToHex(colour)
 
     return null;
 }
+
+module.exports = {
+    getEmoji: getEmoji,
+    error: error,
+    colourNameToHex: colourNameToHex,
+    getMention: getMention,
+    devOnly: devOnly
+};
