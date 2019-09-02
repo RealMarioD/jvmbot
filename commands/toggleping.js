@@ -11,3 +11,8 @@ exports.run = (client, message, args) => {
         }
     }
 };
+
+exports.info = {
+    syntax: '',
+    description: 'Megváltoztatja a hírlevél role egy beállítását.'
+}

@@ -1,21 +1,20 @@
 const {error} = require("../util");
 exports.run = (client, message, args) => {
-    var helpEmbed = {
+    let helpEmbed = {
         color: 0x56f442,
         title: '🗒 **| Parancsok**',
         fields: []
     };
     if (args.length === 0) {
         const fs = require('fs');
-        fs.readdir(`./commands/`, (err, commandFiles) => {
-            helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`;
-            commandFiles.forEach(commandFile => {
-                let cmd = require(`../commands/${commandFile}`);
-                helpEmbed.description += `| \`${client.config.prefix}${commandFile.replace('.js', '')} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`
-            });
-            helpEmbed.description = helpEmbed.description.replace('undefined', '');
-            message.channel.send({embed: helpEmbed});
+        helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`;
+        fs.readdirSync(`./commands/`).forEach(cmdfile => {
+            cmdfile = cmdfile.replace('.js', '')
+            let cmd = require(`../commands/${cmdfile}`);
+            helpEmbed.description += `| \`${client.config.prefix}${cmdfile} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`
         });
+        helpEmbed.description = helpEmbed.description.replace('undefined', '');
+        message.channel.send({embed: helpEmbed});
     } else {
         try {
             let commandFile = require(`./${args[0].toLowerCase()}.js`);
