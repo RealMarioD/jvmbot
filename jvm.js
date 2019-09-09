@@ -3,18 +3,18 @@ const client = new Discord.Client();
 const util = require('util');
 const {execSync} = require('child_process');
 const config = require("./config.json");
-const {getMention, getEmoji} = require("./util");
+const {getMention, getEmoji, getCrDate} = require("./util")
 client.config = config;
 
 client.on('ready', () => {
-    console.log(`~~~ Bejelentkezve mint: ${client.user.tag} ~~~`);
+    console.log(`~~~ Bejelentkezve mint: ${client.user.tag} ~~~ @ ${getCrDate()}`);
     client.user.setActivity('.parancsok');
 })
 .on('reconnecting', () => {
-    console.log(`Újracsatlakozás...`)
+    console.log(`Újracsatlakozás... @ ${getCrDate()}`)
 })
 .on('disconnected', () => {
-    console.log(`Szétcsatlakoztatva!`)
+    console.log(`Szétcsatlakoztatva! @${getCrDate()}`)
 });
 
 const clean = text => {
@@ -24,8 +24,8 @@ const clean = text => {
         return text
 };
 
-client.on('message', message => { // Command handler
-    if (!message.content.startsWith(config.prefix)) return;
+client.on('message', message => {
+    if (!message.content.startsWith(config.prefix)) return; // Command handler
 
     const args = message.content.slice(1).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
@@ -33,10 +33,10 @@ client.on('message', message => { // Command handler
     try {
         let commandFile = require(`./commands/${command}.js`);
         commandFile.run(client, message, args);
-        console.log(`${command} parancs futtatva`)
+        console.log(`${command} parancs futtatva @ ${getCrDate()}`)
     } catch (err) {
         if(err.code === "MODULE_NOT_FOUND") {
-            console.error(`Hiba: ${command} nem egy létező parancs.`)
+            console.error(`Hiba: ${command} nem egy létező parancs. @ ${getCrDate()}`)
         } else {
             console.error(err)
         }
@@ -45,7 +45,7 @@ client.on('message', message => { // Command handler
 })
     .on('guildMemberAdd', member => { // Welcome message
         if (member.guild.id === config.serverID) {
-            console.log(`${member.user.tag} belépett a szerverbe.`);
+            console.log(`${member.user.tag} belépett a szerverbe. @ ${getCrDate()}`);
             member.addRole(config.ideiglenestagID);
             member.send(`${getEmoji(client, "vidman_logo")} __**Üdvözöllek a szerveren!**
             __ Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.
