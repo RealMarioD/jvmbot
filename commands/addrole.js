@@ -3,6 +3,9 @@ exports.run = (client, message, args) => {
     if (message.member.roles.has(client.config.fejlesztoID)) {
 
         const sar = require('../assets/sar.json');
+        const keys = Object.keys(sar);
+        const randIndex = Math.floor(Math.random() * keys.length);
+        const randKey = keys[randIndex];
         const fs = require('fs');
 
         if (args.length === 0) {
@@ -10,7 +13,7 @@ exports.run = (client, message, args) => {
         } else {
             let arg = args[0].toLowerCase();
 
-            let r = message.guild.roles.find(r => r.name.toLowerCase() == arg);
+            let r = message.guild.roles.find(r => r.name.toLowerCase() === arg);
 
             if (!r) {
                 message.channel.send('❌ **| Nem létezik ilyen rank!**')
