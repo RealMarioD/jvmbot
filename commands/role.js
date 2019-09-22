@@ -49,7 +49,9 @@ exports.run = (client, message, args) => {
                         message.guild.members.get(message.author.id).addRole(r.id);
                         message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
                     } else {
-                        message.channel.send(`❌ **| Már van egy rankod! \`(Így vedd le: .role ${message.guild.roles.get(crrole).name})\`**`)
+                        message.guild.members.get(message.author.id).removeRole(crrole);
+                        message.guild.members.get(message.author.id).addRole(r.id);
+                        message.channel.send(`✅ **| Rankod cserélve! \`(${message.guild.roles.get(crrole).name} --> ${r.name})\`**`)
                     }
                 }
             }

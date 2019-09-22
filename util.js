@@ -1,4 +1,5 @@
 const config = require("./config.json");
+const buff = require("./assets/buffos.json")
 
 function devOnly(channel) {
     channel.send({
@@ -33,10 +34,18 @@ function getEmoji(client, name) {
     return emoji.toString();
 }
 
+function getBuff() {
+    const buff = require('./assets/buffos.json')
+    const randIndex = Math.floor(Math.random() * buff.length);
+    const randKey = buff[randIndex];
+    return randKey;
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
     devOnly: devOnly,
     getCrDate: getCrDate,
-    magicBall: magicBall
+    magicBall: magicBall,
+    getBuff: getBuff
 };
