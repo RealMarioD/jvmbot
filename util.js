@@ -24,7 +24,7 @@ function getCrDate() {
 // 8ball randomziáló cucc.
 function magicBall() {
     var rand = ['Igen.', 'Kérdezd újra később..', 'Nem tudom.', 'Nem.', 'Lehet.', 'Valószínűleg nem.', 'Valószínűleg igen.', 'Talán.'];
-    return rand[Math.floor(Math.random()*rand.length)];
+    return rand[Math.floor(Math.random() * rand.length)];
 }
 
 // Beirsz egy nevet, es kikop egy emojit. Hasznos.

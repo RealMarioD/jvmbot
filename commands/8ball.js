@@ -1,4 +1,4 @@
-const {magicBall} = require('../util')
+const {magicBall} = require('../util');
 exports.run = (client, message, args) => {
     message.channel.send(`${message.author.tag}, a válaszod:\n>>> ${magicBall()}`)
 };

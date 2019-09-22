@@ -10,7 +10,7 @@ exports.run = (client, message, args) => {
         } else {
             let arg = args[0].toLowerCase();
 
-            let r = message.guild.roles.find(r => r.name.toLowerCase() == arg);
+            let r = message.guild.roles.find(r => r.name.toLowerCase() === arg);
 
             if (!r) {
                 message.channel.send('❌ **| Nem létezik ilyen rank!**')
