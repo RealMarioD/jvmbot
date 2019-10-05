@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
     Object.keys(users).map(key => ({
         key: key, value: users[key]
     })).sort(
-        (first, second) => (first.value.money - second.value.money)
+        (first, second) => (second.value.money - first.value.money)
     ).forEach((sortedData) => {
             results.push(`${i}. __${message.guild.members.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*`);
             i += 1;
