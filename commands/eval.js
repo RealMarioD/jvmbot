@@ -8,15 +8,19 @@ const clean = text => {
 
 exports.run = (client, message, args) => {
     const config = require("../config.json");
-    if(message.member.roles.has(config.fejlesztoID)) {
+    if (message.member.roles.has(config.fejlesztoID)) {
 
         try {
             const code = args.join(" ");
             let evaled = eval(code);
-            if(typeof evaled !== "string") evaled = require("util").inspect(evaled);
-            message.channel.send(`\`OUT:\`\n\`\`\`xl\n${clean(evaled)}\`\`\``).catch(err => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
+            Promise.resolve(evaled).then((output) => {
+                if (typeof output !== "string") {
+                    output = require("util").inspect(output);
+                }
+                message.channel.send(`\`OUT:\`\n\`\`\`xl\n${output}\`\`\``).catch(() => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
+            })
         } catch (err) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``).catch(err => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
+            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``).catch(() => message.channel.send(`\`ERROR\` \`\`\`\nToo many characters to send! (2000+)\n\`\`\``))
         }
 
     } else {

@@ -8,23 +8,21 @@ exports.run = (client, message, args) => {
         if (args.length === 0) {
             message.channel.send(`❌ **| Nem adtál meg rankot!**`)
         } else {
-            let arg = args[0].toLowerCase();
-
-            let r = message.guild.roles.find(r => r.name.toLowerCase() === arg);
-
-            if (!r) {
+            let roleName = args[0].toLowerCase();
+            let role = message.guild.roles.find(r => r.name.toLowerCase() === roleName);
+            if (!role) {
                 message.channel.send('❌ **| Nem létezik ilyen rank!**')
             } else {
-                if (!sar[r.id]) {
-                    sar[r.id] = {
+                if (!sar[role.id]) {
+                    sar[role.id] = {
                         enabled: false
                     };
                 }
-                if (sar[r.id].enabled === true) {
-                    sar[r.id].enabled = false
+                if (sar[role.id].enabled === true) {
+                    sar[role.id].enabled = false
                 }
                 fs.writeFileSync('./assets/sar.json', JSON.stringify(sar, null, 2));
-                message.channel.send(`✅ **| Rank \`${r.name}\` törölve a listáról!**`)
+                message.channel.send(`✅ **| Rank \`${role.name}\` törölve a listáról!**`)
             }
         }
     } else {

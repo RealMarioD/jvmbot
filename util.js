@@ -1,5 +1,5 @@
 const config = require("./config.json");
-const buff = require("./assets/buffos.json")
+const buff = require("./assets/buffos.json");
 
 function devOnly(channel) {
     channel.send({
@@ -15,7 +15,7 @@ function getMention(channel) {
 }
 
 // Visszaadja az időt egy szép formátumban. (Pl: 2019.06.09 04:20:42)
-function getCrDate() {
+function getDate() {
     var final = new Date().toISOString().slice(0, 10).replace(/-/gi, '.');
     final += ' ' + new Date().toTimeString().slice(0, 8);
     return final;
@@ -35,17 +35,21 @@ function getEmoji(client, name) {
 }
 
 function getBuff() {
-    const buff = require('./assets/buffos.json')
+    const buff = require('./assets/buffos.json');
     const randIndex = Math.floor(Math.random() * buff.length);
-    const randKey = buff[randIndex];
-    return randKey;
+    return buff[randIndex];
 }
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+};
 
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
     devOnly: devOnly,
-    getCrDate: getCrDate,
+    getCrDate: getDate,
     magicBall: magicBall,
-    getBuff: getBuff
+    getBuff: getBuff,
+    sleep: sleep
 };
