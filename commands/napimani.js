@@ -18,7 +18,7 @@ exports.run = (client, message, args) => {
 
     if(crDate < users[au.id].lastSavedTime + cooldown) {
         let remainingTime = moment.duration(users[au.id].lastSavedTime + cooldown - crDate)
-        message.channel.send(`Még várnod kell \`${remainingTime.hours()}:${remainingTime.minutes()}:${remainingTime.seconds()}\``)
+        message.channel.send(`Még várnod kell \`${remainingTime.hours()} órát, ${remainingTime.minutes()} percet és ${remainingTime.seconds()} másodpercet\``)
     } else {
         if(crDate < users[au.id].lastSavedTime + resetTime) {
             users[au.id].money += users[au.id].dailyDay * 50
@@ -29,7 +29,7 @@ exports.run = (client, message, args) => {
             }
             let tick = "☑|";
             let cross = "🇽|";
-            message.channel.send(`>>> **__${au.tag}__ megkapta a napi Vidmániját! \`+${users[au.id].dailyDay * 50}\`**\n|${tick.repeat(users[au.id].dailyDay)}${(cross.repeat(5 - users[au.id].dailyDay))}`);
+            message.channel.send(`>>> **__${au.tag}__ megkapta a napi Vidmániját! \`+${(users[au.id].dailyDay - 1) * 50}\`**\n|${tick.repeat(users[au.id].dailyDay - 1)}${(cross.repeat(5 - users[au.id].dailyDay + 1))}`);
         } else {
             users[au.id].money += 50;
             users[au.id].dailyDay = 2;
