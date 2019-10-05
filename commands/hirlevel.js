@@ -1,13 +1,13 @@
 const {getEmoji} = require("../util");
 exports.run = (client, message, args) => {
     message.delete();
-    let mem = message.guild.members.get(message.author.id);
-    if(mem.roles.has(client.config.hirlevelID) === false) {
-        mem.addRole(client.config.hirlevelID);
-        message.author.send(`✔️ **Feliratkoztál** a szerver hírlevelére! 📨\n\n${getEmoji("vidman_logo")} __${message.guild.name}__`)
+    let member = message.guild.members.get(message.author.id);
+    if (member.roles.has(client.config.hirlevelID) === false) {
+        member.addRole(client.config.hirlevelID).then(() =>
+            message.author.send(`✔️ **Feliratkoztál** a szerver hírlevelére! 📨\n\n${getEmoji("vidman_logo")} __${message.guild.name}__`));
     } else {
-        mem.removeRole(client.config.hirlevelID);
-        message.author.send(`✔️ **Leiratkoztál** a szerver hírleveléről! 📨\n\n${getEmoji("vidman_logo")} __${message.guild.name}__`)
+        member.removeRole(client.config.hirlevelID).then(() =>
+            message.author.send(`✔️ **Leiratkoztál** a szerver hírleveléről! 📨\n\n${getEmoji("vidman_logo")} __${message.guild.name}__`));
     }
 };
 

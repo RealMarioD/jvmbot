@@ -9,7 +9,7 @@ exports.run = (client, message, args) => {
         const fs = require('fs');
         helpEmbed.description = `Ha több infót akarsz megtudni egy parancsról: \`.parancsok <parancs>\`\n`;
         fs.readdirSync(`./commands/`).forEach(cmdfile => {
-            cmdfile = cmdfile.replace('.js', '')
+            cmdfile = cmdfile.replace('.js', '');
             let cmd = require(`../commands/${cmdfile}`);
             helpEmbed.description += `| \`${client.config.prefix}${cmdfile} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`
         });

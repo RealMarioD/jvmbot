@@ -1,13 +1,11 @@
 exports.run = (client, message, args) => {
     const config = require('../config.json');
-    let hirr = message.guild.roles.get(config.hirlevelID);
-    if(message.member.roles.has(config.fejlesztoID)) {
-        if(hirr.mentionable === false) {
-            hirr.setMentionable(true);
-            message.channel.send(`A hírlevél role megpingelése: __**Engedélyezve**__`);
+    let hirlevelRole = message.guild.roles.get(config.hirlevelID);
+    if (message.member.roles.has(config.fejlesztoID)) {
+        if (hirlevelRole.mentionable === false) {
+            hirlevelRole.setMentionable(true).then(() => message.channel.send(`A hírlevél role megpingelése: __**Engedélyezve**__`));
         } else {
-            hirr.setMentionable(false);
-            message.channel.send(`A hírlevél role megpingelése: __**Letiltva**__`);
+            hirlevelRole.setMentionable(false).then(() => message.channel.send(`A hírlevél role megpingelése: __**Letiltva**__`));
         }
     }
 };
@@ -15,4 +13,4 @@ exports.run = (client, message, args) => {
 exports.info = {
     syntax: '',
     description: 'Megváltoztatja a hírlevél role egy beállítását.'
-}
+};

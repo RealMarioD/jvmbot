@@ -1,41 +1,41 @@
 const users = require('../assets/users.json');
 const fs = require('fs');
-const moment = require('moment')
+const moment = require('moment');
 exports.run = (client, message, args) => {
 
-    let au = message.author;
-    if(!users[au.id]) {
-        users[au.id] = {
+    let author = message.author;
+    if (!users[author.id]) {
+        users[author.id] = {
             money: 0,
             lastSavedTime: null,
             dailyDay: 1
         }
-    };
+    }
 
-    let crDate = moment().valueOf();
+    let currentDate = moment().valueOf();
     let cooldown = 86400000;
     let resetTime = 129600000;
 
-    if(crDate < users[au.id].lastSavedTime + cooldown) {
-        let remainingTime = moment.duration(users[au.id].lastSavedTime + cooldown - crDate)
+    if (currentDate < users[author.id].lastSavedTime + cooldown) {
+        let remainingTime = moment.duration(users[author.id].lastSavedTime + cooldown - currentDate);
         message.channel.send(`Még várnod kell \`${remainingTime.hours()} órát, ${remainingTime.minutes()} percet és ${remainingTime.seconds()} másodpercet\``)
     } else {
-        if(crDate < users[au.id].lastSavedTime + resetTime) {
-            users[au.id].money += users[au.id].dailyDay * 50
-            if(users[au.id].dailyDay == 5) {
-                users[au.id].dailyDay = 1
+        if (currentDate < users[author.id].lastSavedTime + resetTime) {
+            users[author.id].money += users[author.id].dailyDay * 50;
+            if (users[author.id].dailyDay === 5) {
+                users[author.id].dailyDay = 1
             } else {
-                users[au.id].dailyDay += 1
+                users[author.id].dailyDay += 1
             }
             let tick = "☑|";
             let cross = "🇽|";
-            message.channel.send(`>>> **__${au.tag}__ megkapta a napi Vidmániját! \`+${(users[au.id].dailyDay - 1) * 50}\`**\n|${tick.repeat(users[au.id].dailyDay - 1)}${(cross.repeat(5 - users[au.id].dailyDay + 1))}`);
+            message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+${(users[author.id].dailyDay - 1) * 50}\`**\n|${tick.repeat(users[author.id].dailyDay - 1)}${(cross.repeat(5 - users[author.id].dailyDay + 1))}`);
         } else {
-            users[au.id].money += 50;
-            users[au.id].dailyDay = 2;
-            message.channel.send(`>>> **__${au.tag}__ megkapta a napi Vidmániját! \`+50\`**`);;
+            users[author.id].money += 50;
+            users[author.id].dailyDay = 2;
+            message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+50\`**`);
         }
-        users[au.id].lastSavedTime = crDate;
+        users[author.id].lastSavedTime = currentDate;
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
 
