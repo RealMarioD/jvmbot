@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
         };
     }
 
-    message.channel.send(`>>> ${message.author.tag}-nak **${users[message.author.id].money}** Vidmánija van!`)
+    message.channel.send(`>>> __${message.author.tag}__-nak **${users[message.author.id].money}** Vidmánija van!`)
 
 }
 
