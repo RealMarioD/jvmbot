@@ -74,12 +74,12 @@ const items = {
         "price": 5000,
         "healboost": 15
     }
-}
+};
 
 function listItems() {
     let list = ">>> Megvásárolható/Eladható Itemek:\n";
-    for(var item in items) {
-        list += `**${items[item].name}** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price/2}vm__\n`
+    for (let item in items) {
+        list += `**${items[item].name}** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price / 2}vm__\n`
     }
     return list;
 }

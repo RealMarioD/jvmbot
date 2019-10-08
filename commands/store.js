@@ -4,86 +4,83 @@ const fs = require('fs');
 
 exports.run = (client, message, args) => {
 
-    if(args.length === 0) {
+    if (args.length === 0) {
         message.channel.send(`❌ **| Hibás használat!**\n\`.store <buy/sell/inv/> <item> <darab>\``)
     } else {
+        if (!args[1]) {
+            message.channel.send(listItems());
+        }
+        if (!args[2]) {
+            message.channel.send(`❌ **| Nem adtál meg mennyiséget!**`)
+        }
+        let key;
+        key = args[1];
         switch (args[0]) {
             case "buy":
-                if(!args[1]) {
-                    message.channel.send(listItems());
-                } else {
-                    itemkey = String(args[1]);
-                    if(items.hasOwnProperty(args[1]) === true) {
-                        if(!args[2]) {
-                            message.channel.send(`❌ **| Nem adtál meg mennyiséget!**`)
-                        } else {
-                        let namount = Number(args[2]);
-                            if(users[message.author.id].money >= items[args[1]].price * namount) {
-                                users[message.author.id].money -= items[args[1]].price * namount;
-                                if(!users[message.author.id].collection) {
-                                    users[message.author.id].collection = {};
-                                    users[message.author.id].collection[itemkey] = namount
-                                } else {
-                                    if(!users[message.author.id].collection[itemkey]) {
-                                        users[message.author.id].collection[itemkey] = namount
-                                    } else {
-                                        users[message.author.id].collection[itemkey] += namount
-                                    }
-                                }
-                                fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2));
-                                message.channel.send(`✅ **| Vettél ${namount}db-ot \`${items[args[1]].price * namount}vm\`-ért ebből: \`${items[args[1]].name}\`**`)
+                if (items.hasOwnProperty(key) === true) {
+                    if (args[2]) {
+                        let amt = parseInt(args[2]);
+                        let totalAmount = users[message.author.id].money >= items[args[1]].price * amt;
+                        if (totalAmount) {
+                            users[message.author.id].money -= items[args[1]].price * amt;
+                            if (!users[message.author.id].collection) {
+                                users[message.author.id].collection = {};
+                                users[message.author.id].collection[key] = amt
                             } else {
-                                message.channel.send(`❌ **| Nincs elegendő pénzed!**`)
+                                if (!users[message.author.id].collection[key]) {
+                                    users[message.author.id].collection[key] = amt
+                                } else {
+                                    users[message.author.id].collection[key] += amt
+                                }
                             }
+                            fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2));
+                            message.channel.send(`✅ **| Vettél ${amt}db-ot \`${items[args[1]].price * amt}vm\`-ért ebből: \`${items[args[1]].name}\`**`)
+                        } else {
+                            message.channel.send(`❌ **| Nincs elegendő pénzed!**`)
                         }
                     } else {
-                        message.channel.send(`❌ **| Nincs ilyen item!**`)
+                        message.channel.send(`❌ **| Nem adtál meg mennyiséget!**`)
                     }
+                } else {
+                    message.channel.send(`❌ **| Nincs ilyen item!**`)
                 }
+
                 break;
             case "sell":
-                let itemkey;
-                if (!args[1]) {
-                    message.channel.send(listItems());
-                } else {
-                    itemkey = String(args[1]);
-                    if (items.hasOwnProperty(args[1]) === true) {
-                        if (!args[2]) {
-                            message.channel.send(`❌ **| Nem adtál meg mennyiséget!**`)
+                if (items.hasOwnProperty(args[1]) === true) {
+                    let amt = parseInt(args[2]);
+                    if (!users[message.author.id].collection) {
+                        message.channel.send(`❌ **| Nincs mit eladnod!**`)
+                    } else {
+                        if (!users[message.author.id].collection[key]) {
+                            message.channel.send(`❌ **| Nincs ilyen item az inventorydban!**`)
                         } else {
-                            let namount = Number(args[2]);
-                            if (!users[message.author.id].collection) {
-                                message.channel.send(`❌ **| Nincs mit eladnod!**`)
+                            if (users[message.author.id].collection[key] < amt) {
+                                message.channel.send(`❌ **| Nincs ${amt}db-od ebből: \`${items[key].name}\`**`)
                             } else {
-                                if (!users[message.author.id].collection[itemkey]) {
-                                    message.channel.send(`❌ **| Nincs ilyen item az inventorydban!**`)
-                                } else {
-                                    if (users[message.author.id].collection[itemkey] < namount) {
-                                        message.channel.send(`❌ **| Nincs ${namount}db-od ebből: \`${items[itemkey].name}\`**`)
-                                    } else {
-                                        users[message.author.id].collection[itemkey] -= namount;
-                                        users[message.author.id].money += items[itemkey].price / 2 * namount;
-                                        message.channel.send(`✅ **| Eladtál ${namount}db-ot \`${items[args[1]].price / 2 * namount}vm\`-ért ebből: \`${items[itemkey].name}\`**`);
-                                        fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2))
-                                    }
-                                }
+                                users[message.author.id].collection[key] -= amt;
+                                users[message.author.id].money += items[key].price / 2 * amt;
+                                message.channel.send(`✅ **| Eladtál ${amt}db-ot \`${items[args[1]].price / 2 * amt}vm\`-ért ebből: \`${items[key].name}\`**`);
+                                fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2))
                             }
                         }
-                    } else {
-                        message.channel.send(`❌ **| Nincs ilyen item!**`)
+
                     }
+                } else {
+                    message.channel.send(`❌ **| Nincs ilyen item!**`)
                 }
                 break;
-            case "inv":
+            case"inv":
                 break;
             default:
                 message.channel.send(`❌ **| Hibás használat!**\n\`.store <buy/sell/inv/> <item> <darab>\``);
                 break;
         }
     }
-  
-};
-  
+
+}
+;
+
 exports.info = {
     syntax: '<buy/sell/inv> <item> <darab>',
     description: 'Vidman Pláza, vagy amit akartok.'
