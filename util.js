@@ -88,7 +88,7 @@ module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
     devOnly: devOnly,
-    getCrDate: getDate,
+    getDate: getDate,
     magicBall: magicBall,
     getBuff: getBuff,
     sleep: sleep,
