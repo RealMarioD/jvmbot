@@ -35,7 +35,6 @@ function getEmoji(client, name) {
 }
 
 function getBuff() {
-    const buff = require('./assets/buffos.json');
     const randIndex = Math.floor(Math.random() * buff.length);
     return buff[randIndex];
 }
@@ -44,6 +43,47 @@ const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 };
 
+const items = {
+    "alma": {
+        "name": "Alma",
+        "price": 100,
+        "winboost": 5
+    },
+    "csigaszeru": {
+        "name": "Csigaszerű Játékizé",
+        "price": 300,
+        "healboost": 5
+    },
+    "tengeri": {
+        "name": "Tengeri Szerzetes",
+        "price": 500,
+        "winboost": 10
+    },
+    "onosz": {
+        "name": "Onosz",
+        "price": 1000,
+        "healboost": 10
+    },
+    "leggitar": {
+        "name": "Léggitár",
+        "price": 2500,
+        "healboost": 15
+    },
+    "ludolacra": {
+        "name": "Ludolacra",
+        "price": 5000,
+        "healboost": 15
+    }
+}
+
+function listItems() {
+    let list = ">>> Megvásárolható/Eladható Itemek:\n";
+    for(var item in items) {
+        list += `**${items[item].name}** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price/2}vm__\n`
+    }
+    return list;
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
@@ -51,5 +91,7 @@ module.exports = {
     getCrDate: getDate,
     magicBall: magicBall,
     getBuff: getBuff,
-    sleep: sleep
+    sleep: sleep,
+    items: items,
+    listItems: listItems
 };

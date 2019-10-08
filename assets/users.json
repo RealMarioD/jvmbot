@@ -1,36 +1,38 @@
 {
   "254714656336248833": {
-    "money": 111111,
-    "dailyDay": 5,
-    "lastSavedTime": 1570193883002
+    "money": 10000,
+    "dailyDay": 3,
+    "lastSavedTime": 1570443927029
   },
   "257208358753271810": {
-    "money": 13850,
-    "dailyDay": 2,
-    "lastSavedTime": 1570126202671
+    "money": 10500,
+    "dailyDay": 3,
+    "lastSavedTime": 1570427484514
   },
   "244510329847939072": {
-    "money": 0,
-    "dailyDay": 2,
-    "lastSavedTime": 1569595451942
+    "money": 150,
+    "dailyDay": 3,
+    "lastSavedTime": 1570451566896
   },
   "481028070644383744": {
-    "money": 100,
+    "money": 0,
     "dailyDay": 3,
-    "lastSavedTime": 1570195728133
+    "lastSavedTime": 1570451539201
   },
   "438757327152218114": {
-    "money": 1000
+    "money": 0,
+    "dailyDay": 2,
+    "lastSavedTime": 1570457394132
   },
   "469150536399323157": {
-    "money": 10320,
-    "dailyDay": 5,
-    "lastSavedTime": 1570198414969
+    "money": 10540,
+    "dailyDay": 3,
+    "lastSavedTime": 1570445005872
   },
   "568847904282771457": {
-    "money": 50276,
-    "dailyDay": 4,
-    "lastSavedTime": 1570218904855
+    "money": 49176,
+    "dailyDay": 1,
+    "lastSavedTime": 1570420843810
   },
   "243057824672776203": {
     "money": 50
@@ -62,9 +64,9 @@
     "money": 200
   },
   "619891012801789966": {
-    "money": 2839,
-    "dailyDay": 5,
-    "lastSavedTime": 1570198520378
+    "money": 3383,
+    "dailyDay": 2,
+    "lastSavedTime": 1570439790390
   },
   "576883979706433576": {
     "money": 100
@@ -99,7 +101,7 @@
   },
   "439488826784743425": {
     "money": 0,
-    "lastSavedTime": 1570206978178,
+    "lastSavedTime": 1570452328939,
     "dailyDay": 2
   }
 }
