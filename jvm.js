@@ -1,7 +1,5 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const util = require('util');
-const {execSync} = require('child_process');
 const config = require("./config.json");
 const {getMention, getEmoji, getDate} = require("./util");
 client.config = config;
@@ -25,6 +23,9 @@ const clean = text => {
 };
 
 client.on('message', message => {
+    if (message.channel.id === '584445312312147996' && !message.guild.members.get(message.author.id).roles.has(config.adminID)){
+        message.delete();
+    }
     if (!message.content.startsWith(config.prefix)) return; // Command handler
 
     const args = message.content.slice(1).trim().split(/ +/g);
@@ -46,12 +47,7 @@ client.on('message', message => {
     .on('guildMemberAdd', member => { // Welcome message
         if (member.guild.id === config.serverID) {
             console.log(`${member.user.tag} belépett a szerverbe. @ ${getDate()}`);
-            member.addRole(config.ideiglenestagID).then(() => member.send(`${getEmoji(client, "vidman_logo")} __**Üdvözöllek a szerveren!**
-            __ Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.
-             Az \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **${getMention(config.igazolID)}** csatornán.
-              Mindenféleképpen olvasd el az ***${getMention(config.udvozlegyID)}** csatornát is értékes infókért!\n\n
-               Sok sikert, és jó szórakozást!\n\n\n${getEmoji(client, "vidman_logo")} __${member.guild.name}__`));
-
+            member.addRole(config.ideiglenestagID).then(() => member.send(`${getEmoji(client, "vidmanLogo")} __**Üdvözöllek a szerveren!**\n__Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.\nAz \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **${getMention(config.igazolID)}** csatornán.\nMindenféleképpen olvasd el az **${getMention(config.udvozlegyID)}** csatornát is értékes infókért!\n\nSok sikert, és jó szórakozást!\n\n\n${getEmoji(client, "vidmanLogo")} __${member.guild.name}__`));
         }
     });
 

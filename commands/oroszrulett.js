@@ -37,6 +37,6 @@ exports.run = (client, message, args) => {
 };
 
 exports.info = {
-    syntax: '',
+    syntax: '<tét>',
     description: 'Egy kis szerencse játék.'
 };

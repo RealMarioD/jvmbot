@@ -30,8 +30,8 @@ function magicBall() {
 // Beirsz egy nevet, es kikop egy emojit. Hasznos.
 function getEmoji(client, name) {
     const vidmanserver = client.guilds.get(config.serverID);
-    var emoji = vidmanserver.emojis.find(emoji => emoji.name === name);
-    return emoji.toString();
+    let emoji = vidmanserver.emojis.find(emoji => emoji.name == name);
+    return emoji;
 }
 
 function getBuff() {
@@ -77,12 +77,16 @@ const items = {
 };
 
 function listItems() {
-    let list = ">>> Megvásárolható/Eladható Itemek:\n";
+    let list = ">>> __Megvásárolható/Eladható Itemek__:\n\n";
     for (let item in items) {
-        list += `**${items[item].name}** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price / 2}vm__\n`
+        list += `**${items[item].name} \`(${item})\`** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price / 2}vm__\n`
     }
     return list;
 }
+
+function giveRandom(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
 
 module.exports = {
     getEmoji: getEmoji,
@@ -93,5 +97,6 @@ module.exports = {
     getBuff: getBuff,
     sleep: sleep,
     items: items,
-    listItems: listItems
+    listItems: listItems,
+    giveRandom : giveRandom
 };
