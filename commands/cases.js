@@ -34,8 +34,13 @@ exports.run = (client, message, args) => {
             let outcomeInput = args[1];
             if(outcomeInput == "false") outcomeInput = false;
             else if(outcomeInput == "true") outcomeInput = true;
+            else if(outcomeInput == "delete") {
+                delete cases[caseid];
+                fs.writeFileSync("./assets/cases.json", JSON.stringify(cases, null, 2))
+                message.channel.send(`\`${caseid}\` törölve!`)
+            }
             else {
-                message.channel.send("Érvénytelen boolean!")
+                message.channel.send("Érvénytelen boolean/eljárás!")
                 return
             }
             let admincomment = args.slice(2).join(" ")
@@ -48,7 +53,7 @@ exports.run = (client, message, args) => {
                 .addField("Egyéb hozzászólás:", admincomment == "" ? "Nincs" : admincomment);
 
             cases[caseid].outcome = outcomeInput
-                        .managed = true
+            cases[caseid].managed = true
             fs.writeFileSync("./assets/cases.json", JSON.stringify(cases, null, 2))
             message.channel.send("Feldolgozva.");
             message.guild.channels.get(config.resultsChannelID).send(finalmsg);

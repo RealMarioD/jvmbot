@@ -1,4 +1,5 @@
 exports.run = (client, message, args) => {
+    let creationTime = new Date(message.guild.createdAt)
     message.channel.send({
         embed: {
             color: 0xDB6206,
@@ -13,13 +14,18 @@ exports.run = (client, message, args) => {
             },
             fields: [
                 {
-                    name: 'Tagok',
-                    value: message.guild.memberCount,
+                    name: 'Emberi lények száma:',
+                    value: message.guild.members.filter(m => m.user.bot == false).size,
                     inline: true
                 },
                 {
-                    name: 'Online',
+                    name: 'Ebből online:',
                     value: message.guild.members.filter(u => u.presence.status === 'online').size,
+                    inline: true
+                },
+                {
+                    name: "Ebből bot:",
+                    value: message.guild.members.filter(m => m.user.bot == true).size,
                     inline: true
                 },
                 {
@@ -28,8 +34,8 @@ exports.run = (client, message, args) => {
                     inline: true
                 },
                 {
-                    name: 'Rangok',
-                    value: message.guild.roles.size,
+                    name: "Szerver létrehozva:",
+                    value: creationTime.toLocaleDateString(),
                     inline: true
                 }
             ]

@@ -5,7 +5,7 @@ const fs = require('fs');
 exports.run = (client, message, args) => {
 
     if (args.length === 0) {
-        message.channel.send(`❌ **| Hibás használat!**\n\`.store <buy/sell/inv/list> <item> <darab>\``)
+        message.channel.send(`>>> ❌ **| Hibás használat!**\n\`.store <buy/sell/inv/list> <item> <darab>\``)
     } else {
         let key;
         key = args[1];
@@ -36,27 +36,27 @@ exports.run = (client, message, args) => {
                                     }  
                                 }
                                     fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2));
-                                    message.channel.send(`✅ **| Vettél ${amt}db-ot \`${totalAmount}vm\`-ért ebből: \`${items[key].name}\`**`)
+                                    message.channel.send(`>>> ✅ **| Vettél ${amt}db-ot \`${totalAmount}vm\`-ért ebből: \`${items[key].name}\`**`)
                                 } else {
-                                    message.channel.send(`❌ **| Nincs elegendő pénzed!**`)
+                                    message.channel.send(`>>> ❌ **| Nincs elegendő pénzed!**`)
                                 }
             
                             break;
                         case "sell":
                             let totalPrice = (items[key].price / 2) * amt;
                             if(!user.collection) {
-                                message.channel.send(`❌ **| Üres az inventory-d!**`)
+                                message.channel.send(`>>> ❌ **| Üres az inventory-d!**`)
                             } else {
                                 if(!user.collection[key]) {
-                                    message.channel.send(`❌ **| Nincs ilyen itemed!**`)
+                                    message.channel.send(`>>> ❌ **| Nincs ilyen itemed!**`)
                                 } else {
                                     if(user.collection[key].amount >= amt) {
                                         user.money += totalPrice;
                                         user.collection[key].amount -= amt
                                         fs.writeFileSync(`./assets/users.json`, JSON.stringify(users, null, 2));
-                                        message.channel.send(`✅ **| Eladtál ${amt}db-ot \`${totalPrice}vm\`-ért ebből: \`${items[key].name}\`**`)
+                                        message.channel.send(`>>> ✅ **| Eladtál ${amt}db-ot \`${totalPrice}vm\`-ért ebből: \`${items[key].name}\`**`)
                                     } else {
-                                        message.channel.send(`❌ **| Nincs \`${amt}\`db-od ebből: \`${items[key].name}\`**`)
+                                        message.channel.send(`>>> ❌ **| Nincs \`${amt}\`db-od ebből: \`${items[key].name}\`**`)
                                     }
                                 }
                             }
@@ -80,17 +80,17 @@ exports.run = (client, message, args) => {
                             break;
             
                         default:
-                            message.channel.send(`❌ **| Hibás használat!**\n\`.store <buy/sell/inv/list> <item> <darab>\``);
+                            message.channel.send(`>>> ❌ **| Hibás használat!**\n\`.store <buy/sell/inv/list> <item> <darab>\``);
                             break;
                     }
                 } else {
-                    message.channel.send(`❌ **| *i g e n***`)
+                    message.channel.send(`>>> ❌ **| *i g e n***`)
                 }
             } else {
-                message.channel.send(`❌ **| Nem adtál meg mennyiséget!**`)
+                message.channel.send(`>>> ❌ **| Nem adtál meg mennyiséget!**`)
             }
         } else {
-            message.channel.send(`❌ **| Nincs ilyen item!**`)
+            message.channel.send(`>>> ❌ **| Nincs ilyen item!**`)
         }
         
     }

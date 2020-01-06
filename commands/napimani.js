@@ -22,8 +22,8 @@ exports.run = (client, message, args) => {
     } else {
         if (currentDate < users[author.id].lastSavedTime + resetTime) {
             users[author.id].money += users[author.id].dailyDay * 50;
-            let tick = "☑|";
-            let cross = "🇽|";
+            let tick = "✅|";
+            let cross = "❎|";
             message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+${(users[author.id].dailyDay) * 50}\`**\n|${tick.repeat(users[author.id].dailyDay)}${(cross.repeat(5 - users[author.id].dailyDay))}`);
             if (users[author.id].dailyDay === 5) {
                 users[author.id].dailyDay = 1

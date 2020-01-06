@@ -16,7 +16,7 @@ exports.run = (client, message, args) => {
             console.log("user in users does not exist");
         }
     });
-    message.channel.send(results.slice(0, 10))
+    message.channel.send(">>> " + results.slice(0, 10).join(`\n`))
 };
 
 exports.info = {

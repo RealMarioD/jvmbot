@@ -86,7 +86,26 @@ function listItems() {
 
 function giveRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
-  }
+}
+
+function totalUpCardpack(cardpack, total, index) {
+    switch(cardpack[index]) {
+        case "Ace":
+            if(total + 11 <= 21) total += 11;
+            else total += 1;
+            break;
+        case "King": case "Queen": case "Jack":
+            total += 10
+            break;
+        default:
+            total += Number(cardpack[index])
+    }
+    return total;
+}
+
+function bjMsg(cardpack, total, name) {
+    return `${name} cards:\n${String(cardpack.map((c, index) => `${index+1}. card: ${c}\n`)).replace(",", "")}Total: ${total}\n`
+}
 
 module.exports = {
     getEmoji: getEmoji,
@@ -98,5 +117,7 @@ module.exports = {
     sleep: sleep,
     items: items,
     listItems: listItems,
-    giveRandom : giveRandom
+    giveRandom : giveRandom,
+    totalUpCardpack: totalUpCardpack,
+    bjMsg: bjMsg
 };

@@ -27,6 +27,7 @@ client.on('message', message => {
         message.delete();
     }
     if (!message.content.startsWith(config.prefix)) return; // Command handler
+    if (message.author.bot == true) return; // Ignore bots
 
     const args = message.content.slice(1).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
@@ -36,9 +37,8 @@ client.on('message', message => {
         commandFile.run(client, message, args);
         console.log(`${command} parancs futtatva @ ${getDate()}`)
     } catch (err) {
-        if(err.code === "MODULE_NOT_FOUND") {
-            console.error(`Hiba: ${command} nem egy létező parancs. @ ${getDate()}`)
-        } else {
+        if(err.code === "MODULE_NOT_FOUND") return;
+        else {
             console.error(err)
         }
     }
@@ -47,7 +47,7 @@ client.on('message', message => {
     .on('guildMemberAdd', member => { // Welcome message
         if (member.guild.id === config.serverID) {
             console.log(`${member.user.tag} belépett a szerverbe. @ ${getDate()}`);
-            member.addRole(config.ideiglenestagID).then(() => member.send(`${getEmoji(client, "vidmanLogo")} __**Üdvözöllek a szerveren!**\n__Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.\nAz \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **${getMention(config.igazolID)}** csatornán.\nMindenféleképpen olvasd el az **${getMention(config.udvozlegyID)}** csatornát is értékes infókért!\n\nSok sikert, és jó szórakozást!\n\n\n${getEmoji(client, "vidmanLogo")} __${member.guild.name}__`));
+            member.send(`${getEmoji(client, "vidmanLogo")} __**Üdvözöllek a szerveren!**\n__Ahhoz, hogy belépj, ellenőriznünk kell, hogy nem vagy-e robot.\nAz \`${config.prefix}igazol\` parancs beírásával tudod magad igazolni az **${getMention(config.igazolID)}** csatornán.\nMindenféleképpen olvasd el az **${getMention(config.udvozlegyID)}** csatornát is értékes infókért!\n\nSok sikert, és jó szórakozást!\n\n\n${getEmoji(client, "vidmanLogo")} __${member.guild.name}__`);
         }
     });
 

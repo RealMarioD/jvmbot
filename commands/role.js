@@ -39,19 +39,19 @@ exports.run = (client, message, args) => {
                 }
             }
             if (!sar[r.id] || sar[r.id].enabled === false) {
-                message.channel.send('❌ **| Ez a rank nem választható!**')
+                message.channel.send('>>> ❌ **| Ez a rank nem választható!**')
             } else {
                 if (message.member.roles.has(r.id) === true) {
                     message.guild.members.get(message.author.id).removeRole(r.id);
-                    message.channel.send(`✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
+                    message.channel.send(`>>> ✅ **| Elvetted a(z) \`${r.name}\` role-t!**`)
                 } else {
                     if (cangetr === true) {
                         message.guild.members.get(message.author.id).addRole(r.id);
-                        message.channel.send(`✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
+                        message.channel.send(`>>> ✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`)
                     } else {
                         message.guild.members.get(message.author.id).removeRole(crrole);
                         message.guild.members.get(message.author.id).addRole(r.id);
-                        message.channel.send(`✅ **| Rankod cserélve! \`(${message.guild.roles.get(crrole).name} --> ${r.name})\`**`)
+                        message.channel.send(`>>> ✅ **| Rankod cserélve! \`(${message.guild.roles.get(crrole).name} --> ${r.name})\`**`)
                     }
                 }
             }
