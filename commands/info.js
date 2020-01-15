@@ -1,5 +1,5 @@
-exports.run = (client, message, args) => {
-    let creationTime = new Date(message.guild.createdAt)
+exports.run = (client, message) => {
+    const creationTime = new Date(message.guild.createdAt);
     message.channel.send({
         embed: {
             color: 0xDB6206,
@@ -24,7 +24,7 @@ exports.run = (client, message, args) => {
                     inline: true
                 },
                 {
-                    name: "Ebből bot:",
+                    name: 'Ebből bot:',
                     value: message.guild.members.filter(m => m.user.bot == true).size,
                     inline: true
                 },
@@ -34,8 +34,8 @@ exports.run = (client, message, args) => {
                     inline: true
                 },
                 {
-                    name: "Szerver létrehozva:",
-                    value: creationTime.toLocaleDateString(),
+                    name: 'Szerver létrehozva:',
+                    value: creationTime.toLocaleDateString,
                     inline: true
                 }
             ]

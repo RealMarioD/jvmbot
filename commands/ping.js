@@ -1,6 +1,6 @@
-exports.run = (client, message, args) => {
-    message.channel.send(`Pinging...`).then(msg => {
-        msg.edit(`Pong! \`${(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp)}ms\``)
+exports.run = (client, message) => {
+    message.channel.send('Pinging...').then(msg => {
+        msg.edit(`Pong! \`${(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp)}ms\``);
     }).catch(console.error);
 };
 

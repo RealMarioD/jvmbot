@@ -1,8 +1,8 @@
 const users = require('../assets/users.json');
 
-exports.run = (client, message, args) => {
+exports.run = (client, message) => {
 
-    let results = [];
+    const results = [];
     let i = 1;
     Object.keys(users).map(key => ({
         key: key, value: users[key]
@@ -12,14 +12,15 @@ exports.run = (client, message, args) => {
         if(message.guild.members.has(sortedData.key) == true) {
             results.push(`${i}. __${message.guild.members.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*`);
             i += 1;
-        } else {
-            console.log("user in users does not exist");
+        }
+        else {
+            console.log('user in users does not exist');
         }
     });
-    message.channel.send(">>> " + results.slice(0, 10).join(`\n`))
+    message.channel.send('>>> ' + results.slice(0, 10).join('\n'));
 };
 
 exports.info = {
-    syntax: "",
-    description: "Kiírja a 10 legtöbb vidmánival rendelkező embert!"
+    syntax: '',
+    description: 'Kiírja a 10 legtöbb vidmánival rendelkező embert!'
 };
