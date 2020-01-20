@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
     if (args.length === 0) {
         message.channel.send('>>> ❌ **| Hibás használat!**\n`.store <buy/sell/inv/list> <item> <darab>`');
     }
- else {
+    else {
         const key = args[1];
         const user = users[message.author.id];
         if(Object.prototype.hasOwnProperty.call(items, key) == true || args[0] == 'inv' || args[0] == 'list') {
@@ -26,42 +26,44 @@ exports.run = (client, message, args) => {
                                     user.money -= totalAmount;
                                 }
                                 else if(!user.collection[key]) {
-                                        user.collection[key] = {
-                                            amount: amt
-                                        };
-                                        user.money -= totalAmount;
-                                    }
-                                    else {
-                                        user.collection[key].amount += amt;
-                                        user.money -= items[key].price * amt;
-                                    }
-                                    fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                                    message.channel.send(`>>> ✅ **| Vettél ${amt}db-ot \`${totalAmount}vm\`-ért ebből: \`${items[key].name}\`**`);
+                                    user.collection[key] = {
+                                        amount: amt
+                                    };
+                                    user.money -= totalAmount;
                                 }
                                 else {
-                                    message.channel.send('>>> ❌ **| Nincs elegendő pénzed!**');
+                                    user.collection[key].amount += amt;
+                                    user.money -= items[key].price * amt;
                                 }
+                                fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+                                message.channel.send(`>>> ✅ **| Vettél ${amt}db-ot \`${totalAmount}vm\`-ért ebből: \`${items[key].name}\`**`);
                             }
-                            break;
+                            else {
+                                message.channel.send('>>> ❌ **| Nincs elegendő pénzed!**');
+                            }
+                        }
+                        break;
+
                         case 'sell': {
                             const totalPrice = (items[key].price / 2) * amt;
                             if(!user.collection) {
                                 message.channel.send('>>> ❌ **| Üres az inventory-d!**');
                             }
- else if(!user.collection[key]) {
-                                    message.channel.send('>>> ❌ **| Nincs ilyen itemed!**');
-                                }
- else if(user.collection[key].amount >= amt) {
-                                        user.money += totalPrice;
-                                        user.collection[key].amount -= amt;
-                                        fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                                        message.channel.send(`>>> ✅ **| Eladtál ${amt}db-ot \`${totalPrice}vm\`-ért ebből: \`${items[key].name}\`**`);
-                                    }
- else {
-                                        message.channel.send(`>>> ❌ **| Nincs \`${amt}\`db-od ebből: \`${items[key].name}\`**`);
-                                    }
-                                }
-                            break;
+                            else if(!user.collection[key]) {
+                                message.channel.send('>>> ❌ **| Nincs ilyen itemed!**');
+                            }
+                            else if(user.collection[key].amount >= amt) {
+                                user.money += totalPrice;
+                                user.collection[key].amount -= amt;
+                                fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+                                message.channel.send(`>>> ✅ **| Eladtál ${amt}db-ot \`${totalPrice}vm\`-ért ebből: \`${items[key].name}\`**`);
+                            }
+                            else {
+                                message.channel.send(`>>> ❌ **| Nincs \`${amt}\`db-od ebből: \`${items[key].name}\`**`);
+                            }
+                        }
+                        break;
+
                         case 'inv': {
                             let finalMsg = `>>> __${message.author.tag} itemei:__\n\n`;
                             for(const item in user.collection) {
@@ -73,8 +75,8 @@ exports.run = (client, message, args) => {
                                 finalMsg += '*Wow, such empty.*';
                             }
                             message.channel.send(finalMsg);
-                            }
-                            break;
+                        }
+                        break;
 
                         case 'list':
                             message.channel.send(listItems());
@@ -85,23 +87,26 @@ exports.run = (client, message, args) => {
                             break;
                     }
                 }
- else {
+                else {
                     message.channel.send('>>> ❌ **| *i g e n***');
                 }
             }
- else {
+            else {
                 message.channel.send('>>> ❌ **| Nem adtál meg mennyiséget!**');
             }
         }
- else {
+        else {
             message.channel.send('>>> ❌ **| Nincs ilyen item!**');
         }
-
     }
 };
 
 
 exports.info = {
+
+    name: 'store',
     syntax: '<buy/sell/inv/list> <item> <darab>',
-    description: 'Vidman Pláza, vagy amit akartok.'
+    description: 'Vidman Pláza, vagy amit akartok.',
+    requiredPerm: null
+
 };

@@ -10,6 +10,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'vidmani',
     syntax: '',
-    description: 'Kiírja, hogy mennyi Vidmánid van!'
+    description: 'Kiírja, hogy mennyi Vidmánid van!',
+    requiredPerm: null
+
 };

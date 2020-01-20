@@ -1,6 +1,23 @@
 const { getDate } = require('../util.js');
 module.exports = (client, message) => {
 
+    function runCommand() {
+        try {
+            cmd.run(client, message, args);
+            console.log(`${command} parancs futtatva @ ${getDate()}`);
+        }
+        catch (err) {
+            if(err.code === 'MODULE_NOT_FOUND') {return;}
+            else {
+                console.error(err);
+            }
+        }
+    }
+
+    function noPerms(perm) {
+        message.reply(`\`${perm}\` jog szükséges ennek a parancsnak a használatához!`);
+    }
+
     // Deletes messages in #igazol
     if (message.channel.id === '584445312312147996' && !message.guild.members.get(message.author.id).roles.has(client.config.adminID)) {
         message.delete();
@@ -16,14 +33,13 @@ module.exports = (client, message) => {
 
     if (!cmd) return;
 
-    try {
-        cmd.run(client, message, args);
-        console.log(`${command} parancs futtatva @ ${getDate()}`);
+    if(!cmd.info.requiredPerm) {
+        runCommand();
     }
-    catch (err) {
-        if(err.code === 'MODULE_NOT_FOUND') {return;}
-        else {
-            console.error(err);
+    else if(cmd.info.requiredPerm == 'developer') {
+        if(client.config.ownerID == message.author.id || message.member.roles.has(client.config.fejlesztoID)) {
+            runCommand();
         }
+        else {noPerms('Fejlesztő');}
     }
 };

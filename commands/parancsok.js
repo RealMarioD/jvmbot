@@ -11,7 +11,7 @@ exports.run = (client, message, args) => {
         fs.readdirSync('./commands/').forEach(cmdfile => {
             cmdfile = cmdfile.replace('.js', '');
             const cmd = require(`../commands/${cmdfile}`);
-            helpEmbed.description += `| \`${client.config.prefix}${cmdfile} ${cmd.info.syntax}\` | ${cmd.info.adminOnly === true ? '__Admin Only!__' : ''}\n`;
+            helpEmbed.description += `| \`${client.config.prefix}${cmdfile} ${cmd.info.syntax}\` | ${cmd.info.requiredPerm != null ? '__Admin Only!__' : ''}\n`;
         });
         helpEmbed.description = helpEmbed.description.replace('undefined', '');
         message.channel.send({ embed: helpEmbed });
@@ -24,7 +24,7 @@ exports.run = (client, message, args) => {
                     color: 0x56f442,
                     title: `\`\`${client.config.prefix}${args[0].toLowerCase()}\`\``,
                     description: (commandFile.info.syntax === '' ? '' : `**Értékek:** ${commandFile.info.syntax}\n`) +
-                        `**Információ:** ${commandFile.info.description}\n${commandFile.info.adminOnly === true ? '__Ezt a parancsot csak fejlesztők/adminok tudják használni!__' : ''}`
+                        `**Információ:** ${commandFile.info.description}\n${commandFile.info.requiredPerm != null ? '__Ezt a parancsot csak fejlesztők/adminok tudják használni!__' : ''}`
                 }
             });
         }
@@ -36,7 +36,9 @@ exports.run = (client, message, args) => {
 
 exports.info = {
 
+    name: 'parancsok',
     syntax: '<parancs>',
-    description: 'Visszaadja az összes parancsot.'
+    description: 'Visszaadja az összes parancsot.',
+    requiredPerm: null
 
 };

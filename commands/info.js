@@ -14,18 +14,18 @@ exports.run = (client, message) => {
             },
             fields: [
                 {
-                    name: 'Emberi lények száma:',
-                    value: message.guild.members.filter(m => m.user.bot == false).size,
+                    name: 'Tagok száma:',
+                    value: message.guild.members.size,
+                    inline: true
+                },
+                {
+                    name: 'Ebből ebből emberi lények:',
+                    value: message.guild.members.filter(m => !m.user.bot).size,
                     inline: true
                 },
                 {
                     name: 'Ebből online:',
-                    value: message.guild.members.filter(u => u.presence.status === 'online').size,
-                    inline: true
-                },
-                {
-                    name: 'Ebből bot:',
-                    value: message.guild.members.filter(m => m.user.bot == true).size,
+                    value:  message.guild.members.filter(u => u.presence.status === 'online' && !u.user.bot).size,
                     inline: true
                 },
                 {
@@ -35,7 +35,7 @@ exports.run = (client, message) => {
                 },
                 {
                     name: 'Szerver létrehozva:',
-                    value: creationTime.toLocaleDateString,
+                    value: creationTime.toLocaleDateString(),
                     inline: true
                 }
             ]
@@ -44,6 +44,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'info',
     syntax: '',
-    description: 'Információ a szerverről.'
+    description: 'Információ a szerverről.',
+    requiredPerm: null
+
 };

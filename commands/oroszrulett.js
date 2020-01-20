@@ -1,6 +1,5 @@
 const users = require('../assets/users.json');
 const fs = require('fs');
-const config = require('../config.json');
 exports.run = (client, message, args) => {
 
     const au = message.author;
@@ -21,7 +20,7 @@ exports.run = (client, message, args) => {
         else if (amount >= 50 && amount <= 10000) {
             let response = Math.floor(Math.random() * (7 - 1 + 1));
             let win = false;
-            if(message.author.id == config.ownerID) {
+            if(message.author.id == client.config.ownerID) {
                 if(args[1] == '--win') {
                     win = true;
                     response = 6;
@@ -52,6 +51,9 @@ exports.run = (client, message, args) => {
 };
 
 exports.info = {
+
+    name: 'oroszrulett',
     syntax: '<tét>',
-    description: 'Egy kis szerencse játék.'
+    description: 'Egy kis szerencse játék.',
+    requiredPerm: null
 };

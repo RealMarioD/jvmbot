@@ -14,7 +14,9 @@ exports.run = (client, message) => {
 
 exports.info = {
 
+    name: 'hirlevel',
     syntax: '',
-    description: 'Fel/le tudsz iratkozni a szerver hírlevélre/ről ezzel a paranccsal.'
+    description: 'Fel/le tudsz iratkozni a szerver hírlevélre/ről ezzel a paranccsal.',
+    requiredPerm: null
 
 };

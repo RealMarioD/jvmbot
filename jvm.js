@@ -3,6 +3,8 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const fs = require('fs');
 const Enmap = require('enmap');
+const ascii = require('ascii-table');
+const table = new ascii().setHeading('Command', 'Status');
 client.config = config;
 
 fs.readdir('./events/', (err, files) => {
@@ -22,9 +24,15 @@ fs.readdir('./commands/', (err, files) => {
     if (!file.endsWith('.js')) return;
     const props = require(`./commands/${file}`);
     const commandName = file.split('.')[0];
-    console.log(`Attempting to load command ${commandName}`);
+    if(file) {
+      table.addRow(file, '✅');
+    }
+    else {
+      table.addRow(file, '❌');
+    }
     client.commands.set(commandName, props);
   });
+  console.log(table.toString());
 });
 
 client.login(config.token);

@@ -8,7 +8,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
     name: '8ball',
     syntax: '',
     description: 'Megválaszolja egy igen-nem kérdésed.',
+    requiredPerm: null
+
 };

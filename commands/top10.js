@@ -21,6 +21,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'top10',
     syntax: '',
-    description: 'Kiírja a 10 legtöbb vidmánival rendelkező embert!'
+    description: 'Kiírja a 10 legtöbb vidmánival rendelkező embert!',
+    requiredPerm: null
+
 };

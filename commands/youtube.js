@@ -11,6 +11,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'youtube',
     syntax: '',
     description: 'Fel/le tudsz iratkozni a YouTube hírlevélre/ről ezzel a paranccsal.',
+    requiredPerm: null
+
 };

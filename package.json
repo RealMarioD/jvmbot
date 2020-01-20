@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.7.11",
+    "ascii-table": "0.0.9",
     "discord.js": "^11.5.1",
     "enmap": "^5.2.4",
     "eslint": "^6.8.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "prism-media": "0.0.4"
   }
 }

@@ -20,7 +20,7 @@ exports.run = (client, message) => {
         const remainingTime = moment.duration(users[author.id].lastSavedTime + cooldown - currentDate);
         message.channel.send(`Még várnod kell \`${remainingTime.hours()} órát, ${remainingTime.minutes()} percet és ${remainingTime.seconds()} másodpercet\``);
     }
- else {
+    else {
         if (currentDate < users[author.id].lastSavedTime + resetTime) {
             users[author.id].money += users[author.id].dailyDay * 50;
             const tick = '✅|';
@@ -29,11 +29,11 @@ exports.run = (client, message) => {
             if (users[author.id].dailyDay === 5) {
                 users[author.id].dailyDay = 1;
             }
- else {
+            else {
                 users[author.id].dailyDay += 1;
             }
         }
- else {
+        else {
             users[author.id].money += 50;
             users[author.id].dailyDay = 2;
             message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+50\`**`);
@@ -45,6 +45,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'napimani',
     syntax: '',
-    description: 'Ezzel a paranncsal megkapod a napi Vidmánid!'
+    description: 'Ezzel a paranncsal megkapod a napi Vidmánid!',
+    requiredPerm: null
+
 };

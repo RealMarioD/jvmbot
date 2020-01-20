@@ -1,4 +1,3 @@
-const config = require('../config.json');
 const Discord = require('discord.js');
 const fs = require('fs');
 const cases = require('../assets/cases.json');
@@ -18,31 +17,38 @@ exports.run = (client, message, args) => {
     else if(args.length == 0) {message.channel.send('> ❌ Nem adtál meg ötletet!');}
     else {
         const caseID = Math.random().toString(36).substring(7);
-        const ideaChannel = message.guild.channels.get(config.ideaChannelID);
+        const ideaChannel = message.guild.channels.get(client.config.ideaChannelID);
         const finalMsg = new Discord.RichEmbed()
             .setColor('#00CC00')
             .setTitle('Új Ötlet')
             .setAuthor(message.author.tag, message.author.avatarURL)
             .addField('Leírás:', `${args.join(' ')}`)
             .setFooter(`ID: ${caseID}`);
-        ideaChannel.send(finalMsg).then(m => {
+        ideaChannel.send(finalMsg)
+        .then(m => {
             m.react(getEmoji(client, 'tickGreen'));
             m.react(getEmoji(client, 'tickRed'));
+            cases[caseID] = {
+                outcome: false,
+                managed: false,
+                type: 'idea',
+                author: `${message.author.tag} (${message.author.id})`,
+                description: args.join(' '),
+                msgID: m.id
+            };
+        })
+        .then(() => {
+            timeouts['erroridea'].lastSavedTime = currentDate;
+            fs.writeFileSync('./assets/timeouts.json', JSON.stringify(timeouts, null, 2));
+            fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
+            message.channel.send(`>>> Ötletedet fogadtuk!\nID: \`${caseID}\``);
         });
-        cases[caseID] = {
-            outcome: false,
-            managed: false,
-            type: 'idea',
-            author: `${message.author.tag} (${message.author.id})`,
-            description: args.join(' ')
-        };
-        timeouts['erroridea'].lastSavedTime = currentDate;
-        fs.writeFileSync('./assets/timeouts.json', JSON.stringify(timeouts, null, 2));
-        fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
-        message.channel.send(`>>> Ötletedet fogadtuk!\nID: \`${caseID}\``);
     }
 };
 exports.info = {
+
+    name: 'otlet',
     syntax: '<ötlet>',
-    description: 'Ezzel a paranccsal ötletet tudsz beküldeni.'
+    description: 'Ezzel a paranccsal ötletet tudsz beküldeni.',
+    requiredPerm: null
 };

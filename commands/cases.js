@@ -1,10 +1,9 @@
 const cases = require('../assets/cases.json');
 const fs = require('fs');
 const Discord = require('discord.js');
-const config = require('../config.json');
 const { devOnly } = require('../util');
 exports.run = (client, message, args) => {
-    if(message.author.id == config.ownerID) {
+    if(message.author.id == client.config.ownerID) {
         if(args.length == 0) {
             const toDoCases = [];
             for (const acase in cases) {
@@ -37,9 +36,13 @@ exports.run = (client, message, args) => {
             if(outcomeInput == 'false') {outcomeInput = false;}
             else if(outcomeInput == 'true') {outcomeInput = true;}
             else if(outcomeInput == 'delete') {
+                message.guild.channels.get(client.config.ideaChannelID).fetchMessage(cases[caseID].msgID)
+                    .then(msg => {
+                        msg.delete().catch(err => console.error(err));
+                    });
                 delete cases[caseID];
                 fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
-                message.channel.send(`\`${caseID}\` törölve!`);
+                return message.channel.send(`\`${caseID}\` törölve!`);
             }
             else {
                 message.channel.send('Érvénytelen boolean/eljárás!');
@@ -58,7 +61,7 @@ exports.run = (client, message, args) => {
             cases[caseID].managed = true;
             fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
             message.channel.send('Feldolgozva.');
-            message.guild.channels.get(config.resultsChannelID).send(finalMsg);
+            message.guild.channels.get(client.config.resultsChannelID).send(finalMsg);
         }
     }
  else {
@@ -66,7 +69,10 @@ exports.run = (client, message, args) => {
     }
 };
 exports.info = {
+
+    name: 'cases',
     syntax: '<case id> <bool> <notes>',
     description: 'Ezzel a paranccsal lehet kezelni az ötleteket és hibákat.',
-    adminOnly: true,
+    requiredPerm: 'developer'
+
 };

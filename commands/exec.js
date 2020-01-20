@@ -1,29 +1,28 @@
 const exec = require('child_process').exec;
-const { devOnly } = require('../util.js');
-const config = require('../config.json');
+
 exports.run = (client, message, args) => {
-    if (message.author.id == config.ownerID) {
-        if(args.length == 0) {message.channel.send('> Nem adtál meg parancsot.');}
-        else {
-            const code = args.join(' ');
-            let msg = '';
-            exec(code, (err, out) => {
-                if(err) {
-                    msg += `Error:\n\`\`\`${err}\`\`\`\n`;
-                }
-                if(out) {
-                    msg += `Output:\n\`\`\`${out}\`\`\``;
-                }
-                message.channel.send(msg);
-            });
-        }
-    }
+
+    if(args.length == 0) {message.channel.send('> Nem adtál meg parancsot.');}
     else {
-        devOnly(message.channel);
+        const code = args.join(' ');
+        let msg = '';
+        exec(code, (err, out) => {
+            if(err) {
+                msg += `Error:\n\`\`\`${err}\`\`\`\n`;
+            }
+            if(out) {
+                msg += `Output:\n\`\`\`${out}\`\`\``;
+            }
+            message.channel.send(msg);
+        });
     }
 };
+
 exports.info = {
-    syntax: '<code>',
+
+    name: 'exec',
+    syntax: '<kód>',
     description: 'A console-t lehet kezelni ezzel a paranccsal.',
-    adminOnly: true
+    requiredPerm: 'developer'
+
 };

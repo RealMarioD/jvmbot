@@ -1,7 +1,6 @@
 exports.run = (client, message) => {
-    const config = require('../config.json');
-    const hirlevelRole = message.guild.roles.get(config.hirlevelID);
-    if (message.member.roles.has(config.fejlesztoID)) {
+    const hirlevelRole = message.guild.roles.get(client.config.hirlevelID);
+    if (message.member.roles.has(client.config.fejlesztoID)) {
         if (hirlevelRole.mentionable === false) {
             hirlevelRole.setMentionable(true).then(() => message.channel.send('>>> A hírlevél role megpingelése: __**Engedélyezve**__'));
         }
@@ -12,7 +11,10 @@ exports.run = (client, message) => {
 };
 
 exports.info = {
+
+    name: 'toggleping',
     syntax: '',
     description: 'Megváltoztatja a hírlevél role egy beállítását.',
-    adminOnly: true
+    requiredPerm: 'developer'
+
 };
