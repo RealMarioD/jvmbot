@@ -17,7 +17,7 @@ exports.info = {
  // Innen semmit se hagyj ki, mindegyik kell.
   name: 'Parancs(a fájl!) neve',
   syntax: 'Parancs szintaxisa(használata)',
-  description: 'Parancs leírása'
+  description: 'Parancs leírása',
   requiredPerm: null // null || 'developer' a létező permek a readme frissítésekor.
   
 }
