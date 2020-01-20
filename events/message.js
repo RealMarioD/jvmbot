@@ -18,7 +18,6 @@ module.exports = (client, message) => {
         message.reply(`\`${perm}\` jog szükséges ennek a parancsnak a használatához!`);
     }
 
-    // Deletes messages in #igazol
     if (message.channel.id === '584445312312147996' && !message.guild.members.get(message.author.id).roles.has(client.config.adminID)) {
         message.delete();
     }
