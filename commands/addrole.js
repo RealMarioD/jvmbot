@@ -7,8 +7,8 @@ exports.run = (client, message, args) => {
         message.channel.send('❌ **| Nem adtál meg rankot!**');
     }
     else {
-        const roleName = args[0].toLowerCase();
-        const role = message.guild.roles.find(r => r.name.toLowerCase() === roleName);
+        const roleName = args.join(' ').toLowerCase();
+        const role = message.guild.roles.cache.find(r => r.name.toLowerCase() === roleName);
         if (!role) {
             message.channel.send('❌ **| Nem létezik ilyen rank!**');
         }
@@ -30,6 +30,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'addrole',
+    category: 'admin',
     syntax: '<role>',
     description: 'Ezzel a paranccsal role-okat lehet hozzáadni a kérhető role-ok listájához.',
     requiredPerm: 'developer'

@@ -14,6 +14,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
   name: 'reload',
+  category: 'admin',
   syntax: '<parancs>',
   description: 'Újratölti a megadott parancsot.',
   requiredPerm: 'developer'

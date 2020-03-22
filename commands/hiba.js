@@ -17,11 +17,11 @@ exports.run = (client, message, args) => {
     else if(args.length == 0) {message.channel.send('> ❌ Nem adtál meg hibát!');}
     else {
         const caseID = Math.random().toString(36).substring(7);
-        const ideaChannel = message.guild.channels.get(client.config.ideaChannelID);
-        const finalMsg = new Discord.RichEmbed()
+        const ideaChannel = message.guild.channels.cache.get(client.config.ideaChannelID);
+        const finalMsg = new Discord.MessageEmbed()
             .setColor('#FF0000')
             .setTitle('Új Hiba')
-            .setAuthor(message.author.tag, message.author.avatarURL)
+            .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .addField('Leírás:', `${args.join(' ')}`)
             .setFooter(`ID: ${caseID}`);
         ideaChannel.send(finalMsg)
@@ -48,6 +48,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'hiba',
+    category: 'egyéb',
     syntax: '<hiba>',
     description: 'Ezzel a paranccsal hibát tudsz bejelenteni.',
     requiredPerm: null

@@ -7,6 +7,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'ping',
+    category: 'egyéb',
     syntax: '',
     description: 'Megmondja a válaszidőt.',
     requiredPerm: null

@@ -9,12 +9,9 @@ exports.run = (client, message) => {
     })).sort(
         (first, second) => (second.value.money - first.value.money)
     ).forEach((sortedData) => {
-        if(message.guild.members.has(sortedData.key) == true) {
-            results.push(`${i}. __${message.guild.members.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*`);
+        if(message.guild.members.cache.has(sortedData.key) == true) {
+            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*`);
             i += 1;
-        }
-        else {
-            console.log('user in users does not exist');
         }
     });
     message.channel.send('>>> ' + results.slice(0, 10).join('\n'));
@@ -23,6 +20,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'top10',
+    category: 'szórakozás',
     syntax: '',
     description: 'Kiírja a 10 legtöbb vidmánival rendelkező embert!',
     requiredPerm: null

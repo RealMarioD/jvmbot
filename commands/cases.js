@@ -10,14 +10,14 @@ exports.run = (client, message, args) => {
                 toDoCases.push(acase.toString());
             }
         }
-        const finalMsg = new Discord.RichEmbed()
+        const finalMsg = new Discord.MessageEmbed()
             .addField('Fűggőben lévő ötletek/hibák:', toDoCases.length == 0 ? '*Üres*' : toDoCases);
         message.channel.send(finalMsg);
     }
     else if(args.length == 1) {
         const caseID = args[0];
         if(Object.prototype.hasOwnProperty.call(cases, caseID)) {
-            const finalMsg = new Discord.RichEmbed()
+            const finalMsg = new Discord.MessageEmbed()
                 .setColor(cases[caseID].type == 'error' ? '#FF0000' : '#00CC00')
                 .setTitle(cases[caseID].type == 'error' ? 'Hiba' : 'Ötlet')
                 .setAuthor(cases[caseID].author)
@@ -35,7 +35,7 @@ exports.run = (client, message, args) => {
         if(outcomeInput == 'false') {outcomeInput = false;}
         else if(outcomeInput == 'true') {outcomeInput = true;}
         else if(outcomeInput == 'delete') {
-            message.guild.channels.get(client.config.ideaChannelID).fetchMessage(cases[caseID].msgID)
+            message.guild.channels.cache.get(client.config.ideaChannelID).fetchMessage(cases[caseID].msgID)
                 .then(msg => {
                     msg.delete().catch(err => console.error(err));
                 });
@@ -48,7 +48,7 @@ exports.run = (client, message, args) => {
             return;
         }
         const adminComment = args.slice(2).join(' ');
-        const finalMsg = new Discord.RichEmbed()
+        const finalMsg = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`${cases[caseID].type == 'error' ? 'Hiba' : 'Ötlet'} ID: [${caseID}]`)
             .setAuthor(cases[caseID].author)
@@ -60,13 +60,14 @@ exports.run = (client, message, args) => {
         cases[caseID].managed = true;
         fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
         message.channel.send('Feldolgozva.');
-        message.guild.channels.get(client.config.resultsChannelID).send(finalMsg);
+        message.guild.channels.cache.get(client.config.resultsChannelID).send(finalMsg);
     }
 };
 
 exports.info = {
 
     name: 'cases',
+    category: 'admin',
     syntax: '<case id> <bool> <notes>',
     description: 'Ezzel a paranccsal lehet kezelni az ötleteket és hibákat.',
     requiredPerm: 'developer'

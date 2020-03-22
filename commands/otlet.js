@@ -17,11 +17,11 @@ exports.run = (client, message, args) => {
     else if(args.length == 0) {message.channel.send('> ❌ Nem adtál meg ötletet!');}
     else {
         const caseID = Math.random().toString(36).substring(7);
-        const ideaChannel = message.guild.channels.get(client.config.ideaChannelID);
-        const finalMsg = new Discord.RichEmbed()
+        const ideaChannel = message.guild.channels.cache.get(client.config.ideaChannelID);
+        const finalMsg = new Discord.MessageEmbed()
             .setColor('#00CC00')
             .setTitle('Új Ötlet')
-            .setAuthor(message.author.tag, message.author.avatarURL)
+            .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .addField('Leírás:', `${args.join(' ')}`)
             .setFooter(`ID: ${caseID}`);
         ideaChannel.send(finalMsg)
@@ -48,6 +48,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'otlet',
+    category: 'egyéb',
     syntax: '<ötlet>',
     description: 'Ezzel a paranccsal ötletet tudsz beküldeni.',
     requiredPerm: null

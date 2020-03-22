@@ -53,6 +53,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'oroszrulett',
+    category: 'szórakozás',
     syntax: '<tét>',
     description: 'Egy kis szerencse játék.',
     requiredPerm: null

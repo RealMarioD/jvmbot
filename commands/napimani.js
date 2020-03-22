@@ -47,6 +47,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'napimani',
+    category: 'szórakozás',
     syntax: '',
     description: 'Ezzel a paranncsal megkapod a napi Vidmánid!',
     requiredPerm: null

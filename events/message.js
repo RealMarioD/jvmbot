@@ -1,4 +1,4 @@
-const { getDate } = require('../util.js');
+const { getDate, sleep } = require('../util.js');
 module.exports = (client, message) => {
 
     function runCommand() {
@@ -18,8 +18,10 @@ module.exports = (client, message) => {
         message.reply(`\`${perm}\` jog szükséges ennek a parancsnak a használatához!`);
     }
 
-    if (message.channel.id === '584445312312147996' && !message.guild.members.get(message.author.id).roles.has(client.config.adminID)) {
-        message.delete();
+    if (message.channel.id === '584445312312147996' && !message.guild.members.cache.get(message.author.id)._roles.includes(client.config.adminID)) {
+        sleep(1000).then(() => {
+            message.delete();
+        });
     }
 
     if (!message.content.startsWith(client.config.prefix)) return;
@@ -36,7 +38,7 @@ module.exports = (client, message) => {
         runCommand();
     }
     else if(cmd.info.requiredPerm == 'developer') {
-        if(client.config.ownerID == message.author.id || message.member.roles.has(client.config.fejlesztoID)) {
+        if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) {
             runCommand();
         }
         else {noPerms('Fejlesztő');}

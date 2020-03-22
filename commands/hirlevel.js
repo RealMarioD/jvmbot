@@ -1,20 +1,19 @@
-const { getEmoji } = require('../util');
 exports.run = (client, message) => {
-    message.delete();
-    const member = message.guild.members.get(message.author.id);
-    if (member.roles.has(client.config.hirlevelID) === false) {
-        member.addRole(client.config.hirlevelID).then(() =>
-            message.author.send(`>>> ✅ **Feliratkoztál** a szerver hírlevelére! 📨\n\n${getEmoji(client, 'vidmanLogo')} __${message.guild.name}__`));
+    const member = message.guild.members.cache.get(message.author.id);
+    if (member._roles.includes(client.config.hirlevelID) === false) {
+        member.roles.add(client.config.hirlevelID).then(() =>
+            message.channel.send('>>> ✅ **Feliratkoztál** a szerver hírlevelére! 📨'));
     }
     else {
-        member.removeRole(client.config.hirlevelID).then(() =>
-            message.author.send(`>>> ✅ **Leiratkoztál** a szerver hírleveléről! 📨\n\n${getEmoji(client, 'vidmanLogo')} __${message.guild.name}__`));
+        member.roles.remove(client.config.hirlevelID).then(() =>
+            message.channel.send('>>> ✅ **Leiratkoztál** a szerver hírleveléről! 📨'));
     }
 };
 
 exports.info = {
 
     name: 'hirlevel',
+    category: 'egyéb',
     syntax: '',
     description: 'Fel/le tudsz iratkozni a szerver hírlevélre/ről ezzel a paranccsal.',
     requiredPerm: null

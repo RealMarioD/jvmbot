@@ -5,7 +5,7 @@ exports.run = (client, message) => {
             color: 0xDB6206,
             title: `\`\`${message.guild.name}\`\``,
             thumbnail: {
-                url: message.guild.iconURL
+                url: message.guild.iconURL()
             },
             author: {
                 name: 'JustVidman',
@@ -15,17 +15,17 @@ exports.run = (client, message) => {
             fields: [
                 {
                     name: 'Tagok száma:',
-                    value: message.guild.members.size,
+                    value: message.guild.members.cache.size,
                     inline: true
                 },
                 {
                     name: 'Ebből ebből emberi lények:',
-                    value: message.guild.members.filter(m => !m.user.bot).size,
+                    value: message.guild.members.cache.filter(m => !m.user.bot).size,
                     inline: true
                 },
                 {
                     name: 'Ebből online:',
-                    value:  message.guild.members.filter(u => u.presence.status === 'online' && !u.user.bot).size,
+                    value:  message.guild.members.cache.filter(u => u.presence.status === 'online' && !u.user.bot).size,
                     inline: true
                 },
                 {
@@ -46,6 +46,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'info',
+    category: 'egyéb',
     syntax: '',
     description: 'Információ a szerverről.',
     requiredPerm: null

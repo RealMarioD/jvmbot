@@ -1,4 +1,4 @@
-const { inspect } = require('util');
+const { inspect } = require('../../test/util');
 
 exports.run = (client, message, args) => {
 
@@ -23,6 +23,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'eval',
+    category: 'admin',
     syntax: '<js kód>',
     description: 'Teszt parancs a fejlesztőknek.',
     requiredPerm: 'developer'

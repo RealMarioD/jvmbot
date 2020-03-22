@@ -10,7 +10,7 @@ const users = require('../assets/users.json');
 
 exports.run = async (client, message, args) => {
 
-    const suits = ['♥', `${client.guilds.get('650353727991185430').emojis.find(emoji => emoji.name == 'vidmanPikk')}`, `${client.guilds.get('650353727991185430').emojis.find(emoji => emoji.name == 'vidmanTreff')}`, '♦'];
+    const suits = ['♥', `${client.guilds.cache.get('650353727991185430').emojis.cache.find(emoji => emoji.name == 'vidmanPikk')}`, `${client.guilds.cache.get('650353727991185430').emojis.cache.find(emoji => emoji.name == 'vidmanTreff')}`, '♦'];
 
     const determineHand = (cardpack, total, name) => {
         return `> ${name} ezeket a kártyákat fogja:\n> ${String(cardpack.map((c) => `[${c}${suits[giveRandom(3)]}]`).join(', '))} (${total})\n\n`;
@@ -151,6 +151,7 @@ exports.run = async (client, message, args) => {
 exports.info = {
 
     name: 'blackjack',
+    category: 'szórakozás',
     syntax: '<tét>',
     description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got from Australia, perfected in Hungary."',
     requiredPerm: null

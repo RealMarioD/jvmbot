@@ -21,6 +21,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'exec',
+    category: 'admin',
     syntax: '<kód>',
     description: 'A console-t lehet kezelni ezzel a paranccsal.',
     requiredPerm: 'developer'

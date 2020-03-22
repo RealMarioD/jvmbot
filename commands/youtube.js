@@ -1,18 +1,19 @@
-const { getEmoji } = require('../util');
 exports.run = (client, message) => {
-    message.delete();
-    const mem = message.guild.members.get(message.author.id);
-    if (mem.roles.has(client.config.ytID) === false) {
-        mem.addRole(client.config.ytID).then(() => message.author.send(`>>> ✅ **Feliratkoztál** a szerver YouTube hírlevelére! 📨\n\n${getEmoji(client, 'vidmanLogo')} __${message.guild.name}__`));
+    const member = message.guild.members.cache.get(message.author.id);
+    if (member._roles.includes(client.config.ytID) === false) {
+        member.roles.add(client.config.ytID).then(() =>
+            message.channel.send('>>> ✅ **Feliratkoztál** a szerver YouTube hírlevelére! 📨'));
     }
     else {
-        mem.removeRole(client.config.ytID).then(() => message.author.send(`>>> ✅ **Leiratkoztál** a szerver YouTube hírleveléről! 📨\n\n${getEmoji(client, 'vidmanLogo')} __${message.guild.name}__`));
+        member.roles.remove(client.config.ytID).then(() =>
+            message.channel.send('>>> ✅ **Leiratkoztál** a szerver YouTube hírleveléről! 📨'));
     }
 };
 
 exports.info = {
 
     name: 'youtube',
+    category: 'egyéb',
     syntax: '',
     description: 'Fel/le tudsz iratkozni a YouTube hírlevélre/ről ezzel a paranccsal.',
     requiredPerm: null

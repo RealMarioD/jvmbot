@@ -10,7 +10,7 @@ exports.run = (client, message, args) => {
     if (args.length === 0) {
         for (const role in sar) {
             if (sar[role].enabled === true) {
-                const r = message.guild.roles.get(role);
+                const r = message.guild.roles.cache.get(role);
                 msgembed.description += `<@&${r.id}> | .role \`${r.name}\`\n`;
             }
         }
@@ -19,10 +19,10 @@ exports.run = (client, message, args) => {
     }
     else {
 
-        const arg = args[0].toLowerCase();
+        const arg = args.join(' ').toLowerCase();
 
         // eslint-disable-next-line no-shadow
-        const r = message.guild.roles.find(r => r.name.toLowerCase() == arg);
+        const r = message.guild.roles.cache.find(r => r.name.toLowerCase() == arg);
 
         if (!r) {
             message.channel.send('❌ **| Nem létezik ilyen rank!**');
@@ -33,7 +33,7 @@ exports.run = (client, message, args) => {
             let crrole;
             for (const role in sar) {
                 if (sar[role].enabled === true) {
-                    if (message.member.roles.has(role)) {
+                    if (message.member._roles.includes(role)) {
                         cangetr = false;
                         crrole = role;
                     }
@@ -42,18 +42,18 @@ exports.run = (client, message, args) => {
             if (!sar[r.id] || sar[r.id].enabled === false) {
                 message.channel.send('>>> ❌ **| Ez a rank nem választható!**');
             }
-            else if (message.member.roles.has(r.id) === true) {
-                    message.guild.members.get(message.author.id).removeRole(r.id);
+            else if (message.member._roles.includes(r.id) === true) {
+                    message.guild.members.cache.get(message.author.id).roles.remove(r.id);
                     message.channel.send(`>>> ✅ **| Elvetted a(z) \`${r.name}\` role-t!**`);
             }
             else if (cangetr === true) {
-                message.guild.members.get(message.author.id).addRole(r.id);
+                message.guild.members.cache.get(message.author.id).roles.add(r.id);
                 message.channel.send(`>>> ✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`);
             }
             else {
-                message.guild.members.get(message.author.id).removeRole(crrole);
-                message.guild.members.get(message.author.id).addRole(r.id);
-                message.channel.send(`>>> ✅ **| Rankod cserélve! \`(${message.guild.roles.get(crrole).name} --> ${r.name})\`**`);
+                message.guild.members.cache.get(message.author.id).roles.remove(crrole);
+                message.guild.members.cache.get(message.author.id).roles.add(r.id);
+                message.channel.send(`>>> ✅ **| Rankod cserélve! \`(${message.guild.roles.cache.get(crrole).name} --> ${r.name})\`**`);
             }
         }
     }
@@ -62,6 +62,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'role',
+    category: 'egyéb',
     syntax: '<role>',
     description: 'Ezzel a paranccsal tudsz role-okat szerezni.',
     requiredPerm: null

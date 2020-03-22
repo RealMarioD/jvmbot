@@ -105,6 +105,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'store',
+    category: 'szórakozás',
     syntax: '<buy/sell/inv/list> <item> <darab>',
     description: 'Vidman Pláza, vagy amit akartok.',
     requiredPerm: null

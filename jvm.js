@@ -17,6 +17,11 @@ fs.readdir('./events/', (err, files) => {
 });
 
 client.commands = new Enmap();
+client.queue = [
+  [],
+  []
+];
+client.dispatcher = {};
 
 fs.readdir('./commands/', (err, files) => {
   if (err) return console.error(err);

@@ -12,6 +12,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'vidmani',
+    category: 'szórakozás',
     syntax: '',
     description: 'Kiírja, hogy mennyi Vidmánid van!',
     requiredPerm: null
