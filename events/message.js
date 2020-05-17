@@ -15,7 +15,8 @@ module.exports = (client, message) => {
         });
     }
 
-    if (!message.content.startsWith(client.config.prefix)) return;
+    if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return;
+    if (client.user.id == client.config.normalID && !message.content.startsWith(client.config.prefix)) return;
     if (message.author.bot) return;
 
     const args = message.content.slice(1).trim().split(/ +/g);
