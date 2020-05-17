@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
 const fs = require('fs');
-const Enmap = require('enmap');
 const ascii = require('ascii-table');
 const table = new ascii().setHeading('Command', 'Status');
 client.config = config;
@@ -16,11 +15,8 @@ fs.readdir('./events/', (err, files) => {
     });
 });
 
-client.commands = new Enmap();
-client.queue = [
-  [],
-  []
-];
+client.commands = new Discord.Collection();
+client.queue = [];
 client.dispatcher = {};
 
 fs.readdir('./commands/', (err, files) => {

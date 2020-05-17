@@ -5,7 +5,8 @@ exports.run = (client, message) => {
     }
     else {
         message.guild.voice.connection.disconnect();
-        client.queue = [[], []];
+        client.dispatcher = {};
+        client.queue = [];
         message.channel.send('Zene megállítva.');
     }
 

@@ -1,4 +1,4 @@
-const { inspect } = require('../../test/util');
+const { inspect } = require('util');
 
 exports.run = (client, message, args) => {
 

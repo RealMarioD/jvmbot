@@ -2,7 +2,8 @@ const users = require('../assets/users.json');
 const fs = require('fs');
 const moment = require('moment');
 exports.run = (client, message) => {
-
+    const tick = '✅|';
+    const cross = '❎|';
     const author = message.author;
     if (!users[author.id]) {
         users[author.id] = {
@@ -23,9 +24,7 @@ exports.run = (client, message) => {
     else {
         if (currentDate < users[author.id].lastSavedTime + resetTime) {
             users[author.id].money += users[author.id].dailyDay * 50;
-            const tick = '✅|';
-            const cross = '❎|';
-            message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+${(users[author.id].dailyDay) * 50}\`**\n|${tick.repeat(users[author.id].dailyDay)}${(cross.repeat(5 - users[author.id].dailyDay))}`);
+            message.channel.send(`>>> **__${author.tag}__, megkaptad a napi <:vidmani:701782953679782019>-d! \`+${(users[author.id].dailyDay) * 50}\`**\n|${tick.repeat(users[author.id].dailyDay)}${(cross.repeat(5 - users[author.id].dailyDay))}`);
             if (users[author.id].dailyDay === 5) {
                 users[author.id].dailyDay = 1;
             }
@@ -36,7 +35,7 @@ exports.run = (client, message) => {
         else {
             users[author.id].money += 50;
             users[author.id].dailyDay = 2;
-            message.channel.send(`>>> **__${author.tag}__ megkapta a napi Vidmániját! \`+50\`**`);
+            message.channel.send(`>>> **__${author.tag}__, megkaptad a napi <:vidmani:701782953679782019>-d! \`+50\`**\n|${tick}${(cross.repeat(4))}`);
         }
         users[author.id].lastSavedTime = currentDate;
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
@@ -49,7 +48,7 @@ exports.info = {
     name: 'napimani',
     category: 'szórakozás',
     syntax: '',
-    description: 'Ezzel a paranncsal megkapod a napi Vidmánid!',
+    description: 'Ezzel a paranncsal megkapod a napi <:vidmani:701782953679782019>-d!',
     requiredPerm: null
 
 };

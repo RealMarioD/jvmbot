@@ -1,6 +1,6 @@
-const config = require('./config.json');
 const buff = require('./assets/buffos.json');
 const ytdl = require('ytdl-core');
+const { MessageEmbed } = require('discord.js');
 
 function devOnly(channel) {
     channel.send({
@@ -30,8 +30,7 @@ function magicBall() {
 
 // Beirsz egy nevet, es kikop egy emojit. Hasznos.
 function getEmoji(client, name) {
-    const vidmanserver = client.guilds.cache.get(config.serverID);
-    const emoji = vidmanserver.emojis.cache.find(e => e.name == name);
+    const emoji = client.emojis.cache.find(e => e.name == name);
     return emoji;
 }
 
@@ -108,24 +107,32 @@ function bjMsg(cardpack, total, name) {
     return `${name} cards:\n${String(cardpack.map((c, index) => `${index + 1}. card: ${c}\n`)).replace(',', '')}Total: ${total}\n`;
 }
 
-function play(connection, music, client, message) {
+function play(connection, client, message, ogMsg) {
     client.message = message;
-    if(client.queue[0][0] != music) client.queue[0].push(music);
-    client.dispatcher = connection.play(ytdl(music));
-    if(!client.queue[1][0]) {
-        ytdl.getBasicInfo(client.queue[0][0], (err, info) => {
-            client.queue[1].push(info.title);
-            message.channel.send(`Most indult: **${info.title}**`);
-        });
+    client.dispatcher = connection.play(ytdl(client.queue[0].url, { quality: 'highestaudio' }));
+    if(!ogMsg) {
+        message.channel.send(new MessageEmbed()
+            .setDescription('Most indult.')
+            .setTitle(client.queue[0].title)
+            .setURL(client.queue[0].url)
+            .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
+            .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
+            .setThumbnail(client.queue[0].videoThumbnail)
+        );
     }
     else {
-        message.channel.send(`Most indult: **${client.queue[1][0]}**`);
+        ogMsg.edit('', new MessageEmbed()
+            .setDescription('Most indult.')
+            .setTitle(client.queue[0].title)
+            .setURL(client.queue[0].url)
+            .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
+            .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
+            .setThumbnail(client.queue[0].videoThumbnail)
+        );
     }
-    if(client.dispatcher._events.finish.length == 2) {
-        const event = require('./dispatcher/finish.js');
-        const eventName = 'finish';
-        client.dispatcher.on(eventName, event.bind(null, client));
-    }
+    const event = require('./dispatcher/finish.js');
+    const eventName = 'finish';
+    client.dispatcher.on(eventName, event.bind(null, client));
 }
 
 module.exports = {

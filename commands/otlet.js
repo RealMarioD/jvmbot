@@ -39,8 +39,8 @@ exports.run = (client, message, args) => {
         })
         .then(() => {
             timeouts['erroridea'].lastSavedTime = currentDate;
-            fs.writeFileSync('./assets/timeouts.json', JSON.stringify(timeouts, null, 2));
             fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
+            fs.writeFileSync('./assets/timeouts.json', JSON.stringify(timeouts, null, 2));
             message.channel.send(`>>> Ötletedet fogadtuk!\nID: \`${caseID}\``);
         });
     }

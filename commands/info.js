@@ -19,7 +19,7 @@ exports.run = (client, message) => {
                     inline: true
                 },
                 {
-                    name: 'Ebből ebből emberi lények:',
+                    name: 'Ebből emberi lények:',
                     value: message.guild.members.cache.filter(m => !m.user.bot).size,
                     inline: true
                 },

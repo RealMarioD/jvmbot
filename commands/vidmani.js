@@ -6,7 +6,7 @@ exports.run = (client, message) => {
             money: 0
         };
     }
-    message.channel.send(`>>> __${message.author.tag}__-nak **${users[message.author.id].money}** Vidmánija van!`);
+    message.channel.send(`>>> __${message.author.tag}:__ **${users[message.author.id].money}**<:vidmani:701782953679782019>`);
 };
 
 exports.info = {

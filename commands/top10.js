@@ -10,7 +10,7 @@ exports.run = (client, message) => {
         (first, second) => (second.value.money - first.value.money)
     ).forEach((sortedData) => {
         if(message.guild.members.cache.has(sortedData.key) == true) {
-            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*`);
+            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*<:vidmani:701782953679782019>`);
             i += 1;
         }
     });
@@ -22,7 +22,7 @@ exports.info = {
     name: 'top10',
     category: 'szórakozás',
     syntax: '',
-    description: 'Kiírja a 10 legtöbb vidmánival rendelkező embert!',
+    description: 'Kiírja a 10 legtöbb <:vidmani:701782953679782019>-val rendelkező embert!',
     requiredPerm: null
 
 };

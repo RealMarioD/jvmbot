@@ -4,13 +4,13 @@ exports.run = (client, message, args) => {
     const fs = require('fs');
 
     if (args.length === 0) {
-        message.channel.send('❌ **| Nem adtál meg rankot!**');
+        message.channel.send('> ❌ **| Nem adtál meg rankot!**');
     }
     else {
         const roleName = args.join(' ').toLowerCase();
         const role = message.guild.roles.cache.find(r => r.name.toLowerCase() === roleName);
         if (!role) {
-            message.channel.send('❌ **| Nem létezik ilyen rank!**');
+            message.channel.send('> ❌ **| Nem létezik ilyen rank!**');
         }
         else {
             if (!sar[role.id]) {
@@ -18,11 +18,11 @@ exports.run = (client, message, args) => {
                     enabled: true
                 };
             }
-            if (sar[role.id].enabled === false) {
+            if (sar[role.id].enabled == false) {
                 sar[role.id].enabled = true;
             }
             fs.writeFileSync('./assets/sar.json', JSON.stringify(sar, null, 2));
-            message.channel.send(`✅ **| Rank \`${role.name}\` hozzáadva a listához!**`);
+            message.channel.send(`> ✅ **| Rank \`${role.name}\` hozzáadva a listához!**`);
         }
     }
 };

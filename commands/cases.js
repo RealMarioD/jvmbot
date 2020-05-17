@@ -35,10 +35,16 @@ exports.run = (client, message, args) => {
         if(outcomeInput == 'false') {outcomeInput = false;}
         else if(outcomeInput == 'true') {outcomeInput = true;}
         else if(outcomeInput == 'delete') {
-            message.guild.channels.cache.get(client.config.ideaChannelID).fetchMessage(cases[caseID].msgID)
-                .then(msg => {
-                    msg.delete().catch(err => console.error(err));
-                });
+            if(cases[caseID].msgID) {
+                message.guild.channels.cache.get(client.config.ideaChannelID).messages.fetch(cases[caseID].msgID)
+                    .then(msg => {
+                        if(msg) {
+                            msg.delete()
+                                .catch(() => message.channel.send(`A(z) <#${client.config.ideaChannelID}> szobából nem tudtam törölni az üzenetet. \`[${msg.id}]\``));
+                        }
+                    });
+            }
+            else { message.channel.send(`A(z) <#${client.config.ideaChannelID}> szobából nem tudtam törölni az üzenetet.`); }
             delete cases[caseID];
             fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
             return message.channel.send(`\`${caseID}\` törölve!`);
