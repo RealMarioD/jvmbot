@@ -1,4 +1,3 @@
-const buff = require('./assets/buffos.json');
 const ytdl = require('ytdl-core');
 const { MessageEmbed } = require('discord.js');
 
@@ -32,11 +31,6 @@ function magicBall() {
 function getEmoji(client, name) {
     const emoji = client.emojis.cache.find(e => e.name == name);
     return emoji;
-}
-
-function getBuff() {
-    const randIndex = Math.floor(Math.random() * buff.length);
-    return buff[randIndex];
 }
 
 const sleep = (milliseconds) => {
@@ -141,7 +135,6 @@ module.exports = {
     devOnly: devOnly,
     getDate: getDate,
     magicBall: magicBall,
-    getBuff: getBuff,
     sleep: sleep,
     items: items,
     listItems: listItems,
