@@ -137,7 +137,7 @@ module.exports = {
     sleep: sleep,
     items: items,
     listItems: listItems,
-    giveRandom : giveRandom,
+    giveRandom: giveRandom,
     totalUpCardpack: totalUpCardpack,
     bjMsg: bjMsg,
     play: play
