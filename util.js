@@ -29,8 +29,7 @@ function magicBall() {
 
 // Beirsz egy nevet, es kikop egy emojit. Hasznos.
 function getEmoji(client, name) {
-    const emoji = client.emojis.cache.find(e => e.name == name);
-    return emoji;
+    return client.emojis.cache.find(e => e.name === name);
 }
 
 const sleep = (milliseconds) => {
