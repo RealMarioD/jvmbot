@@ -4,7 +4,7 @@ function magicBall() {
 }
 
 exports.run = (client, message, args) => {
-    if(args.length != 0) {
+    if(args.length !== 0) {
         message.channel.send(`>>> ${message.author.tag}, a válaszod:\n${magicBall()}`);
     }
     else {
