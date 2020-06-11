@@ -7,6 +7,8 @@ exports.run = (client, message, args) => {
         const code = args.join(' ');
         let msg = '';
         exec(code, (err, out) => {
+            if(err.length > 1950) err = `${err.substr(0, 1950)} ...`;
+            if(out.length > 1950) out = `${out.substr(0, 1950)} ...`;
             if(err) {
                 msg += `Error:\n\`\`\`${err}\`\`\`\n`;
             }

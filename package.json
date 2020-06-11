@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "@types/node": "^12.7.11",
     "ascii-table": "0.0.9",
     "commitizen": "^4.1.2",
@@ -16,9 +17,10 @@
     "eslint": "^6.8.0",
     "ffmpeg": "0.0.4",
     "moment": "^2.24.0",
-    "opusscript": "0.0.7",
     "prism-media": "0.0.4",
     "ytdl-core": "^2.0.0",
+    "ytdl-core-discord": "^1.2.0",
+    "ytpl": "^0.1.21",
     "ytsr": "^0.1.13"
   },
   "devDependencies": {

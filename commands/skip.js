@@ -1,10 +1,7 @@
 exports.run = (client, message) => {
 
     if(!message.guild.voice || !message.guild.voice.connection) {
-        message.channel.send('Nem szól semmi...');
-    }
-    else if(client.queue.length == 0) {
-        message.channel.send('Nincs következő szám!');
+        message.channel.send('> ❌ **| Nem szól semmi...**');
     }
     else {
         client.dispatcher.emit('finish');

@@ -25,10 +25,7 @@ exports.run = (client, message) => {
         if (currentDate < users[author.id].lastSavedTime + resetTime) {
             users[author.id].money += users[author.id].dailyDay * 50;
             message.channel.send(`>>> **__${author.tag}__, megkaptad a napi <:vidmani:701782953679782019>-d! \`+${(users[author.id].dailyDay) * 50}\`**\n|${tick.repeat(users[author.id].dailyDay)}${(cross.repeat(5 - users[author.id].dailyDay))}`);
-            if (users[author.id].dailyDay === 5) {
-                users[author.id].dailyDay = 1;
-            }
-            else {
+            if (users[author.id].dailyDay != 5) {
                 users[author.id].dailyDay += 1;
             }
         }

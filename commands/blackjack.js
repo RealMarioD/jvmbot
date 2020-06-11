@@ -1,7 +1,4 @@
-const giveRandom = (max) => {
-    return Math.floor(Math.random() * Math.floor(max));
-};
-
+const { giveRandom } = require('../util');
 const fs = require('fs');
 const users = require('../assets/users.json');
 
@@ -21,11 +18,14 @@ exports.run = async (client, message, args) => {
     }
 
     if(args.length == 0) return message.channel.send('> ❌ Nem adtál meg tétet!');
-    else if(isNaN(Number(args[0]))) return message.channel.send('> ❌ ***i g e n***');
+    else if(isNaN(parseInt(args[0]))) return message.channel.send('> ❌ ***i g e n***');
     else if(users[message.author.id].money < args[0]) return message.channel.send('> ❌ Nincs annyi pénzed, mint amennyit fel akarsz tenni!');
-    else if(args[0] < 50 || args[0] > 10000) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
+    if(args[0] < 50 || args[0] > 10000) {
+        if(!users[message.author.id].collection || !users[message.author.id].collection['penthouse']) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
+        else if(users[message.author.id].collection['penthouse'].amount < 1) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
+    }
 
-    const bet = Number(args[0]);
+    const bet = parseInt(args[0]);
 
     const gameCards = {
         dealer: [],
@@ -150,8 +150,8 @@ exports.run = async (client, message, args) => {
     }
 
     pushCards('player');
-    pushCards('player');
     pushCards('dealer');
+    pushCards('player');
 
     const ownHand = determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${message.author.username}`);
     const dealerHand = determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó');

@@ -18,6 +18,8 @@ fs.readdir('./events/', (err, files) => {
 client.commands = new Discord.Collection();
 client.queue = [];
 client.dispatcher = {};
+client.volume = 1.0;
+client.party = {};
 
 fs.readdir('./commands/', (err, files) => {
   if (err) return console.error(err);
@@ -38,3 +40,7 @@ fs.readdir('./commands/', (err, files) => {
 
 client.login(config.token);
 // client.login(config.devToken);
+
+module.exports = {
+  client: client
+};

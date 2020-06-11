@@ -1,5 +1,5 @@
 const users = require('../assets/users.json');
-
+const { getEmoji } = require('../util');
 exports.run = (client, message) => {
 
     const results = [];
@@ -10,7 +10,7 @@ exports.run = (client, message) => {
         (first, second) => (second.value.money - first.value.money)
     ).forEach((sortedData) => {
         if(message.guild.members.cache.has(sortedData.key) == true) {
-            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*<:vidmani:701782953679782019>`);
+            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*${getEmoji('vidmani')}`);
             i += 1;
         }
     });

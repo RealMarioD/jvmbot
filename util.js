@@ -1,41 +1,24 @@
-const ytdl = require('ytdl-core');
+const ytdlDC = require('ytdl-core-discord');
 const { MessageEmbed } = require('discord.js');
-
-function devOnly(channel) {
-    channel.send({
-        embed: {
-            color: 0xff0000,
-            title: 'Ennek a parancsnak a végrehajtásához fejlesztőnek kell lenned!'
-        }
-    });
-}
+const { client } = require('./jvm');
 
 function getMention(channel) {
-    return `<#${channel}>`;
+    return client.channels.cache.get(channel).toString();
 }
 
-// Visszaadja az időt egy szép formátumban. (Pl: 2019.06.09 04:20:42)
-function getDate() {
-    let final = new Date().toISOString().slice(0, 10).replace(/-/gi, '.');
-    final += ' ' + new Date().toTimeString().slice(0, 8);
-    return final;
+// Pl: 2019.06.09 04:20:42
+function getDate(date) {
+    if(!date) return new Date().toISOString().slice(0, 10).replace(/-/gi, '.') + ' ' + new Date().toTimeString().slice(0, 8);
+    else return date.toISOString().slice(0, 10).replace(/-/gi, '.') + ' ' + new Date().toTimeString().slice(0, 8);
 }
 
-// 8ball randomziáló cucc.
-function magicBall() {
-    const rand = ['Igen.', 'Kérdezd újra később..', 'Nem tudom.', 'Nem.', 'Lehet.', 'Valószínűleg nem.', 'Valószínűleg igen.', 'Talán.'];
-    return rand[Math.floor(Math.random() * rand.length)];
+function getEmoji(name) {
+    return client.emojis.cache.find(e => e.name == name);
 }
 
-// Beirsz egy nevet, es kikop egy emojit. Hasznos.
-function getEmoji(client, name) {
-    const emoji = client.emojis.cache.find(e => e.name == name);
-    return emoji;
-}
-
-const sleep = (milliseconds) => {
+function sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
-};
+}
 
 const items = {
     'alma': {
@@ -67,6 +50,10 @@ const items = {
         'name': 'Ludolacra',
         'price': 5000,
         'healboost': 15
+    },
+    'penthouse': {
+        'name': 'Penthouse',
+        'price': 25000
     }
 };
 
@@ -82,64 +69,35 @@ function giveRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function totalUpCardpack(cardpack, total, index) {
-    switch(cardpack[index]) {
-        case 'Ace':
-            if(total + 11 <= 21) total += 11;
-            else total += 1;
-            break;
-        case 'King': case 'Queen': case 'Jack':
-            total += 10;
-            break;
-        default:
-            total += Number(cardpack[index]);
-    }
-    return total;
-}
-
-function bjMsg(cardpack, total, name) {
-    return `${name} cards:\n${String(cardpack.map((c, index) => `${index + 1}. card: ${c}\n`)).replace(',', '')}Total: ${total}\n`;
-}
-
-function play(connection, client, message, ogMsg) {
+async function play(connection, message, ogMsg) {
     client.message = message;
-    client.dispatcher = connection.play(ytdl(client.queue[0].url, { quality: 'highestaudio' }));
-    if(!ogMsg) {
-        message.channel.send(new MessageEmbed()
-            .setDescription('Most indult.')
-            .setTitle(client.queue[0].title)
-            .setURL(client.queue[0].url)
-            .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
-            .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
-            .setThumbnail(client.queue[0].videoThumbnail)
-        );
-    }
-    else {
-        ogMsg.edit('', new MessageEmbed()
-            .setDescription('Most indult.')
-            .setTitle(client.queue[0].title)
-            .setURL(client.queue[0].url)
-            .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
-            .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
-            .setThumbnail(client.queue[0].videoThumbnail)
-        );
-    }
-    const event = require('./dispatcher/finish.js');
-    const eventName = 'finish';
-    client.dispatcher.on(eventName, event.bind(null, client));
+    client.dispatcher = connection.play(await ytdlDC(client.queue[0].url), { type: 'opus' });
+    const playEmbed = new MessageEmbed()
+        .setDescription('Most indult.')
+        .addField('**Hossz:**', client.queue[0].duration)
+        .setTitle(client.queue[0].title)
+        .setURL(client.queue[0].url)
+        .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
+        .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
+        .setThumbnail(client.queue[0].videoThumbnail);
+
+    if(!ogMsg) message.channel.send(playEmbed);
+    else ogMsg.edit('', playEmbed);
+
+    const finishEvent = require('./dispatcher/finish.js');
+    const debugEvent = require('./dispatcher/debug.js');
+    client.dispatcher.on('finish', finishEvent.bind(null, client));
+    client.dispatcher.on('debug', debugEvent.bind(null, client));
+    client.dispatcher.setVolumeLogarithmic(client.volume);
 }
 
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
-    devOnly: devOnly,
     getDate: getDate,
-    magicBall: magicBall,
     sleep: sleep,
     items: items,
     listItems: listItems,
     giveRandom : giveRandom,
-    totalUpCardpack: totalUpCardpack,
-    bjMsg: bjMsg,
     play: play
 };

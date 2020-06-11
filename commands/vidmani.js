@@ -1,4 +1,5 @@
 const users = require('../assets/users.json');
+const { getEmoji } = require('../util');
 exports.run = (client, message) => {
 
     if (!users[message.author.id]) {
@@ -6,7 +7,7 @@ exports.run = (client, message) => {
             money: 0
         };
     }
-    message.channel.send(`>>> __${message.author.tag}:__ **${users[message.author.id].money}**<:vidmani:701782953679782019>`);
+    message.channel.send(`>>> __${message.author.tag}:__ **${users[message.author.id].money}**${getEmoji('vidmani')}`);
 };
 
 exports.info = {

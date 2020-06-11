@@ -26,8 +26,8 @@ exports.run = (client, message, args) => {
             .setFooter(`ID: ${caseID}`);
         ideaChannel.send(finalMsg)
         .then(m => {
-            m.react(getEmoji(client, 'tickGreen'));
-            m.react(getEmoji(client, 'tickRed'));
+            m.react(getEmoji('tickGreen'));
+            m.react(getEmoji('tickRed'));
             cases[caseID] = {
                 outcome: false,
                 managed: false,

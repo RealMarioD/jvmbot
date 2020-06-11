@@ -1,61 +1,51 @@
+const sar = require('../assets/sar.json');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args) => {
-    const sar = require('../assets/sar.json');
 
-    const msgembed = {
-        color: 0x56f442,
-        title: 'Kérhető role-ok',
-        fields: []
-    };
+    if(!args.length) {
+        const msgEmbed = new MessageEmbed()
+            .setColor('#56f442')
+            .setTitle('Kérhető roleok:')
+            .setDescription('');
 
-    if (args.length === 0) {
-        for (const role in sar) {
-            if (sar[role].enabled === true) {
-                const r = message.guild.roles.cache.get(role);
-                msgembed.description += `<@&${r.id}> | .role \`${r.name}\`\n`;
+        for(const selfRole in sar) {
+            if (sar[selfRole].enabled == true) {
+                const _role = message.guild.roles.cache.get(selfRole);
+                msgEmbed.description += `${_role.toString()} | .role \`${_role.name}\`\n`;
             }
         }
-        msgembed.description = msgembed.description.replace('undefined', '');
-        message.channel.send({ embed: msgembed });
+        return message.channel.send(msgEmbed);
+    }
+
+    const arg = args.join(' ').toLowerCase();
+
+    const role = message.guild.roles.cache.find(r => r.name.toLowerCase() == arg);
+
+    if(!role) return message.channel.send('> ❌ **| Nem létezik ilyen rank!**');
+
+    let canGetRole = true;
+    let currentRole;
+    for(const selfRole in sar) {
+        if(sar[selfRole].enabled && message.member._roles.includes(selfRole)) {
+            canGetRole = false;
+            currentRole = selfRole;
+        }
+    }
+    if(!sar[role.id] || !sar[role.id].enabled) {
+        message.channel.send('>>> ❌ **| Ez a rank nem választható!**');
+    }
+    else if(message.member._roles.includes(role.id)) {
+        message.guild.members.cache.get(message.author.id).roles.remove(role.id);
+        message.channel.send(`>>> ✅ **| Elvetted a(z) \`${role.name}\` role-t!**`);
+    }
+    else if(canGetRole) {
+        message.guild.members.cache.get(message.author.id).roles.add(role.id);
+        message.channel.send(`>>> ✅ **| Megkaptad a(z) \`${role.name}\` role-t!**`);
     }
     else {
-
-        const arg = args.join(' ').toLowerCase();
-
-        // eslint-disable-next-line no-shadow
-        const r = message.guild.roles.cache.find(r => r.name.toLowerCase() == arg);
-
-        if (!r) {
-            message.channel.send('❌ **| Nem létezik ilyen rank!**');
-        }
-        else {
-
-            let cangetr = true;
-            let crrole;
-            for (const role in sar) {
-                if (sar[role].enabled === true) {
-                    if (message.member._roles.includes(role)) {
-                        cangetr = false;
-                        crrole = role;
-                    }
-                }
-            }
-            if (!sar[r.id] || sar[r.id].enabled === false) {
-                message.channel.send('>>> ❌ **| Ez a rank nem választható!**');
-            }
-            else if (message.member._roles.includes(r.id) === true) {
-                    message.guild.members.cache.get(message.author.id).roles.remove(r.id);
-                    message.channel.send(`>>> ✅ **| Elvetted a(z) \`${r.name}\` role-t!**`);
-            }
-            else if (cangetr === true) {
-                message.guild.members.cache.get(message.author.id).roles.add(r.id);
-                message.channel.send(`>>> ✅ **| Megkaptad a(z) \`${r.name}\` role-t!**`);
-            }
-            else {
-                message.guild.members.cache.get(message.author.id).roles.remove(crrole);
-                message.guild.members.cache.get(message.author.id).roles.add(r.id);
-                message.channel.send(`>>> ✅ **| Rankod cserélve! \`(${message.guild.roles.cache.get(crrole).name} --> ${r.name})\`**`);
-            }
-        }
+        message.guild.members.cache.get(message.author.id).roles.remove(currentRole);
+        message.guild.members.cache.get(message.author.id).roles.add(role.id);
+        message.channel.send(`>>> ✅ **| Rankod cserélve! \`(${message.guild.roles.cache.get(currentRole).name} --> ${role.name})\`**`);
     }
 };
 
