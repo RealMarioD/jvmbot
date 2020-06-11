@@ -1,46 +1,17 @@
+const { MessageEmbed } = require('discord.js');
+const { getDate } = require('../util');
 exports.run = (client, message) => {
-    const creationTime = new Date(message.guild.createdAt);
-    message.channel.send({
-        embed: {
-            color: 0xDB6206,
-            title: `\`\`${message.guild.name}\`\``,
-            thumbnail: {
-                url: message.guild.iconURL()
-            },
-            author: {
-                name: 'JustVidman',
-                icon_url: 'https://yt3.ggpht.com/a/AGF-l79gTj0WzuZJvH-LDfLpx8iS1Yds282ME2fXUw=s900-mo-c-c0xffffffff-rj-k-no',
-                url: 'https://www.youtube.com/JustVidman'
-            },
-            fields: [
-                {
-                    name: 'Tagok száma:',
-                    value: message.guild.members.cache.size,
-                    inline: true
-                },
-                {
-                    name: 'Ebből emberi lények:',
-                    value: message.guild.members.cache.filter(m => !m.user.bot).size,
-                    inline: true
-                },
-                {
-                    name: 'Ebből online:',
-                    value:  message.guild.members.cache.filter(u => u.presence.status === 'online' && !u.user.bot).size,
-                    inline: true
-                },
-                {
-                    name: 'Tulajdonos',
-                    value: message.guild.owner.user.tag,
-                    inline: true
-                },
-                {
-                    name: 'Szerver létrehozva:',
-                    value: creationTime.toLocaleDateString(),
-                    inline: true
-                }
-            ]
-        }
-    });
+    message.channel.send(new MessageEmbed()
+        .setColor('#DB6206')
+        .setTitle(message.guild.name)
+        .setThumbnail(message.guild.iconURL({ format: 'png', dynamic: true }))
+        .setAuthor('JustVidman', 'https://yt3.ggpht.com/a/AGF-l79gTj0WzuZJvH-LDfLpx8iS1Yds282ME2fXUw=s900-mo-c-c0xffffffff-rj-k-no', 'https://www.youtube.com/JustVidman')
+        .addField('Tagok száma:', message.guild.members.cache.size, true)
+        .addField('Ebből emberi lények száma:', message.guild.members.cache.filter(m => !m.user.bot).size, true)
+        .addField('Ebből online:', message.guild.members.cache.filter(m => m.presence.status == 'online' && !m.user.bot).size, true)
+        .addField('Tulajdonos:', message.guild.owner.user.toString(), true)
+        .addField('Szerver létrehozva:', getDate(new Date(message.guild.createdAt)), true)
+    );
 };
 
 exports.info = {

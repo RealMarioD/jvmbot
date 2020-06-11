@@ -1,6 +1,10 @@
 const { getDate, sleep } = require('../util.js');
 module.exports = (client, message) => {
 
+    if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') {
+        message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
+    }
+
     if(message.content.toLowerCase().includes('mosolypannoniae')) {
         message.delete()
             .catch(() => {
