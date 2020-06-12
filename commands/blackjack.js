@@ -168,6 +168,7 @@ exports.info = {
     category: 'szórakozás',
     syntax: '<tét>',
     description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got from Australia, perfected in Hungary."',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['bj', 'black', 'blowjob']
 
 };

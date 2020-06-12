@@ -25,9 +25,16 @@ module.exports = (client, message) => {
 
     const args = message.content.slice(1).trim().split(/ +/g);
     const commandName = args.shift().toLowerCase();
-    const commandObject = client.commands.get(commandName);
+    let commandObject = client.commands.get(commandName);
 
-    if (!commandObject) return;
+    if (!commandObject) {
+		client.aliases.forEach((cmdObject, alias) => {
+			if(alias.includes(commandName)) {
+                commandObject = client.commands.get(cmdObject.info.name);
+			}
+		});
+		if(!commandObject) return;
+	}
 
     switch (commandObject.info.requiredPerm) {
         case 'developer':

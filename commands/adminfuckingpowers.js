@@ -37,6 +37,7 @@ exports.info = {
     category: 'admin',
     syntax: '<i g e n>',
     description: 'Ezzel a paranccsal  i g e n.',
-    requiredPerm: 'developer'
+    requiredPerm: 'developer',
+    aliases: ['afp']
 
 };

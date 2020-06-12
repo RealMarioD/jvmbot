@@ -16,6 +16,7 @@ fs.readdir('./events/', (err, files) => {
 });
 
 client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
 client.queue = [];
 client.dispatcher = {};
 client.volume = 1.0;
@@ -34,6 +35,7 @@ fs.readdir('./commands/', (err, files) => {
       table.addRow(file, '❌');
     }
     client.commands.set(commandName, props);
+    if(props.info.aliases) client.aliases.set(props.info.aliases, props);
   });
   console.log(table.toString());
 });

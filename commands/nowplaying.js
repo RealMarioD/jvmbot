@@ -20,6 +20,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Megmutatja az éppen szóló zenét.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['np']
 
 };

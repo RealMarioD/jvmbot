@@ -46,6 +46,7 @@ exports.info = {
     category: 'szórakozás',
     syntax: '',
     description: 'Ezzel a paranncsal megkapod a napi <:vidmani:701782953679782019>-d!',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['napi']
 
 };

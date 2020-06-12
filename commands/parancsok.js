@@ -48,6 +48,7 @@ exports.info = {
     category: 'egyéb',
     syntax: '<parancs>',
     description: 'Visszaadja az összes parancsot.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['commands', 'help']
 
 };

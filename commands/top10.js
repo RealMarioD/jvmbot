@@ -23,6 +23,7 @@ exports.info = {
     category: 'szórakozás',
     syntax: '',
     description: 'Kiírja a 10 legtöbb <:vidmani:701782953679782019>-val rendelkező embert!',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['top']
 
 };

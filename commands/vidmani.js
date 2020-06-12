@@ -16,6 +16,7 @@ exports.info = {
     category: 'szórakozás',
     syntax: '',
     description: 'Kiírja, hogy mennyi Vidmánid van!',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['mani']
 
 };

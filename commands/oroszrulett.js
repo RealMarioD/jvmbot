@@ -51,5 +51,6 @@ exports.info = {
     category: 'szórakozás',
     syntax: '<tét>',
     description: 'Egy kis szerencse játék.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['rr', 'orosz']
 };

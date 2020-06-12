@@ -95,6 +95,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Visszaadja a lejátszási listát.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['q']
 
 };
