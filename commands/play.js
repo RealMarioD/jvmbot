@@ -38,6 +38,7 @@ exports.run = async (client, message, args) => {
         if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
         const filter = filters.get('Type').find(type => type.name == 'Video');
         const options = {
+            safeSearch: false,
             limit: 5,
             nextpageRef: filter.ref
         };
@@ -45,8 +46,8 @@ exports.run = async (client, message, args) => {
     }
 
     function handleResults(err, results) {
-        if(err) return console.error(err);
-        if(results.items.length == 0) return ogMsg.edit(`> ${getEmoji('vidmanHyperThink')} **| Nincs találat.**`);
+        if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
+        if(!results.items.length) return ogMsg.edit(`> ${getEmoji('vidmanHyperThink')} **| Nincs találat.**`);
         const foundEmbed = new MessageEmbed().setTitle(`${getEmoji('vidmanThink')} **| Találatok**`);
         const foundURLs = [];
         let j = 5;
@@ -60,7 +61,7 @@ exports.run = async (client, message, args) => {
             .then(collected => {
                 const number = parseInt(collected.first().content);
                 if(isNaN(number) || number > 5 || number < 1) {
-                    return ogMsg.edit(new MessageEmbed().setTitle(`${getEmoji('vidmanSzomoru')} **| Visszavonva.**`));
+                    return ogMsg.edit(new MessageEmbed().setTitle(`${getEmoji('vidmanPanik')} **| Visszavonva.**`));
                 }
                 handlePlay(foundURLs[number - 1]);
             })
@@ -72,10 +73,20 @@ exports.run = async (client, message, args) => {
 
     function handlePlay(URL) {
         ytdl.getBasicInfo(URL, (err, info) => {
-            if(err) return console.error(err);
+            if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
+
+            if(!info.title ||
+            !info.author ||
+            !info.author.name ||
+            !info.author.avatar ||
+            !info.player_response.videoDetails ||
+            !info.player_response.videoDetails.thumbnail) {
+                return handlePlay(URL);
+            }
+
             let seconds = info.length_seconds;
-            let minutes = Math.floor(info.length_seconds / 60);
-            seconds -= minutes * 60;
+            let minutes = `${Math.floor(info.length_seconds / 60)}`;
+            seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
             if(minutes.length < 2) minutes = `0${minutes}`;
             if(seconds.length < 2) seconds = `0${seconds}`;
 
@@ -123,9 +134,13 @@ exports.run = async (client, message, args) => {
 
     function addToQueue(err, info, itemURL) {
         if(err) return console.error(err);
+
         let seconds = info.length_seconds;
-        const minutes = Math.floor(info.length_seconds / 60);
-        seconds -= minutes * 60;
+        let minutes = `${Math.floor(info.length_seconds / 60)}`;
+        seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
+        if(minutes.length < 2) minutes = `0${minutes}`;
+        if(seconds.length < 2) seconds = `0${seconds}`;
+
         client.queue.push({
             'url': itemURL,
             'title': info.title,

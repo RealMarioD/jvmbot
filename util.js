@@ -71,15 +71,16 @@ function giveRandom(max) {
 
 async function play(connection, message, ogMsg) {
     client.message = message;
-    client.dispatcher = connection.play(await ytdlDC(client.queue[0].url), { type: 'opus' });
+    const toPlay = client.queue[0];
+    client.dispatcher = connection.play(await ytdlDC(toPlay.url), { type: 'opus' });
     const playEmbed = new MessageEmbed()
         .setDescription('Most indult.')
-        .addField('**Hossz:**', client.queue[0].duration)
-        .setTitle(client.queue[0].title)
-        .setURL(client.queue[0].url)
-        .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
-        .setFooter(client.queue[0].channelName, client.queue[0].channelIcon)
-        .setThumbnail(client.queue[0].videoThumbnail);
+        .addField('**Hossz:**', toPlay.duration)
+        .setTitle(toPlay.title)
+        .setURL(toPlay.url)
+        .setAuthor(toPlay.author.tag, toPlay.author.displayAvatarURL({ format: 'png', dynamic: true }))
+        .setFooter(toPlay.channelName, toPlay.channelIcon)
+        .setThumbnail(toPlay.videoThumbnail);
 
     if(!ogMsg) message.channel.send(playEmbed);
     else ogMsg.edit('', playEmbed);
