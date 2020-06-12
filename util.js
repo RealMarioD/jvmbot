@@ -86,8 +86,10 @@ async function play(connection, message, ogMsg) {
 
     const finishEvent = require('./dispatcher/finish.js');
     const debugEvent = require('./dispatcher/debug.js');
+    const errorEvent = require('./dispatcher/error.js');
     client.dispatcher.on('finish', finishEvent.bind(null, client));
     client.dispatcher.on('debug', debugEvent.bind(null, client));
+    client.dispatcher.on('error', errorEvent.bind(null, client));
     client.dispatcher.setVolumeLogarithmic(client.volume);
 }
 
