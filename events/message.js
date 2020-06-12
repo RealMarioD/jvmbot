@@ -41,7 +41,7 @@ module.exports = (client, message) => {
             break;
 
         case 'moderator':
-            if(client.config.ownerID == message.author.id || message.member_roles.includes(client.config.moderatorID)) runCommand();
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.moderatorID)) runCommand();
             else noPerms('Moderátor');
             break;
 
