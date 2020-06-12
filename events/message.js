@@ -12,7 +12,7 @@ module.exports = (client, message) => {
             });
     }
 
-    if (message.channel.id === '584445312312147996' &&
+    if(message.channel.id === '584445312312147996' &&
     !message.member._roles.includes(client.config.adminID)) {
         sleep(1000).then(() => {
             message.delete();
@@ -20,8 +20,8 @@ module.exports = (client, message) => {
     }
 
     if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return;
-    if (client.user.id == client.config.normalID && !message.content.startsWith(client.config.prefix)) return;
-    if (message.author.bot) return;
+    if(client.user.id == client.config.normalID && !message.content.startsWith(client.config.prefix)) return;
+    if(message.author.bot) return;
 
     const args = message.content.slice(1).trim().split(/ +/g);
     const commandName = args.shift().toLowerCase();
@@ -31,17 +31,18 @@ module.exports = (client, message) => {
 
     switch (commandObject.info.requiredPerm) {
         case 'developer':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) {
-                runCommand();
-            }
-            else {noPerms('Fejlesztő');}
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) runCommand();
+            else noPerms('Fejlesztő');
             break;
 
         case 'admin':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) {
-                runCommand();
-            }
-            else {noPerms('Admin');}
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) runCommand();
+            else noPerms('Admin');
+            break;
+
+        case 'moderator':
+            if(client.config.ownerID == message.author.id || message.member_roles.includes(client.config.moderatorID)) runCommand();
+            else noPerms('Moderátor');
             break;
 
         default:
@@ -54,7 +55,7 @@ module.exports = (client, message) => {
             commandObject.run(client, message, args);
             console.log(`${commandName} parancs futtatva @ ${getDate()}`);
         }
-        catch (err) {
+        catch(err) {
             if(err.code === 'MODULE_NOT_FOUND') {return;}
             else {
                 console.error(err);

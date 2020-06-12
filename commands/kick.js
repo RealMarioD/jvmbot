@@ -43,8 +43,8 @@ exports.info = {
 
     name: 'kick',
     category: 'admin',
-    syntax: '<kivételek>',
+    syntax: '<kivételek ID-je>',
     description: 'Kirúgja az összes igazolatlan tagot.',
-    requiredPerm: 'admin'
+    requiredPerm: 'moderator'
 
 };
