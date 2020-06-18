@@ -93,7 +93,6 @@ exports.run = async (client, message, args) => {
                     do {
                         pushCards('dealer');
                     } while (countCards(gameCards['dealer'], 'dealer') < 17);
-                    originalMessage.channel.send('> Kértél egy kártyát.');
                 }
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó')).then((msg) => {
                     if (countCards(gameCards['player'], 'player') > 21) {
