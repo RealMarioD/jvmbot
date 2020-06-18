@@ -1,4 +1,4 @@
-const { giveRandom } = require('../util');
+const { giveRandom, getEmoji } = require('../util');
 const fs = require('fs');
 const users = require('../assets/users.json');
 
@@ -60,7 +60,7 @@ exports.run = async (client, message, args) => {
             }
             users[message.author.id].money += bet * 2;
             fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-            return passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó') + `\n> Blackjacked van! Visszakaptad a felrakott tétet és nyertél \`+${bet * 2}\` <:vidmani:701782953679782019>-t!`);
+            return passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó') + `\n> Blackjacked van! Visszakaptad a felrakott tétet és nyertél \`+${bet * 2}\` ${getEmoji('vidmani')}-t!`);
         }
 
         passedMsg.edit(passedMsg.content + '\n\n> Kérsz még kártyát `(hit)` vagy megállsz `(stay)`?\n*30mp-ed van beírni a választásod.*');
@@ -99,7 +99,7 @@ exports.run = async (client, message, args) => {
                     if (countCards(gameCards['player'], 'player') > 21) {
                         users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                        return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\` <:vidmani:701782953679782019>`);
+                        return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);
                     }
                     else {
                         playOptions(originalMessage, msg);
@@ -116,17 +116,17 @@ exports.run = async (client, message, args) => {
                     if (finalDealerTotal > 21) {
                         users[message.author.id].money += bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                        return msg.edit(msg.content + `\n\n> Az osztónak túl sok van! \`(${finalDealerTotal})\` Visszakaptad a felrakott tétet és nyertél \`+${bet}\` <:vidmani:701782953679782019>-t!`);
+                        return msg.edit(msg.content + `\n\n> Az osztónak túl sok van! \`(${finalDealerTotal})\` Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
                     else if (finalPlayerTotal > finalDealerTotal) {
                         users[message.author.id].money += bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                        return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Visszakaptad a felrakott tétet és nyertél \`+${bet}\` <:vidmani:701782953679782019>-t!`);
+                        return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
                     else if (finalPlayerTotal < finalDealerTotal) {
                         users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                        return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Elvesztetted a felrakott tétet. \`-${bet}\` <:vidmani:701782953679782019>`);
+                        return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);
                     }
                     else {
                         return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Döntetlen! Visszakaptad a felrakott tétet.`);
@@ -135,7 +135,7 @@ exports.run = async (client, message, args) => {
                 }
                 break;
             default:
-                return message.channel.send(`> Ömm... <@${client.config.ownerID}> ennek nem kéne történnie.. <:vidmanHyperThink:664573035780505650>`);
+                return message.channel.send(`> Ömm... <@${client.config.ownerID}> ennek nem kéne történnie.. ${getEmoji('vidmanHyperThink')}`);
         }
     };
 
@@ -167,7 +167,7 @@ exports.info = {
     name: 'blackjack',
     category: 'szórakozás',
     syntax: '<tét>',
-    description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got from Australia, perfected in Hungary."',
+    description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got it from Australia, made it perfect in Hungary."',
     requiredPerm: null,
     aliases: ['bj', 'black', 'blackj', 'blowjob']
 

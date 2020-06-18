@@ -34,7 +34,7 @@ exports.run = (client, message, args) => {
         message.channel.send(new MessageEmbed()
             .setColor('#56f442')
             .setTitle(`\`${client.config.prefix}${args[0].toLowerCase()}\``)
-            .setDescription(!commandFile.info.syntax ? '' : `**Értékek:** ${commandFile.info.syntax}\n**Információ:** ${commandFile.info.description}\n${commandFile.info.requiredPerm ? `__Ezt a parancsot csak ${commandFile.info.requiredPerm} rangúak tudják használni!__` : ''}`)
+            .setDescription(`${!commandFile.info.syntax ? '' : `**Értékek:** ${commandFile.info.syntax}\n`}${!commandFile.info.description ? '' : `**Információ:** ${commandFile.info.description}\n`}${!commandFile.info.aliases ? '' : `**Aliasok:** ${commandFile.info.aliases.map(c => '`' + c + '`').join(', ')}`}${!commandFile.info.requiredPerm ? '' : `__Ezt a parancsot csak ${commandFile.info.requiredPerm} rangúak tudják használni!__`}`)
         );
     }
     catch(err) {
