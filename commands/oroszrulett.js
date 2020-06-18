@@ -52,5 +52,5 @@ exports.info = {
     syntax: '<tét>',
     description: 'Egy kis szerencse játék.',
     requiredPerm: null,
-    aliases: ['rr', 'orosz']
+    aliases: ['rr', 'orosz', 'or', 'oroszr', 'oroszrulet']
 };

@@ -20,6 +20,7 @@ exports.info = {
     category: 'egyéb',
     syntax: '',
     description: 'Információ a szerverről.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['i', 'inf']
 
 };

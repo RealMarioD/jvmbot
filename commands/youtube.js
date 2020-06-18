@@ -16,6 +16,7 @@ exports.info = {
     category: 'egyéb',
     syntax: '',
     description: 'Fel/le tudsz iratkozni a YouTube hírlevélre/ről ezzel a paranccsal.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['yt']
 
 };

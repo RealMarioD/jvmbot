@@ -10,7 +10,7 @@ exports.run = (client, message) => {
         (first, second) => (second.value.money - first.value.money)
     ).forEach((sortedData) => {
         if(message.guild.members.cache.has(sortedData.key) == true) {
-            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}*${getEmoji('vidmani')}`);
+            results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}* ${getEmoji('vidmani')}`);
             i += 1;
         }
     });
@@ -24,6 +24,6 @@ exports.info = {
     syntax: '',
     description: 'Kiírja a 10 legtöbb <:vidmani:701782953679782019>-val rendelkező embert!',
     requiredPerm: null,
-    aliases: ['top']
+    aliases: ['t10', 'top', '10', 'leaderboard', 'lb']
 
 };

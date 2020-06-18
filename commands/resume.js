@@ -12,6 +12,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Folytatja a visszajátszást.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['r', 're', 'resum']
 
 };

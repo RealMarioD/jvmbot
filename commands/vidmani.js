@@ -7,7 +7,7 @@ exports.run = (client, message) => {
             money: 0
         };
     }
-    message.channel.send(`>>> __${message.author.tag}:__ **${users[message.author.id].money}**${getEmoji('vidmani')}`);
+    message.channel.send(`>>> __${message.author.tag}:__ **${users[message.author.id].money}** ${getEmoji('vidmani')}`);
 };
 
 exports.info = {
@@ -17,6 +17,6 @@ exports.info = {
     syntax: '',
     description: 'Kiírja, hogy mennyi Vidmánid van!',
     requiredPerm: null,
-    aliases: ['mani']
+    aliases: ['mani', 'vid', 'vidm']
 
 };

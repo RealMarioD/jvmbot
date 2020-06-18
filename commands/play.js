@@ -159,6 +159,7 @@ exports.info = {
     category: 'music',
     syntax: '<link vagy keresett YT videó>',
     description: 'Lejátszik egy zenét.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['p', 'pl']
 
 };

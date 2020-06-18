@@ -99,7 +99,7 @@ exports.run = async (client, message, args) => {
                     if (countCards(gameCards['player'], 'player') > 21) {
                         users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                        return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\``);
+                        return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\` <:vidmani:701782953679782019>`);
                     }
                     else {
                         playOptions(originalMessage, msg);
@@ -169,6 +169,6 @@ exports.info = {
     syntax: '<tét>',
     description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got from Australia, perfected in Hungary."',
     requiredPerm: null,
-    aliases: ['bj', 'black', 'blowjob']
+    aliases: ['bj', 'black', 'blackj', 'blowjob']
 
 };

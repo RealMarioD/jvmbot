@@ -16,6 +16,7 @@ exports.info = {
     category: 'egyéb',
     syntax: '',
     description: 'Fel/le tudsz iratkozni a szerver hírlevélre/ről ezzel a paranccsal.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['hir', 'hirl', 'level']
 
 };

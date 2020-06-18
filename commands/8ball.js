@@ -18,6 +18,7 @@ exports.info = {
     category: 'szórakozás',
     syntax: '',
     description: 'Megválaszolja egy igen-nem kérdésed.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['8', '8b', '8bal']
 
 };

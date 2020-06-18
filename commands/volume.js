@@ -16,6 +16,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'A visszajátszás hangerejét lehet állítani ezzel a paranccsal.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['v', 'vol']
 
 };

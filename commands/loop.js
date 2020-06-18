@@ -23,6 +23,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Ismétel egy zenét vagy listát.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['l', 'lp']
 
 };

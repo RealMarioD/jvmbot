@@ -12,6 +12,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Megállítja a visszajátszást.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['ps', 'paus']
 
 };

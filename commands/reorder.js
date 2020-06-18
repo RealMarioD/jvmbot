@@ -25,6 +25,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'A listát lehet módosítani ezzel a paranccsal.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['ro', 'order', 'reord']
 
 };

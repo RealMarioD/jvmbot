@@ -15,6 +15,7 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'A következő zenére ugrik.',
-    requiredPerm: null
+    requiredPerm: null,
+    aliases: ['sk']
 
 };

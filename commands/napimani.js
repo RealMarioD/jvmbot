@@ -47,6 +47,6 @@ exports.info = {
     syntax: '',
     description: 'Ezzel a paranncsal megkapod a napi <:vidmani:701782953679782019>-d!',
     requiredPerm: null,
-    aliases: ['napi']
+    aliases: ['napi', 'nap', 'nm']
 
 };
