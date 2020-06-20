@@ -34,10 +34,10 @@ exports.run = async (client, message, args) => {
 
     const countCards = (cardsToCount, deck) => {
         let total = 0;
-        for (const card in cardsToCount) {
-            switch (gameCards[deck][card].split(' ')[0]) {
+        for(const card in cardsToCount) {
+            switch(gameCards[deck][card].split(' ')[0]) {
                 case 'Ász':
-                    if (total + 11 <= 21) total += 11;
+                    if(total + 11 <= 21) total += 11;
                     else total += 1;
                     break;
                 case 'Király': case 'Királynő': case 'Bubi':
@@ -70,7 +70,7 @@ exports.run = async (client, message, args) => {
 
         originalMessage.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ['time'] })
         .then(collected => {
-            if (!['hit', 'stay'].includes(collected.first().content.toLowerCase())) {
+            if(!['hit', 'stay'].includes(collected.first().content.toLowerCase())) {
                 message.channel.send('> Hibás válasz.');
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó')).then(msg => {
                     playOptions(originalMessage, msg);
@@ -86,16 +86,16 @@ exports.run = async (client, message, args) => {
     };
 
     const selectMove = (choice, originalMessage, passedMsg) => {
-        switch (choice) {
+        switch(choice) {
             case 'hit':
                 pushCards('player');
                 if(countCards(gameCards['player'], 'player') > 21) {
                     do {
                         pushCards('dealer');
-                    } while (countCards(gameCards['dealer'], 'dealer') < 17);
+                    } while(countCards(gameCards['dealer'], 'dealer') < 17);
                 }
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó')).then((msg) => {
-                    if (countCards(gameCards['player'], 'player') > 21) {
+                    if(countCards(gameCards['player'], 'player') > 21) {
                         users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);
@@ -108,21 +108,21 @@ exports.run = async (client, message, args) => {
             case 'stay': {
                 do {
                     pushCards('dealer');
-                } while (countCards(gameCards['dealer'], 'dealer') < 17);
+                } while(countCards(gameCards['dealer'], 'dealer') < 17);
                 const finalPlayerTotal = countCards(gameCards['player'], 'player');
                 const finalDealerTotal = countCards(gameCards['dealer'], 'dealer');
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó')).then(msg => {
-                    if (finalDealerTotal > 21) {
+                    if(finalDealerTotal > 21) {
                         users[message.author.id].money += bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Az osztónak túl sok van! \`(${finalDealerTotal})\` Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
-                    else if (finalPlayerTotal > finalDealerTotal) {
+                    else if(finalPlayerTotal > finalDealerTotal) {
                         users[message.author.id].money += bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
-                    else if (finalPlayerTotal < finalDealerTotal) {
+                    else if(finalPlayerTotal < finalDealerTotal) {
                         users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);

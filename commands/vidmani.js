@@ -2,7 +2,7 @@ const users = require('../assets/users.json');
 const { getEmoji } = require('../util');
 exports.run = (client, message) => {
 
-    if (!users[message.author.id]) {
+    if(!users[message.author.id]) {
         users[message.author.id] = {
             money: 0
         };

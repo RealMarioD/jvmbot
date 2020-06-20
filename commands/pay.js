@@ -3,7 +3,7 @@ const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args) => {
 
-    if (args.length < 2) {
+    if(args.length < 2) {
         return message.channel.send('> ❌ **| Nem adtál meg elég adatot!**');
     }
 

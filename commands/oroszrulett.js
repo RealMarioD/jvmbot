@@ -14,23 +14,23 @@ exports.run = (client, message, args) => {
         'Mostmár kinyithatod a szemedet.',
         'Valaki nem töltötte újra a revolvert... üres tárral tényleg könnyű.'
     ];
-    if (args.length === 0) {
+    if(args.length === 0) {
         return message.channel.send(`> __${message.author.tag}__, adj meg egy összeget, amit be akarsz dobni!`);
     }
     const amount = parseInt(args[0]);
     if(isNaN(amount)) return message.channel.send('> ❌ **| i g e n**');
 
-    if (!users[message.author.id]) {
+    if(!users[message.author.id]) {
         users[message.author.id] = {
             money: 0
         };
     }
-    if (users[message.author.id].money < amount) {
+    if(users[message.author.id].money < amount) {
         return message.channel.send(`>>> __${message.author.tag}, nincs elég <:vidmani:701782953679782019>-d, hogy feltegyél ennyit!`);
     }
-    if (amount >= 50 && amount <= 10000) {
+    if(amount >= 50 && amount <= 10000) {
         const response = Math.floor(Math.random() * 10);
-        if (response > 4) {
+        if(response > 4) {
             users[message.author.id].money += amount;
             message.channel.send(`>>> **${responses[response]}**\n__${message.author.tag}__ nyert ${amount} <:vidmani:701782953679782019>-t!`);
         }

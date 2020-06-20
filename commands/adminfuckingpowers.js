@@ -6,7 +6,7 @@ exports.run = (client, message, args) => {
     const whoToAbuse = message.mentions.users.first();
     if(!whoToAbuse) return message.channel.send('❌ **| BIG FDUKCING NONO**');
     let abuseAmount;
-    switch (args[0]) {
+    switch(args[0]) {
         case 'show':
             if(!gayppl[whoToAbuse.id]) {
                 gayppl[whoToAbuse.id] = {

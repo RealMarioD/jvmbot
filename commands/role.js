@@ -9,7 +9,7 @@ exports.run = (client, message, args) => {
             .setDescription('');
 
         for(const selfRole in sar) {
-            if (sar[selfRole].enabled == true) {
+            if(sar[selfRole].enabled == true) {
                 const _role = message.guild.roles.cache.get(selfRole);
                 msgEmbed.description += `${_role.toString()} | .role \`${_role.name}\`\n`;
             }

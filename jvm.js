@@ -7,7 +7,7 @@ const table = new ascii().setHeading('Command', 'Status');
 client.config = config;
 
 fs.readdir('./events/', (err, files) => {
-    if (err) return console.error(err);
+    if(err) return console.error(err);
     files.forEach(file => {
       const event = require(`./events/${file}`);
       const eventName = file.split('.')[0];
@@ -23,9 +23,9 @@ client.volume = 1.0;
 client.party = {};
 
 fs.readdir('./commands/', (err, files) => {
-  if (err) return console.error(err);
+  if(err) return console.error(err);
   files.forEach(file => {
-    if (!file.endsWith('.js')) return;
+    if(!file.endsWith('.js')) return;
     const props = require(`./commands/${file}`);
     const commandName = file.split('.')[0];
     if(file) {

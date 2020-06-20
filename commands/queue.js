@@ -10,7 +10,7 @@ exports.run = async (client, message) => {
         message.channel.send('A lejátszási lista üres!');
     }
     else {
-        for (let i = 0; i < client.queue.length; i++) {
+        for(let i = 0; i < client.queue.length; i++) {
             if(i == 0) {
                 list.setTitle(`Most szól:\n**${client.queue[i].title}**`)
                     .setURL(client.queue[i].url)

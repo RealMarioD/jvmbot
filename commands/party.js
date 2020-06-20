@@ -2,7 +2,7 @@ const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
     let partyID;
     let index;
-    switch (args[0]) {
+    switch(args[0]) {
         case 'create':
             for(const party in client.party) {
                 if(client.party[party].host.id == message.author.id) return message.channel.send(`> ❌ **| Neked már van egy party-d! \`${party}\`**`);

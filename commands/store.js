@@ -4,7 +4,7 @@ const fs = require('fs');
 
 exports.run = (client, message, args) => {
 
-    if (args.length === 0) {
+    if(args.length === 0) {
         message.channel.send('>>> ❌ **| Hibás használat!**\n`.store <buy/sell/inv/list> <item> <darab>`');
     }
     else {
@@ -14,11 +14,11 @@ exports.run = (client, message, args) => {
             if(args[2] || args[0] == 'inv' || args[0] == 'list') {
                 const amt = parseInt(args[2]);
                 if(amt > 0 || args[0] == 'inv' || args[0] == 'list') {
-                    switch (args[0]) {
+                    switch(args[0]) {
                         case 'buy': {
                             const totalAmount = items[key].price * amt;
-                            if (user.money >= totalAmount) {
-                                if (!user.collection) {
+                            if(user.money >= totalAmount) {
+                                if(!user.collection) {
                                     user.collection = {};
                                     user.collection[key] = {
                                         amount: amt

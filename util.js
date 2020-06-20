@@ -59,7 +59,7 @@ const items = {
 
 function listItems() {
     let list = '>>> __Megvásárolható/Eladható Itemek__:\n\n';
-    for (const item in items) {
+    for(const item in items) {
         list += `**${items[item].name} \`(${item})\`** - Vétel ár: __${items[item].price}vm__ | Eladási ár: __${items[item].price / 2}vm__\n`;
     }
     return list;
@@ -101,6 +101,6 @@ module.exports = {
     sleep: sleep,
     items: items,
     listItems: listItems,
-    giveRandom : giveRandom,
+    giveRandom: giveRandom,
     play: play
 };

@@ -5,8 +5,8 @@ exports.run = (client, message, args) => {
 
     if(args.length == 0) {
         const toDoCases = [];
-        for (const acase in cases) {
-            if (cases[acase].managed == false) {
+        for(const acase in cases) {
+            if(cases[acase].managed == false) {
                 toDoCases.push(acase.toString());
             }
         }

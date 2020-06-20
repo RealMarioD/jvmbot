@@ -27,7 +27,7 @@ module.exports = (client, message) => {
     const commandName = args.shift().toLowerCase();
     let commandObject = client.commands.get(commandName);
 
-    if (!commandObject) {
+    if(!commandObject) {
 		client.aliases.forEach((cmdObject, alias) => {
 			if(alias.includes(commandName)) {
                 commandObject = client.commands.get(cmdObject.info.name);
@@ -36,7 +36,7 @@ module.exports = (client, message) => {
 		if(!commandObject) return;
 	}
 
-    switch (commandObject.info.requiredPerm) {
+    switch(commandObject.info.requiredPerm) {
         case 'developer':
             if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) runCommand();
             else noPerms('Fejlesztő');
