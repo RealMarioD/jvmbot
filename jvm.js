@@ -40,8 +40,8 @@ fs.readdir('./commands/', (err, files) => {
   console.log(table.toString());
 });
 
-// client.login(config.token);
-client.login(config.devToken);
+client.login(config.token);
+// client.login(config.devToken);
 
 module.exports = {
   client: client
