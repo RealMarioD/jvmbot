@@ -2,7 +2,7 @@ const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
 
     if(!message.guild.voice || !message.guild.voice.connection) return message.channel.send('> ❌ **| Nincs lejátszási lista!**');
-    if(!message.member.voice || message.member.voice.channel.id != client.dispatcher.player.voiceConnection.channel.id) return message.channel.send('> ❌ **| Nem vagy egy voice channelben a bottal!**');
+    if(!message.member.voice.channel || message.member.voice.channel.id != client.dispatcher.player.voiceConnection.channel.id) return message.channel.send('> ❌ **| Nem vagy egy voice channelben a bottal!**');
     if(!args.length) return message.channel.send('> ❌ **| Nem adtál meg számot!**');
 
     const numbertoMove = parseInt(args[0]);
