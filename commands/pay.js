@@ -1,6 +1,7 @@
 const users = require('../assets/users.json');
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
+const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
 
     if(args.length < 2) {
@@ -18,7 +19,7 @@ exports.run = (client, message, args) => {
     const verified = [];
 
     message.channel.send(new MessageEmbed()
-        .setTitle('<:vidmani:701782953679782019> | Átadás')
+        .setTitle(`${getEmoji('vidmani')} | Átadás`)
         .addField('**Küldő:**', message.author.tag, true)
         .addField('**Fogadó:**', userToPay.tag, true)
         .addField('**Összeg:**', money, true)

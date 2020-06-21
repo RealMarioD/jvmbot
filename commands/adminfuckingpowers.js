@@ -1,5 +1,6 @@
 const fasz = require('fs');
 const gayppl = require('../assets/users.json');
+const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
 
     if(args.length === 0) return message.channel.send('> ❌ **| N E M**');
@@ -13,7 +14,7 @@ exports.run = (client, message, args) => {
                     money: 0
                 };
             }
-            message.channel.send(`>>> __${whoToAbuse.tag}:__ **${gayppl[whoToAbuse.id].money}**<:vidmani:701782953679782019>`);
+            message.channel.send(`>>> __${whoToAbuse.tag}:__ **${gayppl[whoToAbuse.id].money}**${getEmoji('vidmani')}`);
             break;
 
         case 'change':

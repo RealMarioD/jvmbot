@@ -22,7 +22,7 @@ exports.info = {
     name: 'top10',
     category: 'szórakozás',
     syntax: '',
-    description: 'Kiírja a 10 legtöbb <:vidmani:701782953679782019>-val rendelkező embert!',
+    description: 'Kiírja a 10 legtöbb Vidmanival rendelkező embert!',
     requiredPerm: null,
     aliases: ['t10', 'top', '10', 'leaderboard', 'lb']
 

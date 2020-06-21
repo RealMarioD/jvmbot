@@ -1,5 +1,6 @@
 const users = require('../assets/users.json');
 const fs = require('fs');
+const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
 
     const responses = [
@@ -26,17 +27,17 @@ exports.run = (client, message, args) => {
         };
     }
     if(users[message.author.id].money < amount) {
-        return message.channel.send(`>>> __${message.author.tag}, nincs elég <:vidmani:701782953679782019>-d, hogy feltegyél ennyit!`);
+        return message.channel.send(`>>> __${message.author.tag}, nincs elég ${getEmoji('vidmani')}-d, hogy feltegyél ennyit!`);
     }
     if(amount >= 50 && amount <= 10000) {
         const response = Math.floor(Math.random() * 10);
         if(response > 4) {
             users[message.author.id].money += amount;
-            message.channel.send(`>>> **${responses[response]}**\n__${message.author.tag}__ nyert ${amount} <:vidmani:701782953679782019>-t!`);
+            message.channel.send(`>>> **${responses[response]}**\n__${message.author.tag}__ nyert ${amount} ${getEmoji('vidmani')}-t!`);
         }
         else {
             users[message.author.id].money -= amount;
-            message.channel.send(`>>> **${responses[response]}**\n__${message.author.tag}__ elvesztette a felrakott ${amount} <:vidmani:701782953679782019>-t.`);
+            message.channel.send(`>>> **${responses[response]}**\n__${message.author.tag}__ elvesztette a felrakott ${amount} ${getEmoji('vidmani')}-t.`);
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
