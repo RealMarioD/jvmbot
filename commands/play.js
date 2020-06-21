@@ -75,15 +75,6 @@ exports.run = async (client, message, args) => {
         ytdl.getBasicInfo(URL, (err, info) => {
             if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
 
-            if(!info.title ||
-            !info.author ||
-            !info.author.name ||
-            !info.author.avatar ||
-            !info.player_response.videoDetails ||
-            !info.player_response.videoDetails.thumbnail) {
-                return handlePlay(URL);
-            }
-
             let seconds = info.length_seconds;
             let minutes = `${Math.floor(info.length_seconds / 60)}`;
             seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
