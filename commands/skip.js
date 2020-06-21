@@ -1,11 +1,8 @@
 exports.run = (client, message) => {
 
-    if(!message.guild.voice || !message.guild.voice.connection) {
-        message.channel.send('> ❌ **| Nem szól semmi...**');
-    }
-    else {
-        client.dispatcher.emit('finish');
-    }
+    if(!message.guild.voice || !message.guild.voice.connection) return message.channel.send('> ❌ **| Nem szól semmi...**');
+    if(!message.member.voice || message.member.voice.channel.id != client.dispatcher.player.voiceConnection.channel.id) return message.channel.send('> ❌ **| Nem vagy egy voice channelben a bottal!**');
+    client.dispatcher.emit('finish');
 
 };
 

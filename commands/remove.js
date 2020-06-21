@@ -2,6 +2,7 @@ const { getEmoji } = require('../util');
 exports.run = (client, message, args) => {
 
     if(!message.guild.voice || !message.guild.voice.connection || !client.queue) return message.channel.send('> ❌ **| Nincs lejátszási lista!**');
+    if(!message.member.voice || message.member.voice.channel.id != client.dispatcher.player.voiceConnection.channel.id) return message.channel.send('> ❌ **| Nem vagy egy voice channelben a bottal!**');
     if(!args.length) return message.channel.send('> ❌ **| Nem adtál meg számot!**');
     const number = parseInt(args[0]);
     if(!number || number > client.queue.length - 1) return message.channel.send('> ❌ **| Nincs ilyen szám!**');
