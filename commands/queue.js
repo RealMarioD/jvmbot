@@ -28,9 +28,13 @@ exports.run = async (client, message) => {
 
         message.channel.send('Kérlek várj...')
         .then(msg => {
+            passedMsg = msg;
+            if(!fieldHolder.length) {
+                list.setFooter('Oldal: 1/1');
+                return passedMsg.edit('', list);
+            }
             msg.react('⬅️');
             msg.react('➡️');
-            passedMsg = msg;
             sortFields(startIndex);
         });
 
