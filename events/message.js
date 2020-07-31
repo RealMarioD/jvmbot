@@ -5,13 +5,6 @@ module.exports = (client, message) => {
         message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
     }
 
-    if(message.content.toLowerCase().includes('mosolypannoniae')) {
-        message.delete()
-            .catch(() => {
-                message.channel.send('<@438757327152218114>, nincs jogom ebben a channelben üzenetet törölni<:vidmanUnott:587645361154424832>');
-            });
-    }
-
     if(message.channel.id === '584445312312147996' &&
     !message.member._roles.includes(client.config.adminID)) {
         sleep(1000).then(() => {
