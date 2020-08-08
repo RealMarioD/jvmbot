@@ -1,5 +1,5 @@
-const users = require('../assets/users.json');
-const { getEmoji } = require('../util');
+const users = require('../../assets/users.json');
+const { getEmoji } = require('../../util');
 exports.run = (client, message) => {
 
     if(!users[message.author.id]) {
@@ -13,7 +13,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'vidmani',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '',
     description: 'Kiírja, hogy mennyi Vidmánid van!',
     requiredPerm: null,

@@ -23,7 +23,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'eval',
-    category: 'admin',
+    category: 'dev',
     syntax: '<js kód>',
     description: 'Teszt parancs a fejlesztőknek.',
     requiredPerm: 'developer'

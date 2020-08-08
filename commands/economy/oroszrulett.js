@@ -1,6 +1,6 @@
-const users = require('../assets/users.json');
+const users = require('../../assets/users.json');
 const fs = require('fs');
-const { getEmoji } = require('../util');
+const { getEmoji } = require('../../util');
 exports.run = (client, message, args) => {
 
     const responses = [
@@ -49,7 +49,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'oroszrulett',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '<tét>',
     description: 'Egy kis szerencse játék.',
     requiredPerm: null,

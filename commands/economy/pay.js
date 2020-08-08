@@ -1,7 +1,7 @@
-const users = require('../assets/users.json');
+const users = require('../../assets/users.json');
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
-const { getEmoji } = require('../util');
+const { getEmoji } = require('../../util');
 exports.run = (client, message, args) => {
 
     if(args.length < 2) {
@@ -65,7 +65,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'pay',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '<tag> <vidmani>',
     description: 'Ezzel a paranccsal pénzt tudsz utalni másik tagnak.',
     requiredPerm: null

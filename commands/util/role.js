@@ -1,4 +1,4 @@
-const sar = require('../assets/sar.json');
+const sar = require('../../assets/sar.json');
 const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args) => {
 

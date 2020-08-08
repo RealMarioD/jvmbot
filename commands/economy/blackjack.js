@@ -1,6 +1,6 @@
-const { giveRandom, getEmoji } = require('../util');
+const { giveRandom, getEmoji } = require('../../util');
 const fs = require('fs');
-const users = require('../assets/users.json');
+const users = require('../../assets/users.json');
 
 exports.run = async (client, message, args) => {
 
@@ -164,7 +164,7 @@ exports.run = async (client, message, args) => {
 exports.info = {
 
     name: 'blackjack',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '<tét>',
     description: 'Avagy huszonegy. Ha neked több pontod van mint az osztónak nyersz. Vigyázz, ne legyen több pontod, mint huszonegy, különben veszítesz!\n"Got it from Australia, made it perfect in Hungary."',
     requiredPerm: null,

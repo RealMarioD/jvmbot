@@ -1,4 +1,4 @@
-const { getEmoji, getMention } = require('../util');
+const { getEmoji, getMention } = require('../../util');
 exports.run = (client, message) => {
     const member = message.guild.members.cache.get(message.author.id);
     if(member._roles.includes(client.config.tagID) !== true) {

@@ -1,4 +1,4 @@
-const { getEmoji } = require('../util');
+const { getEmoji } = require('../../util');
 exports.run = (client, message, args) => {
 
     if(!message.guild.voice || !message.guild.voice.connection) return message.channel.send('> ❌ **| Nincs lejátszási lista!**');

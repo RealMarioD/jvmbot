@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr');
 const ytpl = require('ytpl');
-const { play, getEmoji } = require('../util');
+const { play, getEmoji } = require('../../util');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args) => {
 

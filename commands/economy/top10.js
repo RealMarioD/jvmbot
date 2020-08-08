@@ -1,5 +1,5 @@
-const users = require('../assets/users.json');
-const { getEmoji } = require('../util');
+const users = require('../../assets/users.json');
+const { getEmoji } = require('../../util');
 exports.run = (client, message) => {
 
     const results = [];
@@ -20,7 +20,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'top10',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '',
     description: 'Kiírja a 10 legtöbb Vidmanival rendelkező embert!',
     requiredPerm: null,

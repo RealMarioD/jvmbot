@@ -1,26 +1,29 @@
-const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args) => {
     const helpEmbed = new MessageEmbed()
         .setColor('0x56f442')
         .setTitle('🗒 **| Parancsok**');
 
+    let dev = false;
+
+    if(message.content.endsWith('--slave')) {
+        args = [];
+        dev = true;
+    }
+
     if(!args.length) {
         const categories = {};
         helpEmbed.description = 'Ha több infót akarsz megtudni egy parancsról: `.parancsok <parancs>`\n';
-        fs.readdirSync('./commands/').forEach(cmdfile => {
-            cmdfile = cmdfile.replace('.js', '');
-            const cmd = require(`../commands/${cmdfile}`);
-            categories[cmd.info.category] = [];
+        client.commands.forEach(command => {
+            categories[command.info.category] = [];
         });
-        fs.readdirSync('./commands/').forEach(cmdfile => {
-            cmdfile = cmdfile.replace('.js', '');
-            const cmd = require(`../commands/${cmdfile}`);
-            categories[cmd.info.category].push(cmd.info.name);
+        client.commands.forEach(command => {
+            categories[command.info.category].push(command.info.name);
         });
 
-        if(!message.member._roles.includes(client.config.fejlesztoID)) {
+        if(!message.member._roles.includes(client.config.fejlesztoID) || !message.member._roles.includes(client.config.moderatorID) || dev) {
             delete categories['admin'];
+            delete categories['dev'];
         }
 
         Object.keys(categories).forEach(category => {
@@ -30,7 +33,7 @@ exports.run = (client, message, args) => {
         return message.channel.send(helpEmbed);
     }
     try {
-        const commandFile = require(`./${args[0].toLowerCase()}.js`);
+        const commandFile = client.commands.get(args[0].toLowerCase());
         message.channel.send(new MessageEmbed()
             .setColor('#56f442')
             .setTitle(`\`${client.config.prefix}${args[0].toLowerCase()}\``)

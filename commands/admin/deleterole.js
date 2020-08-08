@@ -1,38 +1,38 @@
 exports.run = (client, message, args) => {
 
-    const sar = require('../assets/sar.json');
+    const sar = require('../../assets/sar.json');
     const fs = require('fs');
 
-    if(!args.length) {
-        message.channel.send('> ❌ **| Nem adtál meg rankot!**');
+    if(args.length === 0) {
+        message.channel.send('❌ **| Nem adtál meg rankot!**');
     }
     else {
         const roleName = args.join(' ').toLowerCase();
         const role = message.guild.roles.cache.find(r => r.name.toLowerCase() === roleName);
         if(!role) {
-            message.channel.send('> ❌ **| Nem létezik ilyen rank!**');
+            message.channel.send('❌ **| Nem létezik ilyen rank!**');
         }
         else {
             if(!sar[role.id]) {
                 sar[role.id] = {
-                    enabled: true
+                    enabled: false
                 };
             }
-            if(sar[role.id].enabled == false) {
-                sar[role.id].enabled = true;
+            if(sar[role.id].enabled === true) {
+                sar[role.id].enabled = false;
             }
             fs.writeFileSync('./assets/sar.json', JSON.stringify(sar, null, 2));
-            message.channel.send(`> ✅ **| Rank \`${role.name}\` hozzáadva a listához!**`);
+            message.channel.send(`✅ **| Rank \`${role.name}\` törölve a listáról!**`);
         }
     }
 };
 
 exports.info = {
 
-    name: 'addrole',
+    name: 'deleterole',
     category: 'admin',
     syntax: '<role>',
-    description: 'Ezzel a paranccsal role-okat lehet hozzáadni a kérhető role-ok listájához.',
+    description: 'Ezzel a paranccsal role-okat lehet törölni a kérhető role-ok listájáról',
     requiredPerm: 'developer'
 
 };

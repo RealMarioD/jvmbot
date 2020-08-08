@@ -1,6 +1,6 @@
 const fasz = require('fs');
-const gayppl = require('../assets/users.json');
-const { getEmoji } = require('../util');
+const gayppl = require('../../assets/users.json');
+const { getEmoji } = require('../../util');
 exports.run = (client, message, args) => {
 
     if(args.length === 0) return message.channel.send('> ❌ **| N E M**');

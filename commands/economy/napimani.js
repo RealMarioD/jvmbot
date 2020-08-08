@@ -1,5 +1,5 @@
-const users = require('../assets/users.json');
-const { getEmoji } = require('../util');
+const users = require('../../assets/users.json');
+const { getEmoji } = require('../../util');
 const fs = require('fs');
 const moment = require('moment');
 exports.run = (client, message) => {
@@ -44,7 +44,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'napimani',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '',
     description: 'Ezzel a paranncsal megkapod a napi Vidmanidat!',
     requiredPerm: null,

@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getDate } = require('../util');
+const { getDate } = require('../../util');
 exports.run = (client, message) => {
     message.channel.send(new MessageEmbed()
         .setColor('#DB6206')

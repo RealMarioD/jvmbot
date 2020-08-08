@@ -1,4 +1,4 @@
-const { getEmoji } = require('../util');
+const { getEmoji } = require('../../util');
 exports.run = (client, message, args) => {
     let partyID;
     let index;
@@ -59,7 +59,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'party',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '<create|join|leave|start> (<party ID>)',
     description: 'Ezzel a paranccsal közösen lehet blackjacket játszani.',
     requiredPerm: null

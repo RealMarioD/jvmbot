@@ -1,5 +1,5 @@
-const users = require('../assets/users.json');
-const { items, listItems } = require('../util.js');
+const users = require('../../assets/users.json');
+const { items, listItems } = require('../../util.js');
 const fs = require('fs');
 
 exports.run = (client, message, args) => {
@@ -105,7 +105,7 @@ exports.run = (client, message, args) => {
 exports.info = {
 
     name: 'store',
-    category: 'szórakozás',
+    category: 'pénzverde',
     syntax: '<buy/sell/inv/list> <item> <darab>',
     description: 'Vidman Pláza, vagy amit akartok.',
     requiredPerm: null
