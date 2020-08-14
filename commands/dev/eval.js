@@ -4,6 +4,7 @@ exports.run = (client, message, args) => {
 
     try {
         const input = args.join(' ');
+        if(input.includes('exec') || input.includes('child_process')) return message.channel.send('haha no');
         if(!input) return message.channel.send('`Error:`\n```Can\'t evalute air```');
         let output = eval(input);
 
