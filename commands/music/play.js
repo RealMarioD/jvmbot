@@ -12,17 +12,21 @@ exports.run = async (client, message, args) => {
     let ogMsg;
 
     if(!ytdl.validateURL(searchTerm)) {
-        if(!ytpl.validateURL(searchTerm)) {
+        if(!ytpl.validateID(searchTerm)) {
             message.channel.send(`> ${getEmoji('loading').toString()} **| Keresés...**`).then(msg => {
                 ogMsg = msg;
-                ytsr.getFilters(searchTerm).then((err, filters) => handleFilters(err, filters));
+                ytsr.getFilters(searchTerm)
+                    .then(filters => handleFilters(filters))
+                    .catch(() => sendErrorMsg('filters'));
             });
         }
         else {
             message.channel.send(`> ${getEmoji('loading').toString()} **| Lista összesítése...**`)
             .then(msg => {
                 ogMsg = msg;
-                ytpl(searchTerm, (err, result) => handlePlaylist(err, result));
+                ytpl(searchTerm)
+                    .then(result => handlePlaylist(result))
+                    .catch();
             });
         }
     }
@@ -34,19 +38,23 @@ exports.run = async (client, message, args) => {
         });
     }
 
-    function handleFilters(err, filters) {
-        if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
+    function sendErrorMsg(devInfo) {
+        return ogMsg.edit(`> ❌ **| Hiba történt, próbáld újra.**\n\`dev info: @${devInfo}\``);
+    }
+
+    function handleFilters(filters) {
         const filter = filters.get('Type').find(type => type.name == 'Video');
         const options = {
             safeSearch: false,
             limit: 5,
             nextpageRef: filter.ref
         };
-        ytsr(searchTerm, options).then((err, results) => handleResults(err, results));
+        ytsr(searchTerm, options)
+            .then(results => handleResults(results))
+            .catch(() => sendErrorMsg('ytsr'));
     }
 
-    function handleResults(err, results) {
-        if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
+    function handleResults(results) {
         if(!results.items.length) return ogMsg.edit(`> ${getEmoji('vidmanHyperThink')} **| Nincs találat.**`);
         const foundEmbed = new MessageEmbed().setTitle(`${getEmoji('vidmanThink')} **| Találatok**`);
         const foundURLs = [];
@@ -72,9 +80,8 @@ exports.run = async (client, message, args) => {
     }
 
     function handlePlay(URL) {
-        ytdl.getBasicInfo(URL, (err, info) => {
-            if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
-
+        ytdl.getBasicInfo(URL)
+        .then(info => {
             let seconds = info.length_seconds;
             let minutes = `${Math.floor(info.length_seconds / 60)}`;
             seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
@@ -106,13 +113,15 @@ exports.run = async (client, message, args) => {
                     .setThumbnail(client.queue[client.queue.length - 1].videoThumbnail)
                 );
             }
-        });
+        })
+        .catch(() => sendErrorMsg('ytdl.getBasicInfo'));
     }
 
-    async function handlePlaylist(err, playlist) {
-        if(err) return ogMsg.edit('> ❌ **| Hiba történt, próbáld újra.**');
+    async function handlePlaylist(playlist) {
         await playlist.items.forEach(item => {
-            ytdl.getBasicInfo(item.url_simple, (err, info) => addToQueue(err, info, item.url_simple));
+            ytdl.getBasicInfo(item.url_simple)
+                .then(info => addToQueue(info, item.url_simple))
+                .catch();
         });
         if(!message.guild.voice || !message.guild.voice.connection) {
             const vc = message.member.voice.channel;
@@ -123,9 +132,7 @@ exports.run = async (client, message, args) => {
         ogMsg.edit(`> 🛂 **| \`${playlist.items.length}\` szám hozzáadva a lejátszási listához.**`);
     }
 
-    function addToQueue(err, info, itemURL) {
-        if(err) return console.error(err);
-
+    function addToQueue(info, itemURL) {
         let seconds = info.length_seconds;
         let minutes = `${Math.floor(info.length_seconds / 60)}`;
         seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;

@@ -20,7 +20,7 @@
     "prism-media": "^1.2.2",
     "ytdl-core": "^2.1.7",
     "ytdl-core-discord": "^1.2.1",
-    "ytpl": "^0.1.22",
+    "ytpl": "^0.3.0",
     "ytsr": "^0.1.21"
   },
   "devDependencies": {
