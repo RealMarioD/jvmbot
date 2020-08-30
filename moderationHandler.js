@@ -35,7 +35,7 @@ function log(moderationType, moderator, punished, reason, timeout) {
 
     if(timeout) logMessage.addField('Hossz', timeout, true);
 
-    client.channels.cache.get('585873434077167637').send(logMessage)
+    client.channels.cache.get(client.config.modLogChannel).send(logMessage)
     .then(msg => {
         modCases.cases[thisCaseNumber] = {
             modType: moderationType,
