@@ -19,6 +19,10 @@ exports.run = (client, message, args) => {
         tempFolder = 'util';
         break;
 
+      case 'moderáció':
+        tempFolder = 'moderation';
+        break;
+
       default:
         tempFolder = tempCmd.info.category;
         break;

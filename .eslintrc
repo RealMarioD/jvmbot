@@ -12,7 +12,7 @@
 		"comma-dangle": ["error", "only-multiline"],
 		"comma-spacing": "error",
 		"comma-style": "error",
-		"curly": ["error", "multi-line", "consistent"],
+		"curly": ["error", "multi-line"],
 		"dot-location": ["error", "property"],
 		"handle-callback-err": "off",
 		"key-spacing": ["error", { "beforeColon": false, "afterColon": true }],

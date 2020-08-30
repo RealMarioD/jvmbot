@@ -1,4 +1,4 @@
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 const ytsr = require('ytsr');
 const ytpl = require('ytpl');
 const { play, getEmoji } = require('../../util');
@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
         if(!ytpl.validateURL(searchTerm)) {
             message.channel.send(`> ${getEmoji('loading').toString()} **| Keresés...**`).then(msg => {
                 ogMsg = msg;
-                ytsr.getFilters(searchTerm, (err, filters) => handleFilters(err, filters));
+                ytsr.getFilters(searchTerm).then((err, filters) => handleFilters(err, filters));
             });
         }
         else {
@@ -42,7 +42,7 @@ exports.run = async (client, message, args) => {
             limit: 5,
             nextpageRef: filter.ref
         };
-        ytsr(searchTerm, options, (err, results) => handleResults(err, results));
+        ytsr(searchTerm, options).then((err, results) => handleResults(err, results));
     }
 
     function handleResults(err, results) {

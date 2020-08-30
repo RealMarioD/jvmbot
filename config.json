@@ -9,7 +9,6 @@
   "ownerID": "254714656336248833",
   "fejlesztoID": "584740600033837069",
   "hirlevelID": "584676489405136897",
-  "ideiglenestagID": "584408550365724672",
   "tagID": "584408550101483523",
   "ytID": "584736334099382288",
   "igazolID": "584445312312147996",
@@ -19,5 +18,7 @@
   "moderatorID": "584408387857416206",
   "ideaChannelID": "584674220886327296",
   "resultsChannelID": "648996658084053042",
-  "consoleLogChannelID": "672206986858725386"
+  "consoleLogChannelID": "672206986858725386",
+  "modLogChannel": "593115670972071936",
+  "muteRole": "592796637152280755"
 }

@@ -10,20 +10,21 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
-    "@types/node": "^12.7.11",
-    "commitizen": "^4.1.2",
-    "discord.js": "^12.0.1",
+    "@types/node": "^12.12.54",
+    "commitizen": "^4.2.1",
+    "discord.js": "^12.3.1",
     "eslint": "^6.8.0",
     "ffmpeg": "0.0.4",
-    "moment": "^2.24.0",
-    "prism-media": "0.0.4",
-    "ytdl-core": "^2.0.0",
-    "ytdl-core-discord": "^1.2.0",
-    "ytpl": "^0.1.21",
-    "ytsr": "^0.1.13"
+    "moment": "^2.27.0",
+    "ms": "^2.1.2",
+    "prism-media": "^1.2.2",
+    "ytdl-core": "^2.1.7",
+    "ytdl-core-discord": "^1.2.1",
+    "ytpl": "^0.1.22",
+    "ytsr": "^0.1.21"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^3.2.0"
+    "cz-conventional-changelog": "^3.3.0"
   },
   "config": {
     "commitizen": {

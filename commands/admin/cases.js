@@ -76,6 +76,6 @@ exports.info = {
     category: 'admin',
     syntax: '<case id> <bool> <notes>',
     description: 'Ezzel a paranccsal lehet kezelni az ötleteket és hibákat.',
-    requiredPerm: 'developer'
+    requiredPerm: 'admin'
 
 };

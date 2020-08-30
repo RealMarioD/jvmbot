@@ -33,6 +33,6 @@ exports.info = {
     category: 'admin',
     syntax: '<role>',
     description: 'Ezzel a paranccsal role-okat lehet törölni a kérhető role-ok listájáról',
-    requiredPerm: 'developer'
+    requiredPerm: 'admin'
 
 };

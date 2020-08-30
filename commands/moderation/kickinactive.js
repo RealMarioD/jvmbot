@@ -41,8 +41,8 @@ exports.run = (client, message, args) => {
 
 exports.info = {
 
-    name: 'kick',
-    category: 'admin',
+    name: 'kickinactive',
+    category: 'moderáció',
     syntax: '<kivételek ID-je>',
     description: 'Kirúgja az összes igazolatlan tagot.',
     requiredPerm: 'moderator'
