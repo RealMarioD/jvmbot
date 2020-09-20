@@ -82,18 +82,18 @@ exports.run = async (client, message, args) => {
     function handlePlay(URL) {
         ytdl.getBasicInfo(URL)
         .then(info => {
-            let seconds = info.length_seconds;
-            let minutes = `${Math.floor(info.length_seconds / 60)}`;
+            let seconds = info.videoDetails.lengthSeconds;
+            let minutes = `${Math.floor(info.videoDetails.lengthSeconds / 60)}`;
             seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
             if(minutes.length < 2) minutes = `0${minutes}`;
             if(seconds.length < 2) seconds = `0${seconds}`;
 
             client.queue.push({
                 'url': URL,
-                'title': info.title,
+                'title': info.videoDetails.title,
                 'videoThumbnail': info.player_response.videoDetails.thumbnail.thumbnails[info.player_response.videoDetails.thumbnail.thumbnails.length - 1].url,
-                'channelName': info.author.name,
-                'channelIcon': info.author.avatar,
+                'channelName': info.videoDetails.author.name,
+                'channelIcon': info.videoDetails.author.avatar,
                 'author': message.author,
                 'duration': `${minutes}:${seconds}`
             });
@@ -106,10 +106,10 @@ exports.run = async (client, message, args) => {
             else {
                 ogMsg.edit('', new MessageEmbed()
                     .setDescription('Hozzáadva a lejátszási listához.')
-                    .setTitle(info.title)
+                    .setTitle(info.videoDetails.title)
                     .setURL(URL)
                     .setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true }))
-                    .setFooter(info.author.name, info.thumbnail_url)
+                    .setFooter(info.videoDetails.author.name, info.thumbnail_url)
                     .setThumbnail(client.queue[client.queue.length - 1].videoThumbnail)
                 );
             }
@@ -133,18 +133,18 @@ exports.run = async (client, message, args) => {
     }
 
     function addToQueue(info, itemURL) {
-        let seconds = info.length_seconds;
-        let minutes = `${Math.floor(info.length_seconds / 60)}`;
+        let seconds = info.videoDetails.lengthSeconds;
+        let minutes = `${Math.floor(info.videoDetails.lengthSeconds / 60)}`;
         seconds = `${parseInt(seconds) - parseInt(minutes) * 60}`;
         if(minutes.length < 2) minutes = `0${minutes}`;
         if(seconds.length < 2) seconds = `0${seconds}`;
 
         client.queue.push({
             'url': itemURL,
-            'title': info.title,
+            'title': info.videoDetails.title,
             'videoThumbnail': info.player_response.videoDetails.thumbnail.thumbnails[info.player_response.videoDetails.thumbnail.thumbnails.length - 1].url,
-            'channelName': info.author.name,
-            'channelIcon': info.author.avatar,
+            'channelName': info.videoDetails.author.name,
+            'channelIcon': info.videoDetails.author.avatar,
             'author': message.author,
             'duration': `${minutes}:${seconds}`
         });

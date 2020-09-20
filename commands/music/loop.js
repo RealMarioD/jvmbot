@@ -5,17 +5,17 @@ exports.run = (client, message) => {
     let emoji;
     if(!client.loop) {
         client.loop = 'song';
-        emoji = '🔂';
+        emoji = '🔂 Egy szám';
     }
     else if(client.loop == 'song') {
         client.loop = 'queue';
-        emoji = '🔁';
+        emoji = '🔁 Lista';
     }
     else if(client.loop == 'queue') {
         client.loop = null;
-        emoji = '➡️';
+        emoji = '➡️ Nincs ismétlés';
     }
-    message.channel.send(`> ${emoji} **| Ismétlés átállítva.**`);
+    message.channel.send(`> ✅ **| Ismétlés átállítva: ${emoji}**`);
 
 };
 
