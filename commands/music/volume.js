@@ -5,8 +5,8 @@ exports.run = (client, message, args) => {
     if(!args.length) return message.channel.send('> ❌ **| Nem adtál meg értéket!**');
     const volume = parseInt(args[0]);
     if(volume > 150 || volume < 1 || isNaN(volume)) return message.channel.send('> ❌ **| Túl halk vagy túl hangos a megadott érték! `(1 - 150)`**');
-    client.volume = Math.round(volume / 100);
-    client.dispatcher.setVolumeLogarithmic(Math.round(volume / 100));
+    client.volume = volume / 100;
+    client.dispatcher.setVolumeLogarithmic(volume / 100);
     message.channel.send(`> 🔉 **| Hangerő átállítva. \`(${(volume)}%)\`**`);
 
 };
