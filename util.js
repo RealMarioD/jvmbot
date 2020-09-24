@@ -9,7 +9,7 @@ function getMention(channel) {
 // Pl: 2019.06.09 04:20:42
 function getDate(date) {
     if(!date) return new Date().toISOString().slice(0, 10).replace(/-/gi, '.') + ' ' + new Date().toTimeString().slice(0, 8);
-    else return date.toISOString().slice(0, 10).replace(/-/gi, '.') + ' ' + date.toISOString().slice(11, 8);
+    else return date.toISOString().slice(0, 10).replace(/-/gi, '.') + ' ' + date.toISOString().slice(11, 19);
 }
 
 function getEmoji(name) {
