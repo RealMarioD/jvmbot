@@ -31,12 +31,12 @@ module.exports = (client, message) => {
 
     switch(commandObject.info.requiredPerm) {
         case 'developer':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) runCommand();
+            if((client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) && message.channel.id === client.config.commandsIDs.test) runCommand();
             else noPerms('Fejlesztő');
             break;
 
         case 'admin':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) runCommand();
+            if((client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) && message.channel.id === client.config.commandsIDs.test) runCommand();
             else noPerms('Admin');
             break;
 
@@ -46,7 +46,7 @@ module.exports = (client, message) => {
             break;
 
         default:
-            runCommand();
+            if((Object.values(client.config.commandsIDs).includes(message.channel.id)) || (commandObject.info.name === 'igazol' && message.channel.id === client.config.igazolID) || (commandObject.info.category === 'music' && message.channel.id === client.config.musicID)) runCommand();
             break;
     }
 
