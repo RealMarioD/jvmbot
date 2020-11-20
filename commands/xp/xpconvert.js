@@ -1,6 +1,6 @@
 const asd = require('../../asd.json');
 const users = require('../../assets/users.json');
-const fs = require('fs');
+// const fs = require('fs');
 exports.run = (client, message) => {
     for(const key in asd) {
         const member = message.guild.members.cache.find(x => x.user.username === key);
@@ -37,7 +37,7 @@ exports.run = (client, message) => {
             }
         }
     }
-    fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+    // fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     message.channel.send('XP sikeresen átkonvertálva');
 };
 

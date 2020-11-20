@@ -1,6 +1,6 @@
 const { getDate, sleep } = require('../util.js');
 const users = require('../assets/users.json');
-const fs = require('fs');
+// const fs = require('fs');
 module.exports = (client, message) => {
 
     if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') {
@@ -87,11 +87,11 @@ module.exports = (client, message) => {
         }
         else if(users[message.author.id].lastMessageTime + 4000 <= message.createdTimestamp) {
             users[message.author.id].lastMessageTime = message.createdTimestamp;
-            ++users[message.author.id].xp;
-            let összeg = 35;
-            for(let i = 1; i <= users[message.author.id].level; i++) összeg += (i - 1) * 40 + 20;
-            if(users[message.author.id].xp === összeg) ++users[message.author.id].level;
+            users[message.author.id].xp++;
+            let final = 35;
+            for(let i = 1; i <= users[message.author.id].level; i++) final += (i - 1) * 40 + 20;
+            if(users[message.author.id].xp == final) ++users[message.author.id].level;
         }
-        fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+        // fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
 };

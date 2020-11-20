@@ -23,24 +23,24 @@ exports.run = async (client, message, args) => {
             if(users[key].level === undefined) users[key].level = 0;
             fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
         }
-        const asd = Object.keys(users).map(key => ({
+        const sortedUsers = Object.keys(users).map(key => ({
             key: key, value: users[key]
         })).sort((first, second) => (second.value.xp - first.value.xp));
+
+        embed.setTitle(`${message.guild.name} ranglistája`)
+            .setThumbnail(message.guild.iconURL({ format: 'png', dynamic: true }))
+            .setColor('#DB6206')
+            .setTimestamp();
+
         let k = 0;
-        for(let i = -1; i < asd.length; i++) {
-            if(i == -1) {
-                embed.setTitle(`${message.guild.name} ranglistája`)
-                    .setThumbnail(message.guild.iconURL({ format: 'png', dynamic: true }))
-                    .setColor('#DB6206')
-                    .setTimestamp();
-            }
-            else if(message.guild.members.cache.find(x => x.id === asd[i].key) && asd[i].value.xp > 0) {
+        for(let i = 0; i < sortedUsers.length; i++) {
+            if(message.guild.members.cache.find(x => x.id === sortedUsers[i].key) && sortedUsers[i].value.xp > 0) {
                 let összeg = 35;
                 ++k;
-                for(let j = 1; j <= asd[i].value.level; j++) összeg += (j - 1) * 40 + 20;
+                for(let j = 1; j <= sortedUsers[i].value.level; j++) összeg += (j - 1) * 40 + 20;
                 fieldHolder.push({
-                    title: `__${k}.__ **${message.guild.members.cache.find(x => x.id === asd[i].key).user.username}**`,
-                    desc: `Szint: \`${asd[i].value.level}\`\nXP: \`${asd[i].value.xp}/${összeg}\``
+                    title: `__${k}.__ **${message.guild.members.cache.find(x => x.id === sortedUsers[i].key).user.username}**`,
+                    desc: `Szint: \`${sortedUsers[i].value.level}\`\nXP: \`${sortedUsers[i].value.xp}/${összeg}\``
                 });
             }
         }
@@ -64,18 +64,18 @@ exports.run = async (client, message, args) => {
             level: 0
         };
     }
-    let összeg = 35;
-    for(let i = 1; i <= users[member.id].level; i++) összeg += (i - 1) * 40 + 20;
-    let levonandó = 35;
-    for(let j = 1; j < users[member.id].level; j++) levonandó += (j - 1) * 40 + 20;
+    let final = 35;
+    for(let i = 1; i <= users[member.id].level; i++) final += (i - 1) * 40 + 20;
+    let toRemove = 35;
+    for(let j = 1; j < users[member.id].level; j++) toRemove += (j - 1) * 40 + 20;
     const canvas = Canvas.createCanvas(900, 220);
     const ctx = canvas.getContext('2d');
     const background = await Canvas.loadImage('./card.png');
-    const szintjelző = await Canvas.loadImage('./szint.png');
-    const szintjelzőmaradék = await Canvas.loadImage('./maradek.png');
+    const canvasLevel = await Canvas.loadImage('./szint.png');
+    const restOfLevel = await Canvas.loadImage('./maradek.png');
     const textname = member.user.tag;
-    ctx.drawImage(szintjelző, 12, 203, (users[member.id].xp - levonandó) / (összeg - levonandó) * 615, 7);
-    ctx.drawImage(szintjelzőmaradék, 12 + (users[member.id].xp - levonandó) / (összeg - levonandó) * 615, 203, 615 - (users[member.id].xp - levonandó) / (összeg - levonandó) * 615, 7);
+    ctx.drawImage(canvasLevel, 12, 203, (users[member.id].xp - toRemove) / (final - toRemove) * 615, 7);
+    ctx.drawImage(restOfLevel, 12 + (users[member.id].xp - toRemove) / (final - toRemove) * 615, 203, 615 - (users[member.id].xp - toRemove) / (final - toRemove) * 615, 7);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.font = applyText(canvas, textname);
     ctx.fillStyle = '#fceaa8';
@@ -89,17 +89,17 @@ exports.run = async (client, message, args) => {
         if(sorteddata.key === member.id) j = i;
         ++i;
     });
-    let szélesség = ctx.measureText(`#${j}`).width;
-    ctx.fillText(`#${j}`, 264 - szélesség / 2, 175);
+    let canvasWidth = ctx.measureText(`#${j}`).width;
+    ctx.fillText(`#${j}`, 264 - canvasWidth / 2, 175);
     ctx.font = 'bold 24px sans-serif';
-    szélesség = ctx.measureText(users[member.id].level).width;
-    ctx.fillText(users[member.id].level, 765 - szélesség / 2, 75);
-    szélesség = ctx.measureText(users[member.id].xp).width;
-    ctx.fillText(users[member.id].xp, 771 - szélesség, 181);
+    canvasWidth = ctx.measureText(users[member.id].level).width;
+    ctx.fillText(users[member.id].level, 765 - canvasWidth / 2, 75);
+    canvasWidth = ctx.measureText(users[member.id].xp).width;
+    ctx.fillText(users[member.id].xp, 771 - canvasWidth, 181);
     ctx.font = 'bold 12px sans-serif';
     ctx.fillStyle = '#7f7f7f';
-    szélesség = ctx.measureText(összeg).width;
-    ctx.fillText(összeg, 788, 181);
+    canvasWidth = ctx.measureText(final).width;
+    ctx.fillText(final, 788, 181);
     ctx.beginPath();
     ctx.arc(121, 110, 55, 0, Math.PI * 2, true);
     ctx.closePath();
