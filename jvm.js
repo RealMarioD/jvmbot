@@ -17,7 +17,7 @@ client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.queue = [];
 client.dispatcher = {};
-client.volume = 100;
+client.volume = 1;
 client.party = {};
 
 fs.readdir('./commands/', (err, folders) => {
