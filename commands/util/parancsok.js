@@ -18,7 +18,7 @@ exports.run = (client, message, args) => {
             categories[command.info.category] = [];
         });
         client.commands.forEach(command => {
-            categories[command.info.category].push(command.info.name);
+            categories[command.info.category].push(`\`${command.info.name}\``);
         });
 
         if(!message.member._roles.includes(client.config.fejlesztoID) || !message.member._roles.includes(client.config.moderatorID) || dev) {
@@ -27,7 +27,7 @@ exports.run = (client, message, args) => {
         }
 
         Object.keys(categories).forEach(category => {
-            helpEmbed.addField(`**${category.substring(0, 1).toUpperCase()}${category.slice(1)}**\n`, categories[category].map(command => command), true);
+            helpEmbed.addField(`**${category.substring(0, 1).toUpperCase()}${category.slice(1)}**\n`, categories[category].join(', '));
         });
 
         return message.channel.send(helpEmbed);
