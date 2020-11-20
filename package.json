@@ -9,24 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@discordjs/opus": "^0.3.2",
-    "@types/node": "^12.12.62",
-    "commitizen": "^4.2.1",
-    "discord.js": "^12.3.1",
-=======
-=======
->>>>>>> 9674bf2 (refactor(modules): updated modules)
     "@discordjs/opus": "^0.3.3",
     "@types/node": "^12.19.6",
     "canvas": "^2.6.1",
     "commitizen": "^4.2.2",
     "discord.js": "^12.4.1",
-<<<<<<< HEAD
->>>>>>> 9674bf2 (refactor(modules): updated modules)
-=======
->>>>>>> 9674bf2 (refactor(modules): updated modules)
     "eslint": "^6.8.0",
     "ffmpeg": "0.0.4",
     "moment": "^2.29.1",
