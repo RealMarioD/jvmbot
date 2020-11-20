@@ -1,6 +1,7 @@
 const ytdl = require('ytdl-core-discord');
 const ytsr = require('ytsr');
 const ytpl = require('ytpl');
+const scraper = require('youtube-playlist-scraper');
 const { play, getEmoji } = require('../../util');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args) => {
@@ -13,20 +14,21 @@ exports.run = async (client, message, args) => {
 
     if(!ytdl.validateURL(searchTerm)) {
         if(!ytpl.validateID(searchTerm)) {
+            // message.channel.send('> ❌ **| A keresés funkció ismeretlen ideig nem üzemel.**');
             message.channel.send(`> ${getEmoji('loading').toString()} **| Keresés...**`).then(msg => {
                 ogMsg = msg;
                 ytsr.getFilters(searchTerm)
-                    .then(filters => handleFilters(filters))
-                    .catch(() => sendErrorMsg('filters'));
+                    .then(async filters => handleFilters(filters))
+                    .catch(err => sendErrorMsg('filters', err));
             });
         }
         else {
-            message.channel.send(`> ${getEmoji('loading').toString()} **| Lista összesítése...**`)
+            message.channel.send(`> ${getEmoji('loading').toString()} **| Lista összesítése...** \`Ha nem történik semmi egy rövid időn belül, próbáld újra!\``)
             .then(msg => {
                 ogMsg = msg;
-                ytpl(searchTerm)
-                    .then(result => handlePlaylist(result))
-                    .catch();
+                ytpl.getPlaylistID(searchTerm)
+                .then(id => scrapePlaylistLocal(id))
+                .catch(err => sendErrorMsg('getPlaylistID', err));
             });
         }
     }
@@ -38,31 +40,40 @@ exports.run = async (client, message, args) => {
         });
     }
 
-    function sendErrorMsg(devInfo) {
-        return ogMsg.edit(`> ❌ **| Hiba történt, próbáld újra.**\n\`dev info: @${devInfo}\``);
+    async function scrapePlaylistLocal(id) {
+        const data = await scraper(id);
+        return handlePlaylist(data);
     }
 
-    function handleFilters(filters) {
+    function sendErrorMsg(devInfo, err) {
+        console.log(err);
+        return ogMsg.edit(`> ❌ **| Hiba történt, próbáld újra.**\n\`dev info: @${devInfo}\``, null);
+    }
+
+    async function handleFilters(filters) {
         const filter = filters.get('Type').find(type => type.name == 'Video');
         const options = {
             safeSearch: false,
-            limit: 5,
+            limit: 10,
             nextpageRef: filter.ref
         };
         ytsr(searchTerm, options)
             .then(results => handleResults(results))
-            .catch(() => sendErrorMsg('ytsr'));
+            .catch(err => sendErrorMsg('ytsr', err));
     }
 
     function handleResults(results) {
         if(!results.items.length) return ogMsg.edit(`> ${getEmoji('vidmanHyperThink')} **| Nincs találat.**`);
         const foundEmbed = new MessageEmbed().setTitle(`${getEmoji('vidmanThink')} **| Találatok**`);
         const foundURLs = [];
+        for(let i = 0; i < results.items.length; i++) if(!results.items[i].title) results.items.splice(i, 1);
         let j = 5;
         if(results.items.length < 5) j = results.items.length;
+        let author;
         for(let i = 0; i < j; i++) {
             foundURLs.push(results.items[i].link);
-            foundEmbed.addField(`**${i + 1}.:** ${results.items[i].title}`, `**Feltöltő:** ${results.items[i].author.name}\n**Hossz:** ${results.items[i].duration}\n${results.items[i].uploaded_at}`);
+            author = results.items[i].author;
+            foundEmbed.addField(`**${i + 1}.:** ${results.items[i].title}`, `**Feltöltő:** ${!author ? 'Nem sikerült lekérni a feltöltőt.' : author.name}\n**Hossz:** ${results.items[i].duration}\n${!results.items[i].uploaded_at ? '??:??' : results.items[i].uploaded_at}`);
         }
         ogMsg.edit('', foundEmbed).then(() => {
             ogMsg.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 60000, errors: ['time'] })
@@ -114,13 +125,13 @@ exports.run = async (client, message, args) => {
                 );
             }
         })
-        .catch(() => sendErrorMsg('ytdl.getBasicInfo'));
+        .catch(err => sendErrorMsg('ytdl.getBasicInfo', err));
     }
 
     async function handlePlaylist(playlist) {
-        await playlist.items.forEach(item => {
-            ytdl.getBasicInfo(item.url_simple)
-                .then(info => addToQueue(info, item.url_simple))
+        playlist.playlist.forEach(item => {
+            ytdl.getBasicInfo(item.url)
+                .then(info => addToQueue(info, item.url))
                 .catch();
         });
         if(!message.guild.voice || !message.guild.voice.connection) {
@@ -129,7 +140,7 @@ exports.run = async (client, message, args) => {
                 play(connection, message);
             });
         }
-        ogMsg.edit(`> 🛂 **| \`${playlist.items.length}\` szám hozzáadva a lejátszási listához.**`);
+        ogMsg.edit(`> 🛂 **| \`${playlist.playlist.length}\` szám hozzáadva a lejátszási listához.**`);
     }
 
     function addToQueue(info, itemURL) {

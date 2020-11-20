@@ -10,20 +10,18 @@ exports.run = async (client, message) => {
         message.channel.send('A lejátszási lista üres!');
     }
     else {
-        for(let i = 0; i < client.queue.length; i++) {
-            if(i == 0) {
-                list.setTitle(`Most szól:\n**${client.queue[i].title}**`)
-                    .setURL(client.queue[i].url)
-                    .setDescription(`__Feltöltő:__ ${client.queue[i].channelName}\n__Kérte:__ ${client.queue[i].author.tag}\n__Hossz:__ ${client.queue[i].duration}`)
-                    .setThumbnail(client.queue[i].videoThumbnail)
-                    .setFooter('', client.queue[i].channelIcon);
-            }
-            else {
-                fieldHolder.push({
-                    title: `__${i}:__ **${client.queue[i].title}**`,
-                    desc: `__Feltöltő:__ ${client.queue[i].channelName}\n__Kérte:__ ${client.queue[i].author.tag}\n__Hossz:__ ${client.queue[i].duration}\n**[Link](${client.queue[i].url})**`
-                });
-            }
+        let i = 0;
+        list.setTitle(`Most szól:\n**${client.queue[i].title}**`)
+            .setURL(client.queue[i].url)
+            .setDescription(`__Feltöltő:__ ${client.queue[i].channelName}\n__Kérte:__ ${client.queue[i].author.tag}\n__Hossz:__ ${client.queue[i].duration}`)
+            .setThumbnail(client.queue[i].videoThumbnail)
+            .setFooter('', client.queue[i].channelIcon);
+
+        for(i = 1; i < client.queue.length; i++) {
+            fieldHolder.push({
+                title: `__${i}:__ **${client.queue[i].title}**`,
+                desc: `__Feltöltő:__ ${client.queue[i].channelName}\n__Kérte:__ ${client.queue[i].author.tag}\n__Hossz:__ ${client.queue[i].duration}\n**[Link](${client.queue[i].url})**`
+            });
         }
 
         message.channel.send('Kérlek várj...')
@@ -61,7 +59,8 @@ exports.run = async (client, message) => {
     function startAwait() {
         const filter = (reaction, user) => reaction.emoji.name == '⬅️' || reaction.emoji.name == '➡️' && user.id == message.author.id;
         passedMsg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-        .then(collection => handleReactions(collection));
+        .then(collection => handleReactions(collection))
+        .catch(() => null);
     }
 
     function handleReactions(collection) {

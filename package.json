@@ -19,10 +19,11 @@
     "moment": "^2.29.1",
     "ms": "^2.1.2",
     "prism-media": "^1.2.2",
-    "ytdl-core": "^2.1.7",
+    "youtube-playlist-scraper": "^1.0.2",
+    "ytdl-core": "^4.0.5",
     "ytdl-core-discord": "^1.2.4",
     "ytpl": "^1.0.1",
-    "ytsr": "^0.1.21"
+    "ytsr": "^2.0.0-alpha.1"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0"
