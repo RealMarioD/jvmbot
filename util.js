@@ -94,6 +94,58 @@ async function play(connection, message, ogMsg) {
     client.dispatcher.setVolumeLogarithmic(client.volume);
 }
 
+function sortFields(startIndex, list, fieldHolder, passedMsg, message) {
+    list.spliceFields(0, 5);
+    let j = startIndex;
+    if(j >= fieldHolder.length) j = fieldHolder.length - 5;
+    let stopIndex = startIndex + 5;
+    if(stopIndex > fieldHolder.length) {
+        stopIndex = fieldHolder.length;
+    }
+    const pages = Math.ceil(fieldHolder.length / 5);
+    const pageOf = Math.ceil(j / 5) + 1;
+    for(j; j < stopIndex; j++) {
+        list.addField(fieldHolder[j].title, fieldHolder[j].desc);
+    }
+    list.setFooter(`Oldal: ${pageOf}/${pages}`);
+    passedMsg.edit('', list);
+    startAwait(passedMsg, message, startIndex, fieldHolder, list);
+}
+
+function startAwait(passedMsg, message, startIndex, fieldHolder, list) {
+    const filter = (reaction, user) => reaction.emoji.name == '⬅️' || reaction.emoji.name == '➡️' && user.id == message.author.id;
+    passedMsg.awaitReactions(filter, { max: 1, time: 5000, errors: ['time'] })
+    .then(collection => handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list))
+    .catch(() => null);
+}
+
+function handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list) {
+    switch(collection.first()._emoji.name) {
+        case '⬅️':
+            if(startIndex == 0) {
+                startAwait(passedMsg, message, startIndex, fieldHolder, list);
+            }
+            else {
+                startIndex = startIndex - 5;
+                sortFields(startIndex, list, fieldHolder, passedMsg, message);
+            }
+            break;
+
+        case '➡️':
+            if(startIndex + 5 >= fieldHolder.length) {
+                startAwait(passedMsg, message, startIndex, fieldHolder, list);
+            }
+            else {
+                startIndex = startIndex + 5;
+                sortFields(startIndex, list, fieldHolder, passedMsg, message);
+            }
+            break;
+        default:
+            startAwait(passedMsg, message, startIndex, fieldHolder, list);
+            break;
+    }
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
@@ -102,5 +154,6 @@ module.exports = {
     items: items,
     listItems: listItems,
     giveRandom: giveRandom,
-    play: play
+    play: play,
+    sortFields: sortFields
 };
