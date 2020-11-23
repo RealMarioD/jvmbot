@@ -24,6 +24,6 @@ exports.info = {
     syntax: '',
     description: 'Kiírja a 10 legtöbb Vidmanival rendelkező embert!',
     requiredPerm: null,
-    aliases: ['t10', 'top', '10', 'leaderboard', 'lb']
+    aliases: ['t10', 'top', '10']
 
 };
