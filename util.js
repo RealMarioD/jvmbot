@@ -146,6 +146,10 @@ function handleReactions(collection, startIndex, fieldHolder, passedMsg, message
     }
 }
 
+function doBackup() {
+    client.channels.cache.get(client.config.consoleLogChannelID).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
@@ -155,5 +159,6 @@ module.exports = {
     listItems: listItems,
     giveRandom: giveRandom,
     play: play,
-    sortFields: sortFields
+    sortFields: sortFields,
+    doBackup: doBackup
 };

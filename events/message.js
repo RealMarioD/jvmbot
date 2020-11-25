@@ -1,11 +1,10 @@
 const { getDate, sleep } = require('../util.js');
 const users = require('../assets/users.json');
-// const fs = require('fs');
+const fs = require('fs');
+const { MessageEmbed } = require('discord.js');
 module.exports = (client, message) => {
 
-    if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') {
-        message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
-    }
+    if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
 
     if(message.channel.id === '584445312312147996' &&
     !message.member._roles.includes(client.config.adminID)) {
@@ -24,21 +23,25 @@ module.exports = (client, message) => {
 
     if(!commandObject) {
 		client.aliases.forEach((cmdObject, alias) => {
-			if(alias.includes(commandName)) {
-                commandObject = client.commands.get(cmdObject.info.name);
-			}
+			if(alias.includes(commandName)) commandObject = client.commands.get(cmdObject.info.name);
 		});
 		if(!commandObject) return;
 	}
 
     switch(commandObject.info.requiredPerm) {
         case 'developer':
-            if((client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) && message.channel.id === client.config.commandsIDs.test) runCommand();
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) {
+                if(message.channel.id == client.config.commandsIDs.test) runCommand();
+                else message.reply('hint hint, rossz channel :eyes:').then(msg => sleep(10000).then(() => msg.delete()));
+            }
             else noPerms('Fejlesztő');
             break;
 
         case 'admin':
-            if((client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) && message.channel.id === client.config.commandsIDs.test) runCommand();
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) {
+                if(message.channel.id == client.config.commandsIDs.test) runCommand();
+                else message.reply('hint hint, rossz channel :eyes:').then(msg => sleep(10000).then(() => msg.delete()));
+            }
             else noPerms('Admin');
             break;
 
@@ -48,7 +51,7 @@ module.exports = (client, message) => {
             break;
 
         default:
-            if((Object.values(client.config.commandsIDs).includes(message.channel.id)) || (commandObject.info.name === 'igazol' && message.channel.id === client.config.igazolID) || (commandObject.info.category === 'music' && message.channel.id === client.config.musicID)) runCommand();
+            if((Object.values(client.config.commandsIDs).includes(message.channel.id)) || (commandObject.info.name == 'igazol' && message.channel.id === client.config.igazolID) || (commandObject.info.category == 'music' && message.channel.id == client.config.musicID)) runCommand();
             break;
     }
 
@@ -58,10 +61,8 @@ module.exports = (client, message) => {
             console.log(`${commandName} parancs futtatva @ ${getDate()}`);
         }
         catch(err) {
-            if(err.code === 'MODULE_NOT_FOUND') {return;}
-            else {
-                console.error(err);
-            }
+            if(err.code == 'MODULE_NOT_FOUND') return;
+            else console.error(err);
         }
     }
 
@@ -90,8 +91,17 @@ module.exports = (client, message) => {
             users[message.author.id].xp++;
             let final = 35;
             for(let i = 1; i <= users[message.author.id].level; i++) final += (i - 1) * 40 + 20;
-            if(users[message.author.id].xp == final) ++users[message.author.id].level;
+            if(users[message.author.id].xp == final) {
+                users[message.author.id].level++;
+                client.channels.cache.get(client.config.levelUpChannelID).send(message.author.toString(), new MessageEmbed()
+                    .setTitle('Szintlépés!')
+                    .setDescription(`Gratulálunk ${message.author.toString()}, szintet léptél!`)
+                    .addField('Szinted:', users[message.author.id].level)
+                    .setThumbnail(message.author.displayAvatarURL({ format: 'png', dynamic: true }))
+                    .setColor('#00cc00')
+                );
+            }
         }
-        // fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+        fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
 };
