@@ -114,9 +114,11 @@ function sortFields(startIndex, list, fieldHolder, passedMsg, message) {
 
 function startAwait(passedMsg, message, startIndex, fieldHolder, list) {
     const filter = (reaction, user) => reaction.emoji.name == '⬅️' || reaction.emoji.name == '➡️' && user.id == message.author.id;
-    passedMsg.awaitReactions(filter, { max: 1, time: 5000, errors: ['time'] })
+    passedMsg.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] })
     .then(collection => handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list))
-    .catch(() => null);
+    .catch(() => {
+        passedMsg.reactions.removeAll();
+    });
 }
 
 function handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list) {
