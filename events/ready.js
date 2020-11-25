@@ -1,4 +1,4 @@
-const { getDate } = require('../util.js');
+const { getDate, doBackup } = require('../util.js');
 const moderationHandler = require('../moderationHandler');
 const schedule = require('node-schedule');
 module.exports = (client) => {
@@ -9,7 +9,5 @@ module.exports = (client) => {
     const rule = new schedule.RecurrenceRule();
     rule.hour = 0;
     rule.minute = 0;
-    client.backup = schedule.scheduleJob(rule, () => {
-        client.channels.cache.get(client.config.consoleLogChannelID).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
-    });
+    client.backup = schedule.scheduleJob(rule, () => doBackup());
 };
