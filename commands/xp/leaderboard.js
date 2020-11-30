@@ -28,7 +28,7 @@ exports.run = async (client, message) => {
             });
         }
     }
-    return message.channel.send('Kérlek, várj...')
+    message.channel.send('Kérlek, várj...')
     .then(msg => {
         passedMsg = msg;
         if(!fieldHolder.length) {
