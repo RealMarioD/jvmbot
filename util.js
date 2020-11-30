@@ -97,7 +97,7 @@ async function play(connection, message, ogMsg) {
 }
 
 function sortFields(startIndex, list, fieldHolder, passedMsg, message, pageSize) {
-    pageSize = !pageSize ? 5 : pageSize;
+    if(!pageSize) pageSize = 5;
     list.spliceFields(0, pageSize);
     let j = startIndex;
     if(j >= fieldHolder.length) j = fieldHolder.length - pageSize;
@@ -108,7 +108,7 @@ function sortFields(startIndex, list, fieldHolder, passedMsg, message, pageSize)
     for(j; j < stopIndex; j++) list.addField(fieldHolder[j].title, fieldHolder[j].desc);
     list.setFooter(`Oldal: ${pageOf}/${pages}`);
     passedMsg.edit('', list);
-    startAwait(passedMsg, message, startIndex, fieldHolder, list);
+    startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize);
 }
 
 function startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize) {
