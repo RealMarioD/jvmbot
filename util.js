@@ -1,6 +1,8 @@
 const ytdlDC = require('ytdl-core-discord');
 const { MessageEmbed } = require('discord.js');
 const { client } = require('./jvm');
+const users = require('./assets/users.json');
+const fs = require('fs');
 
 function getMention(channel) {
     return client.channels.cache.get(channel).toString();
@@ -94,56 +96,49 @@ async function play(connection, message, ogMsg) {
     client.dispatcher.setVolumeLogarithmic(client.volume);
 }
 
-function sortFields(startIndex, list, fieldHolder, passedMsg, message) {
-    list.spliceFields(0, 5);
+function sortFields(startIndex, list, fieldHolder, passedMsg, message, pageSize) {
+    pageSize = !pageSize ? 5 : pageSize;
+    list.spliceFields(0, pageSize);
     let j = startIndex;
-    if(j >= fieldHolder.length) j = fieldHolder.length - 5;
-    let stopIndex = startIndex + 5;
-    if(stopIndex > fieldHolder.length) {
-        stopIndex = fieldHolder.length;
-    }
-    const pages = Math.ceil(fieldHolder.length / 5);
-    const pageOf = Math.ceil(j / 5) + 1;
-    for(j; j < stopIndex; j++) {
-        list.addField(fieldHolder[j].title, fieldHolder[j].desc);
-    }
+    if(j >= fieldHolder.length) j = fieldHolder.length - pageSize;
+    let stopIndex = startIndex + pageSize;
+    if(stopIndex > fieldHolder.length) stopIndex = fieldHolder.length;
+    const pages = Math.ceil(fieldHolder.length / pageSize);
+    const pageOf = Math.ceil(j / pageSize) + 1;
+    for(j; j < stopIndex; j++) list.addField(fieldHolder[j].title, fieldHolder[j].desc);
     list.setFooter(`Oldal: ${pageOf}/${pages}`);
     passedMsg.edit('', list);
     startAwait(passedMsg, message, startIndex, fieldHolder, list);
 }
 
-function startAwait(passedMsg, message, startIndex, fieldHolder, list) {
+function startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize) {
     const filter = (reaction, user) => reaction.emoji.name == '⬅️' || reaction.emoji.name == '➡️' && user.id == message.author.id;
     passedMsg.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] })
-    .then(collection => handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list))
+    .then(collection => handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list, pageSize))
     .catch(() => {
         passedMsg.reactions.removeAll();
     });
 }
 
-function handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list) {
+function handleReactions(collection, startIndex, fieldHolder, passedMsg, message, list, pageSize) {
     switch(collection.first()._emoji.name) {
         case '⬅️':
-            if(startIndex == 0) {
-                startAwait(passedMsg, message, startIndex, fieldHolder, list);
-            }
+            if(startIndex == 0) startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize);
             else {
-                startIndex = startIndex - 5;
-                sortFields(startIndex, list, fieldHolder, passedMsg, message);
+                startIndex = startIndex - pageSize;
+                sortFields(startIndex, list, fieldHolder, passedMsg, message, pageSize);
             }
             break;
 
         case '➡️':
-            if(startIndex + 5 >= fieldHolder.length) {
-                startAwait(passedMsg, message, startIndex, fieldHolder, list);
-            }
+            if(startIndex + pageSize >= fieldHolder.length) startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize);
             else {
-                startIndex = startIndex + 5;
-                sortFields(startIndex, list, fieldHolder, passedMsg, message);
+                startIndex = startIndex + pageSize;
+                sortFields(startIndex, list, fieldHolder, passedMsg, message, pageSize);
             }
             break;
         default:
-            startAwait(passedMsg, message, startIndex, fieldHolder, list);
+            startAwait(passedMsg, message, startIndex, fieldHolder, list, pageSize);
             break;
     }
 }
@@ -151,6 +146,39 @@ function handleReactions(collection, startIndex, fieldHolder, passedMsg, message
 function doBackup() {
     client.channels.cache.get(client.config.consoleLogChannelID).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
 }
+
+function jingleMyBalls(connection, msg) {
+    const dispatcher = connection.play('./assets/honestly.ogg');
+    eventObj.eventDispatcher = dispatcher;
+    eventObj.running = true;
+    eventObj.msg = msg;
+    dispatcher.on('finish', () => {
+        for(const m in eventObj.listeners) {
+            if(!users[m]) {
+                users[m] = {
+                    eventStats: 1
+                };
+            }
+            else if(!users[m].eventStats) users[m].eventStats = 1;
+            else users[m].eventStats++;
+        }
+        eventObj.running = false;
+        fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
+        msg.channel.send(new MessageEmbed()
+            .setTitle('Szám vége!')
+            .setDescription(eventObj.beautyListeners.map(l => l + ' + 1\n'))
+        );
+        dispatcher.player.voiceConnection.disconnect();
+    });
+}
+
+const eventObj = {
+    running: false,
+    eventDispatcher: null,
+    listeners: {},
+    msg: null,
+    beautyListeners: []
+};
 
 module.exports = {
     getEmoji: getEmoji,
@@ -162,5 +190,7 @@ module.exports = {
     giveRandom: giveRandom,
     play: play,
     sortFields: sortFields,
-    doBackup: doBackup
+    doBackup: doBackup,
+    jingleMyBalls: jingleMyBalls,
+    eventObj: eventObj
 };
