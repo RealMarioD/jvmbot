@@ -100,6 +100,12 @@ module.exports = (client, message) => {
                     .setThumbnail(message.author.displayAvatarURL({ format: 'png', dynamic: true }))
                     .setColor('#00cc00')
                 );
+                try {
+                    message.author.roles.add(message.guild.roles.cache.find(x => x.name === `Lvl${users[message.author.id].level}`));
+                }
+                catch(error) {
+                    console.log('Nincs ilyen role!');
+                }
             }
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));

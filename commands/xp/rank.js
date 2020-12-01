@@ -5,7 +5,7 @@ function applyText(canvas, text) {
     const ctx = canvas.getContext('2d');
     let fontSize = 50;
     do {
-        ctx.font = `${fontSize -= 10}px sans-serif`;
+        ctx.font = `bold ${fontSize -= 10}px sans-serif`;
     } while(ctx.measureText(text).width > canvas.width - 510);
     return ctx.font;
 }
@@ -32,19 +32,19 @@ exports.run = async (client, message, args) => {
     for(let i = 1; i <= users[member.id].level; i++) final += (i - 1) * 40 + 20;
     let toRemove = 35;
     for(let j = 1; j < users[member.id].level; j++) toRemove += (j - 1) * 40 + 20;
+    if(users[member.id].level === 0) toRemove = 0;
     const canvas = Canvas.createCanvas(900, 220);
     const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#7f7f7f';
+    ctx.fillRect(208 + (users[member.id].xp - toRemove) / (final - toRemove) * 659, 151, 659 - (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
+    ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
+    ctx.fillRect(208, 151, (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
     const background = await Canvas.loadImage('./assets/imgs/card.png');
-    const canvasLevel = await Canvas.loadImage('./assets/imgs/level.png');
-    const restOfLevel = await Canvas.loadImage('./assets/imgs/rest.png');
     const textname = member.user.tag;
-    ctx.drawImage(canvasLevel, 12, 203, (users[member.id].xp - toRemove) / (final - toRemove) * 615, 7);
-    ctx.drawImage(restOfLevel, 12 + (users[member.id].xp - toRemove) / (final - toRemove) * 615, 203, 615 - (users[member.id].xp - toRemove) / (final - toRemove) * 615, 7);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.font = applyText(canvas, textname);
-    ctx.fillStyle = '#fceaa8';
-    ctx.fillText(textname, 234, 73);
-    ctx.font = '30px sans-serif';
+    ctx.fillText(textname, 213, 121);
+    ctx.font = 'bold 28px sans-serif';
     let i = 1;
     let j = 1;
     Object.keys(users).map(key => ({
@@ -54,22 +54,26 @@ exports.run = async (client, message, args) => {
         i++;
     });
     let canvasWidth = ctx.measureText(`#${j}`).width;
-    ctx.fillText(`#${j}`, 264 - canvasWidth / 2, 175);
-    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(`#${j}`, 280, 65);
+    ctx.font = 'bold 28px sans-serif';
     canvasWidth = ctx.measureText(users[member.id].level).width;
-    ctx.fillText(users[member.id].level, 765 - canvasWidth / 2, 75);
-    canvasWidth = ctx.measureText(users[member.id].xp).width;
-    ctx.fillText(users[member.id].xp, 771 - canvasWidth, 181);
-    ctx.font = 'bold 12px sans-serif';
-    ctx.fillStyle = '#7f7f7f';
-    canvasWidth = ctx.measureText(final).width;
-    ctx.fillText(final, 788, 181);
+    ctx.fillText(users[member.id].level, 460, 65);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 28px sans-serif';
+    canvasWidth = ctx.measureText(`${users[member.id].xp}/${final}`).width;
+    ctx.fillText(`${users[member.id].xp}/${final}`, 812 - canvasWidth, 145);
     ctx.beginPath();
-    ctx.arc(121, 110, 55, 0, Math.PI * 2, true);
+    ctx.arc(109, 110, 91, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+    ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
+    ctx.fillRect(18, 19, 182, 182);
+    ctx.beginPath();
+    ctx.arc(109, 110, 83, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.clip();
     const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
-    ctx.drawImage(avatar, 65, 54, 111, 111);
+    ctx.drawImage(avatar, 26, 27, 166, 166);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), './assets/imgs/level.png');
     message.channel.send('', attachment);
 
