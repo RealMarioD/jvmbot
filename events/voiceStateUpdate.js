@@ -11,6 +11,7 @@ module.exports = (client, oldData, newData) => {
             delete eventObj.listeners[missing.id];
             eventObj.beautyListeners.splice(eventObj.beautyListeners.indexOf(missing.toString()), 1);
             if(Object.entries(eventObj.listeners).length > 0) return eventObj.msg.channel.send(new MessageEmbed().setDescription(`${missing.toString()} elhagyta a voice channelt, így ő nem kap pontot mostantól.`));
+            eventObj.running = false;
             eventObj.eventDispatcher.player.voiceConnection.disconnect();
             eventObj.msg.channel.send(new MessageEmbed().setDescription('Mindenki elhagyta a voice channelt, így az eventnek vége.'));
     }
