@@ -6,9 +6,11 @@ module.exports = (client, message) => {
 
     if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
 
-    if(message.channel.id === '584445312312147996' &&
+    // Deletes every message in igazol unless author is admin
+    if(message.channel.id == client.config.igazolID &&
     !message.member._roles.includes(client.config.adminID)) {
-        sleep(1000).then(() => {
+        sleep(1000)
+        .then(() => {
             message.delete();
         });
     }
@@ -32,7 +34,13 @@ module.exports = (client, message) => {
         case 'developer':
             if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) {
                 if(message.channel.id == client.config.commandsIDs.test) runCommand();
-                else message.reply('hint hint, rossz channel :eyes:').then(msg => sleep(10000).then(() => msg.delete()));
+                else {
+                    message.reply('hint hint, rossz channel :eyes:')
+                    .then(msg => {
+                        sleep(10000)
+                        .then(() => msg.delete());
+                    });
+                }
             }
             else noPerms('Fejlesztő');
             break;
@@ -40,7 +48,13 @@ module.exports = (client, message) => {
         case 'admin':
             if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) {
                 if(message.channel.id == client.config.commandsIDs.test) runCommand();
-                else message.reply('hint hint, rossz channel :eyes:').then(msg => sleep(10000).then(() => msg.delete()));
+                else {
+                    message.reply('hint hint, rossz channel :eyes:')
+                    .then(msg => {
+                        sleep(10000)
+                        .then(() => msg.delete());
+                    });
+                }
             }
             else noPerms('Admin');
             break;

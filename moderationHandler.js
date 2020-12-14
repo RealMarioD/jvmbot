@@ -18,8 +18,7 @@ function log(moderationType, moderator, punished, reason, timeout) {
         .setTimestamp();
 
     switch(moderationType) {
-        case 'Kick':
-        case 'Ban':
+        case 'Kick': case 'Ban':
             logMessage.setColor('#EE2500');
             break;
 
@@ -28,12 +27,17 @@ function log(moderationType, moderator, punished, reason, timeout) {
             handleMute(Date.now(), timeout, punished);
             break;
 
+        case 'Unmute':
+            logMessage.setColor('#FFCC00');
+            handleUnmute(punished);
+            break;
+
         default:
             logMessage.setColor('#FFED00');
             break;
     }
 
-    if(timeout) logMessage.addField('Hossz', timeout, true);
+    if(timeout) logMessage.addField('Hossz', `${timeout / 1000 / 60} perc`, true);
 
     client.channels.cache.get(client.config.modLogChannel).send(logMessage)
     .then(msg => {
@@ -49,6 +53,11 @@ function log(moderationType, moderator, punished, reason, timeout) {
 
 }
 
+function handleUnmute(punished) {
+    delete modCases.mutes[punished.id];
+    fs.writeFileSync('./assets/modCases.json', JSON.stringify(modCases, null, 2));
+}
+
 function handleMute(muteWhen, muteDuration, muteWho) {
     modCases.mutes[muteWho.id] = {
         mutedAt: muteWhen,
@@ -57,7 +66,7 @@ function handleMute(muteWhen, muteDuration, muteWho) {
     fs.writeFileSync('./assets/modCases.json', JSON.stringify(modCases, null, 2));
     setTimeout(() => {
         muteWho.roles.remove(client.config.muteRole);
-        console.log(`Unmuted ${muteWho.user.tag}`);
+        log('Unmute', client.user.toString(), muteWho, 'Auto');
     }, muteDuration);
 }
 
@@ -70,12 +79,11 @@ function initMute() {
             const currentUser = client.guilds.cache.get(client.config.serverID).members.cache.get(key);
             if(!currentUser) break;
 
-            if(value.mutedAt + value.muteDuration >= Date.now()) {
-               currentUser.roles.remove(client.config.muteRole);
-            }
+            if(value.mutedAt + value.muteDuration >= Date.now()) currentUser.roles.remove(client.config.muteRole);
             else {
                 setTimeout(() => {
                     currentUser.roles.remove(client.config.muteRole);
+                    log('Unmute', client.user.toString(), currentUser, 'Auto');
                 }, Date.now() - (value.mutedAt + value.muteDuration));
             }
 

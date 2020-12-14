@@ -4,9 +4,8 @@ const Discord = require('discord.js');
 function applyText(canvas, text) {
     const ctx = canvas.getContext('2d');
     let fontSize = 50;
-    do {
-        ctx.font = `bold ${fontSize -= 10}px sans-serif`;
-    } while(ctx.measureText(text).width > canvas.width - 510);
+    do ctx.font = `bold ${fontSize -= 10}px sans-serif`;
+    while(ctx.measureText(text).width > canvas.width - 510);
     return ctx.font;
 }
 

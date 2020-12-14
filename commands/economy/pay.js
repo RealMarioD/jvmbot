@@ -1,14 +1,12 @@
 const users = require('../../assets/users.json');
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
-const { getEmoji } = require('../../util');
+const { getEmoji, cmdUsage, findMember } = require('../../util');
 exports.run = (client, message, args) => {
 
-    if(args.length < 2) {
-        return message.channel.send('> ❌ **| Nem adtál meg elég adatot!**');
-    }
+    if(args.length < 2) cmdUsage(this, message);
 
-    const userToPay = message.mentions.users.first();
+    const userToPay = findMember(args[0], message, true);
     if(!userToPay) return message.channel.send('> ❌ **| Nincs ilyen tag!**');
     else if(userToPay.id == message.author.id) return message.channel.send('> ❌ **| Magadnak nem küldhetsz pénzt!**');
     const money = parseInt(args[1]);
@@ -26,16 +24,12 @@ exports.run = (client, message, args) => {
         .setDescription('__Elfogadáshoz mindakettő fél írjon egy `elfogad`-ot!__')
     );
     message.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 30000, errors: ['time'] })
-    .then(collected => {
-        handleTransfer(collected);
-    })
+    .then(collected => handleTransfer(collected))
     .catch(() => {
         return message.channel.send('> ❌ **| Elutasítva.**');
     });
     message.channel.awaitMessages(m => m.author.id == userToPay.id, { max: 1, time: 30000, errors: ['time'] })
-    .then(collected => {
-        handleTransfer(collected);
-    })
+    .then(collected => handleTransfer(collected))
     .catch(() => {
         return message.channel.send('> ❌ **| Elutasítva.**');
     });
@@ -54,9 +48,7 @@ exports.run = (client, message, args) => {
                 fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                 message.channel.send('> ✅ **| Az átadás megtörtént.**');
             }
-            else {
-                message.channel.send('> ❌ **| Elutasítva.**');
-            }
+            else message.channel.send('> ❌ **| Elutasítva.**');
         }
     }
 

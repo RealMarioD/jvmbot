@@ -1,6 +1,6 @@
 const users = require('../../assets/users.json');
 const fs = require('fs');
-const { getEmoji } = require('../../util');
+const { getEmoji, cmdUsage } = require('../../util');
 exports.run = (client, message, args) => {
 
     const responses = [
@@ -15,20 +15,16 @@ exports.run = (client, message, args) => {
         'Mostmár kinyithatod a szemedet.',
         'Valaki nem töltötte újra a revolvert... üres tárral tényleg könnyű.'
     ];
-    if(args.length === 0) {
-        return message.channel.send(`> __${message.author.tag}__, adj meg egy összeget, amit be akarsz dobni!`);
-    }
+    if(!args.length) return cmdUsage(this, message);
     const amount = parseInt(args[0]);
-    if(isNaN(amount)) return message.channel.send('> ❌ **| i g e n**');
+    if(isNaN(amount)) return message.channel.send('> ❌ **| Megadott érték nem szám.**');
 
     if(!users[message.author.id]) {
         users[message.author.id] = {
             money: 0
         };
     }
-    if(users[message.author.id].money < amount) {
-        return message.channel.send(`>>> __${message.author.tag}, nincs elég ${getEmoji('vidmani')}-d, hogy feltegyél ennyit!`);
-    }
+    if(users[message.author.id].money < amount) return message.channel.send(`>>> __${message.author.tag}, nincs elég ${getEmoji('vidmani')}-d, hogy feltegyél ennyit!`);
     if(amount >= 50 && amount <= 10000) {
         const response = Math.floor(Math.random() * 10);
         if(response > 4) {
@@ -41,9 +37,7 @@ exports.run = (client, message, args) => {
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
-    else {
-        message.channel.send(`>>> __${message.author.tag}__, túl keveset vagy túl sokat akarsz felrakni! \`(50-10000)\``);
-    }
+    else message.channel.send(`>>> __${message.author.tag}__, túl keveset vagy túl sokat akarsz felrakni! \`(50-10000)\``);
 };
 
 exports.info = {

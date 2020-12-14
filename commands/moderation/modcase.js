@@ -8,8 +8,7 @@ exports.run = (client, message, args) => {
 
     const caseNumber = args.shift();
 
-    // client.channels.cache.get(client.config.modLogChannel).messages.fetch(thisCase.msgID)
-    client.channels.cache.get('585873434077167637').messages.fetch(thisCase.msgID)
+    client.channels.cache.get(client.config.modLogChannel).messages.fetch(thisCase.msgID)
     .then(msg => {
         if(!msg) return message.channel.send('> ❌ **| Nem tudom szerkeszteni ezt az ügyet.**');
         const newEmbed = msg.embeds[0];
@@ -28,6 +27,6 @@ exports.info = {
     category: 'moderáció',
     syntax: '<case szám> <ok>',
     description: 'Egy eljárás okát lehet megváltoztatni ezzel a paranccsal.',
-    requiredPerm: null,
+    requiredPerm: 'moderator',
 
 };

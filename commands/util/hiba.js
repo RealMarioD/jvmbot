@@ -14,9 +14,7 @@ exports.run = (client, message, args) => {
         const remainingTime = moment.duration(timeouts['erroridea'].lastSavedTime + resetTime - currentDate);
         return message.channel.send(`Még várnod kell \`${remainingTime.minutes()} percet és ${remainingTime.seconds()} másodpercet\`, hogy be tudj küldeni egy új hibát/ötletet!`);
     }
-    else if(args.length == 0) {
-        return message.channel.send('> ❌ Nem adtál meg hibát!');
-    }
+    else if(args.length == 0) return message.channel.send('> ❌ Nem adtál meg hibát!');
 
     const caseID = Math.random().toString(36).substring(7);
     const ideaChannel = message.guild.channels.cache.get(client.config.ideaChannelID);
@@ -26,6 +24,7 @@ exports.run = (client, message, args) => {
         .setAuthor(message.author.tag, message.author.displayAvatarURL())
         .addField('Leírás:', `${args.join(' ')}`)
         .setFooter(`ID: ${caseID}`);
+
     ideaChannel.send(finalMsg)
     .then(m => {
         m.react(getEmoji('tickGreen'));

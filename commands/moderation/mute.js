@@ -1,15 +1,11 @@
 const { log } = require('../../moderationHandler');
 const ms = require('ms');
+const { cmdUsage, findMember } = require('../../util');
 exports.run = (client, message, args) => {
 
-    if(!args.length) return message.channel.send('> ❌ **| Helytelen használat.**');
+    if(!args.length) return cmdUsage(this, message);
 
-    let punished;
-    let reason;
-
-    if(!message.mentions.users.size) punished = message.guild.members.cache.get(args[0]);
-    else punished = message.mentions.members.first();
-
+    const punished = findMember(args[0], message);
     if(!punished) return message.channel.send('❌ **| Nincs ilyen tag!**');
 
     args.shift();
@@ -28,6 +24,7 @@ exports.run = (client, message, args) => {
 
     for(let j = 1; j <= i; j++) args.shift();
 
+    let reason;
     if(args.length) reason = args.join(' ');
 
     punished.roles.add(client.config.muteRole, reason);
@@ -44,6 +41,6 @@ exports.info = {
     category: 'moderáció',
     syntax: '<tag> <idő> <ok>',
     description: 'Ezzel a paranccsal muteolni lehet tagokat.',
-    requiredPerm: null,
+    requiredPerm: 'moderator',
 
 };

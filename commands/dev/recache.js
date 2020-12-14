@@ -9,17 +9,17 @@ exports.run = (client, message) => {
         .addField('GuildMembers', loading);
 
     message.channel.send(cacheEmbed)
-        .then(msg => {
-            message.guild.members.fetch({ cache: true })
-                .then(() => {
-                    cacheEmbed.fields[0].value = '✅';
-                    msg.edit(cacheEmbed);
-                })
-                .catch(() => {
-                    cacheEmbed.fields[0].value = '❌';
-                    msg.edit(cacheEmbed);
-                });
-        });
+    .then(msg => {
+        message.guild.members.fetch({ cache: true })
+            .then(() => {
+                cacheEmbed.fields[0].value = '✅';
+                msg.edit(cacheEmbed);
+            })
+            .catch(() => {
+                cacheEmbed.fields[0].value = '❌';
+                msg.edit(cacheEmbed);
+            });
+    });
 };
 
 exports.info = {

@@ -31,9 +31,7 @@ exports.run = (client, message, args) => {
             currentRole = selfRole;
         }
     }
-    if(!sar[role.id] || !sar[role.id].enabled) {
-        message.channel.send('>>> ❌ **| Ez a rank nem választható!**');
-    }
+    if(!sar[role.id] || !sar[role.id].enabled) message.channel.send('>>> ❌ **| Ez a rank nem választható!**');
     else if(message.member._roles.includes(role.id)) {
         message.guild.members.cache.get(message.author.id).roles.remove(role.id);
         message.channel.send(`>>> ✅ **| Elvetted a(z) \`${role.name}\` role-t!**`);

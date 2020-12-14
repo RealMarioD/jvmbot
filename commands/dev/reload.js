@@ -1,31 +1,36 @@
+const { cmdUsage } = require('../../util');
+
 exports.run = (client, message, args) => {
-    if(!args || args.length < 1) return message.reply('Meg kell adnod a parancsot amit reloadolni akarsz.');
+    if(!args.length) return cmdUsage(this, message);
     const commandName = args[0];
-    if(!client.commands.has(commandName)) {
-      return message.reply('Ez a parancs nem létezik.');
+    let commandObject = client.commands.get(commandName);
+    if(commandObject) {
+        client.aliases.forEach((cmdObject, alias) => {
+            if(alias.includes(commandName)) commandObject = client.commands.get(cmdObject.info.name);
+        });
+        if(!commandObject) return message.reply('Ez a parancs nem létezik.');
     }
-    const tempCmd = client.commands.get(commandName);
     let tempFolder;
-    switch(tempCmd.info.category) {
-      case 'pénzverde':
-        tempFolder = 'economy';
-        break;
+    switch(commandObject.info.category) {
+        case 'pénzverde':
+            tempFolder = 'economy';
+            break;
 
-      case 'szórakozás':
-        tempFolder = 'fun';
-        break;
+        case 'szórakozás':
+            tempFolder = 'fun';
+            break;
 
-      case 'egyéb':
-        tempFolder = 'util';
-        break;
+        case 'egyéb':
+            tempFolder = 'util';
+            break;
 
-      case 'moderáció':
-        tempFolder = 'moderation';
-        break;
+        case 'moderáció':
+            tempFolder = 'moderation';
+            break;
 
-      default:
-        tempFolder = tempCmd.info.category;
-        break;
+        default:
+            tempFolder = commandObject.info.category;
+            break;
     }
     delete require.cache[require.resolve(`../../commands/${tempFolder}/${commandName}.js`)];
     client.commands.delete(commandName);
@@ -36,10 +41,10 @@ exports.run = (client, message, args) => {
 
 exports.info = {
 
-  name: 'reload',
-  category: 'dev',
-  syntax: '<parancs>',
-  description: 'Újratölti a megadott parancsot.',
-  requiredPerm: 'developer'
+    name: 'reload',
+    category: 'dev',
+    syntax: '<parancs>',
+    description: 'Újratölti a megadott parancsot.',
+    requiredPerm: 'developer'
 
 };

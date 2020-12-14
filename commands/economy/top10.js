@@ -4,11 +4,14 @@ exports.run = (client, message) => {
 
     const results = [];
     let i = 1;
-    Object.keys(users).map(key => ({
+    Object.keys(users)
+    .map(key => ({
         key: key, value: users[key]
-    })).sort(
+    }))
+    .sort(
         (first, second) => (second.value.money - first.value.money)
-    ).forEach((sortedData) => {
+    )
+    .forEach((sortedData) => {
         if(message.guild.members.cache.has(sortedData.key) == true) {
             results.push(`${i}. __${message.guild.members.cache.get(sortedData.key).user.tag}__ - *${sortedData.value.money}* ${getEmoji('vidmani')}`);
             i += 1;

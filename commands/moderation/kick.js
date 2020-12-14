@@ -1,24 +1,21 @@
 const { log } = require('../../moderationHandler');
+const { cmdUsage, findMember } = require('../../util');
 exports.run = (client, message, args) => {
 
-    if(!args.length) return message.channel.send('> ❌ **| Helytelen használat.**');
+    if(!args.length) return cmdUsage(this, message);
 
-    let punished;
-    let reason;
-
-    if(!message.mentions.users.size) punished = client.users.cache.get(args[0]);
-    else punished = message.mentions.users.first();
-
+    const punished = findMember(args[0], message);
     if(!punished) return message.channel.send('❌ **| Nincs ilyen tag!**');
 
+    let reason;
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    message.guild.members.cache.get(punished.id).kick(reason);
+    punished.kick(reason);
 
     log('Kick', message.author, punished, reason);
 
-    message.channel.send(`✅ **| ${punished.tag} kickelve lett${reason ? `: ${reason}` : '.'}**`);
+    message.channel.send(`✅ **| ${punished.user.tag} kickelve lett${reason ? `: ${reason}` : '.'}**`);
 
 };
 
@@ -28,6 +25,6 @@ exports.info = {
     category: 'moderáció',
     syntax: '<tag> <ok>',
     description: 'Ezzel a paranccsal kickelni lehet tagokat.',
-    requiredPerm: null,
+    requiredPerm: 'moderator',
 
 };
