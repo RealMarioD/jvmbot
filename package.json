@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.3",
     "@types/node": "^12.19.6",
     "canvas": "^2.6.1",
     "discord.js": "^12.4.1",
