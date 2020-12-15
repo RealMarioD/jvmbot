@@ -1,11 +1,11 @@
 exports.run = (client, message) => {
     const member = message.guild.members.cache.get(message.author.id);
-    if(member._roles.includes(client.config.ytID) === false) {
-        member.roles.add(client.config.ytID)
+    if(member._roles.includes(client.config.roles.youtube) === false) {
+        member.roles.add(client.config.roles.youtube)
         .then(() => message.channel.send('>>> ✅ **Feliratkoztál** a szerver YouTube hírlevelére! 📨'));
     }
     else {
-        member.roles.remove(client.config.ytID)
+        member.roles.remove(client.config.roles.youtube)
         .then(() => message.channel.send('>>> ✅ **Leiratkoztál** a szerver YouTube hírleveléről! 📨'));
     }
 };

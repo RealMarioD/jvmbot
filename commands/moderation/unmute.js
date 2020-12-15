@@ -11,7 +11,7 @@ exports.run = (client, message, args) => {
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    punished.roles.remove(client.config.muteRole, reason);
+    punished.roles.remove(client.config.roles.muted, reason);
 
     log('Unmute', message.author, punished, reason);
 

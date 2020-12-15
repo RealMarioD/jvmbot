@@ -8,7 +8,7 @@ exports.run = (client, message, args) => {
 
     const caseNumber = args.shift();
 
-    client.channels.cache.get(client.config.modLogChannel).messages.fetch(thisCase.msgID)
+    client.channels.cache.get(client.config.channels.modlog).messages.fetch(thisCase.msgID)
     .then(msg => {
         if(!msg) return message.channel.send('> ❌ **| Nem tudom szerkeszteni ezt az ügyet.**');
         const newEmbed = msg.embeds[0];

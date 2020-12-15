@@ -27,7 +27,7 @@ exports.run = (client, message, args) => {
     let reason;
     if(args.length) reason = args.join(' ');
 
-    punished.roles.add(client.config.muteRole, reason);
+    punished.roles.add(client.config.roles.muted, reason);
 
     log('Mute', message.author, punished, reason, totalTimeout);
 

@@ -1,11 +1,11 @@
 exports.run = (client, message) => {
     const member = message.guild.members.cache.get(message.author.id);
-    if(member._roles.includes(client.config.hirlevelID) === false) {
-        member.roles.add(client.config.hirlevelID)
+    if(member._roles.includes(client.config.roles.hirlevel) === false) {
+        member.roles.add(client.config.roles.hirlevel)
         .then(() => message.channel.send('>>> ✅ **Feliratkoztál** a szerver hírlevelére! 📨'));
     }
     else {
-        member.roles.remove(client.config.hirlevelID)
+        member.roles.remove(client.config.roles.hirlevel)
         .then(() => message.channel.send('>>> ✅ **Leiratkoztál** a szerver hírleveléről! 📨'));
     }
 };

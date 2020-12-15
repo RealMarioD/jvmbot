@@ -7,8 +7,8 @@ module.exports = (client, message) => {
     if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
 
     // Deletes every message in igazol unless author is admin
-    if(message.channel.id == client.config.igazolID &&
-    !message.member._roles.includes(client.config.adminID)) {
+    if(message.channel.id == client.config.channels.igazol &&
+    !message.member._roles.includes(client.config.roles.admin)) {
         sleep(1000)
         .then(() => {
             message.delete();
@@ -32,7 +32,7 @@ module.exports = (client, message) => {
 
     switch(commandObject.info.requiredPerm) {
         case 'developer':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.fejlesztoID)) {
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.roles.fejleszto)) {
                 if(message.channel.id == client.config.commandsIDs.test) runCommand();
                 else {
                     message.reply('hint hint, rossz channel :eyes:')
@@ -46,7 +46,7 @@ module.exports = (client, message) => {
             break;
 
         case 'admin':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.adminID)) {
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.roles.admin)) {
                 if(message.channel.id == client.config.commandsIDs.test) runCommand();
                 else {
                     message.reply('hint hint, rossz channel :eyes:')
@@ -60,12 +60,12 @@ module.exports = (client, message) => {
             break;
 
         case 'moderator':
-            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.moderatorID)) runCommand();
+            if(client.config.ownerID == message.author.id || message.member._roles.includes(client.config.roles.moderator)) runCommand();
             else noPerms('Moderátor');
             break;
 
         default:
-            if((Object.values(client.config.commandsIDs).includes(message.channel.id)) || (commandObject.info.name == 'igazol' && message.channel.id === client.config.igazolID) || (commandObject.info.category == 'music' && message.channel.id == client.config.musicID)) runCommand();
+            if((Object.values(client.config.commandsIDs).includes(message.channel.id)) || (commandObject.info.name == 'igazol' && message.channel.id === client.config.channels.igazol) || (commandObject.info.category == 'music' && message.channel.id == client.config.commandsIDs.music)) runCommand();
             break;
     }
 
@@ -107,7 +107,7 @@ module.exports = (client, message) => {
             for(let i = 1; i <= users[message.author.id].level; i++) final += (i - 1) * 40 + 20;
             if(users[message.author.id].xp == final) {
                 users[message.author.id].level++;
-                client.channels.cache.get(client.config.levelUpChannelID).send(message.author.toString(), new MessageEmbed()
+                client.channels.cache.get(client.config.channels.levelup).send(message.author.toString(), new MessageEmbed()
                     .setTitle('Szintlépés!')
                     .setDescription(`Gratulálunk ${message.author.toString()}, szintet léptél!`)
                     .addField('Szinted:', users[message.author.id].level)

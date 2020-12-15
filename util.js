@@ -1,4 +1,3 @@
-const ytdlDC = require('ytdl-core-discord');
 const { MessageEmbed } = require('discord.js');
 const { client } = require('./jvm');
 const users = require('./assets/users.json');
@@ -86,31 +85,6 @@ function giveRandom(max, min) {
     return Math.floor(Math.random() * Math.floor(max - min)) + min;
 }
 
-async function play(connection, message, ogMsg) {
-    client.message = message;
-    const toPlay = client.queue[0];
-    client.dispatcher = connection.play(await ytdlDC(toPlay.url), { type: 'opus' });
-    const playEmbed = new MessageEmbed()
-        .setDescription('Most indult.')
-        .addField('**Hossz:**', toPlay.duration)
-        .setTitle(toPlay.title)
-        .setURL(toPlay.url)
-        .setAuthor(toPlay.author.tag, toPlay.author.displayAvatarURL({ format: 'png', dynamic: true }))
-        .setFooter(toPlay.channelName, toPlay.channelIcon)
-        .setThumbnail(toPlay.videoThumbnail);
-
-    if(!ogMsg) message.channel.send(playEmbed);
-    else ogMsg.edit('', playEmbed);
-
-    const finishEvent = require('./dispatcher/finish.js');
-    const debugEvent = require('./dispatcher/debug.js');
-    const errorEvent = require('./dispatcher/error.js');
-    client.dispatcher.on('finish', finishEvent.bind(null, client));
-    client.dispatcher.on('debug', debugEvent.bind(null, client));
-    client.dispatcher.on('error', errorEvent.bind(null, client));
-    client.dispatcher.setVolumeLogarithmic(client.volume);
-}
-
 /**
  * Use this if you would like to setup a page embed.
  * @param { Number } startIndex Leave this on 0 unless you want to start from a different position.
@@ -174,7 +148,7 @@ function handleReactions(collection, startIndex, fieldHolder, passedMsg, message
 }
 
 function doBackup() {
-    client.channels.cache.get(client.config.consoleLogChannelID).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
+    client.channels.cache.get(client.config.channels.backup).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
 }
 
 function jingleMyBalls(connection, msg) {
@@ -248,7 +222,6 @@ module.exports = {
     items: items,
     listItems: listItems,
     giveRandom: giveRandom,
-    play: play,
     sortFields: sortFields,
     doBackup: doBackup,
     jingleMyBalls: jingleMyBalls,

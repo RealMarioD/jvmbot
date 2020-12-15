@@ -30,22 +30,22 @@ exports.run = (client, message, args) => {
         else if(outcomeInput == 'true') outcomeInput = true;
         else if(outcomeInput == 'delete') {
             if(cases[caseID].msgID) {
-                message.guild.channels.cache.get(client.config.ideaChannelID).messages.fetch(cases[caseID].msgID)
+                message.guild.channels.cache.get(client.config.channels.otletekhibak).messages.fetch(cases[caseID].msgID)
                 .then(msg => {
                     if(msg) {
                         msg.delete()
-                        .catch(() => message.channel.send(`A(z) <#${client.config.ideaChannelID}> szobából nem tudtam törölni az üzenetet. \`[${msg.id}]\``));
+                        .catch(() => message.channel.send(`A(z) <#${client.config.channels.oteletekhibak}> szobából nem tudtam törölni az üzenetet. \`[${msg.id}]\``));
                     }
                 });
             }
-            else message.channel.send(`A(z) <#${client.config.ideaChannelID}> szobából nem tudtam törölni az üzenetet.`);
+            else message.channel.send(`A(z) <#${client.config.channels.oteletekhibak}> szobából nem tudtam törölni az üzenetet.`);
             delete cases[caseID];
             fs.writeFileSync('./assets/cases.json', JSON.stringify(cases, null, 2));
             return message.channel.send(`\`${caseID}\` törölve!`);
         }
         else return message.channel.send('Érvénytelen boolean/eljárás!');
         const adminComment = args.slice(2).join(' ');
-        message.guild.channels.cache.get(client.config.resultsChannelID).send(new Discord.MessageEmbed()
+        message.guild.channels.cache.get(client.config.channels.eredmenyek).send(new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`${cases[caseID].type == 'error' ? 'Hiba' : 'Ötlet'} ID: [${caseID}]`)
             .setAuthor(cases[caseID].author)

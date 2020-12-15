@@ -39,7 +39,7 @@ function log(moderationType, moderator, punished, reason, timeout) {
 
     if(timeout) logMessage.addField('Hossz', `${timeout / 1000 / 60} perc`, true);
 
-    client.channels.cache.get(client.config.modLogChannel).send(logMessage)
+    client.channels.cache.get(client.config.channels.modlog).send(logMessage)
     .then(msg => {
         modCases.cases[thisCaseNumber] = {
             modType: moderationType,
@@ -65,7 +65,7 @@ function handleMute(muteWhen, muteDuration, muteWho) {
     };
     fs.writeFileSync('./assets/modCases.json', JSON.stringify(modCases, null, 2));
     setTimeout(() => {
-        muteWho.roles.remove(client.config.muteRole);
+        muteWho.roles.remove(client.config.roles.muted);
         log('Unmute', client.user.toString(), muteWho, 'Auto');
     }, muteDuration);
 }
@@ -79,10 +79,10 @@ function initMute() {
             const currentUser = client.guilds.cache.get(client.config.serverID).members.cache.get(key);
             if(!currentUser) break;
 
-            if(value.mutedAt + value.muteDuration >= Date.now()) currentUser.roles.remove(client.config.muteRole);
+            if(value.mutedAt + value.muteDuration >= Date.now()) currentUser.roles.remove(client.config.roles.muted);
             else {
                 setTimeout(() => {
-                    currentUser.roles.remove(client.config.muteRole);
+                    currentUser.roles.remove(client.config.roles.muted);
                     log('Unmute', client.user.toString(), currentUser, 'Auto');
                 }, Date.now() - (value.mutedAt + value.muteDuration));
             }

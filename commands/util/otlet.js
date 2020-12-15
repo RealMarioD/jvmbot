@@ -17,7 +17,7 @@ exports.run = (client, message, args) => {
     else if(args.length == 0) return cmdUsage(this, message);
 
     const caseID = Math.random().toString(36).substring(7);
-    const ideaChannel = message.guild.channels.cache.get(client.config.ideaChannelID);
+    const ideaChannel = message.guild.channels.cache.get(client.config.channels.otletekhibak);
     const finalMsg = new Discord.MessageEmbed()
         .setColor('#00CC00')
         .setTitle('Új Ötlet')

@@ -17,7 +17,7 @@ exports.run = (client, message, args) => {
     else if(args.length == 0) return message.channel.send('> ❌ Nem adtál meg hibát!');
 
     const caseID = Math.random().toString(36).substring(7);
-    const ideaChannel = message.guild.channels.cache.get(client.config.ideaChannelID);
+    const ideaChannel = message.guild.channels.cache.get(client.config.channels.oteletekhibak);
     const finalMsg = new Discord.MessageEmbed()
         .setColor('#FF0000')
         .setTitle('Új Hiba')

@@ -21,7 +21,7 @@ exports.run = (client, message, args) => {
             categories[command.info.category].push(`\`${command.info.name}\``);
         });
 
-        if(!message.member._roles.includes(client.config.fejlesztoID) || !message.member._roles.includes(client.config.moderatorID) || dev) {
+        if(!message.member._roles.includes(client.config.roles.fejleszto) || !message.member._roles.includes(client.config.roles.moderator) || dev) {
             delete categories['admin'];
             delete categories['dev'];
         }
