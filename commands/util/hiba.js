@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const cases = require('../../assets/cases.json');
-const { getEmoji } = require('../../util');
+const { getEmoji, cmdUsage } = require('../../util');
 const moment = require('moment');
 const timeouts = require('../../assets/timeouts.json');
 exports.run = (client, message, args) => {
+
+    if(!args.length) return cmdUsage(this, message);
 
     const currentDate = moment().valueOf();
     const resetTime = 600000;
@@ -14,28 +16,28 @@ exports.run = (client, message, args) => {
         const remainingTime = moment.duration(timeouts['erroridea'].lastSavedTime + resetTime - currentDate);
         return message.channel.send(`Még várnod kell \`${remainingTime.minutes()} percet és ${remainingTime.seconds()} másodpercet\`, hogy be tudj küldeni egy új hibát/ötletet!`);
     }
-    else if(args.length == 0) return message.channel.send('> ❌ Nem adtál meg hibát!');
 
-    const caseID = Math.random().toString(36).substring(7);
-    const ideaChannel = message.guild.channels.cache.get(client.config.channels.oteletekhibak);
+    const ideaChannel = message.guild.channels.cache.get(client.config.channels.otletekhibak);
     const finalMsg = new Discord.MessageEmbed()
-        .setColor('#FF0000')
+        .setColor('#696969')
         .setTitle('Új Hiba')
         .setAuthor(message.author.tag, message.author.displayAvatarURL())
         .addField('Leírás:', `${args.join(' ')}`)
-        .setFooter(`ID: ${caseID}`);
+        .setFooter('Státusz: Jóváhagyásra vár...');
 
+    let caseID;
     ideaChannel.send(finalMsg)
     .then(m => {
+        caseID = m.id;
+        finalMsg.addField('ID:', caseID);
         m.react(getEmoji('tickGreen'));
         m.react(getEmoji('tickRed'));
         cases[caseID] = {
-            outcome: false,
+            outcome: 'awaiting',
             managed: false,
             type: 'error',
             author: `${message.author.tag} (${message.author.id})`,
             description: args.join(' '),
-            msgID: m.id
         };
     })
     .then(() => {

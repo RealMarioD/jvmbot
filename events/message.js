@@ -115,7 +115,17 @@ module.exports = (client, message) => {
                     .setColor('#00cc00')
                 );
                 message.member.roles.add(message.guild.roles.cache.find(x => x.name === `Lvl${users[message.author.id].level}`))
-                    .catch();
+                .then(() => {
+                    let roleHolder;
+                    for(let i = 1; i < 6; i++) {
+                        roleHolder = message.guild.roles.cache.find(role => role.name == `Lvl${users[message.author.id].level - i}`);
+                        if(roleHolder && message.member._roles.includes(roleHolder.id)) {
+                            message.member.roles.remove(roleHolder);
+                            break;
+                        }
+                    }
+                })
+                .catch();
             }
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
