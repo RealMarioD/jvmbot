@@ -44,16 +44,14 @@ exports.run = async (client, message, args) => {
     ctx.font = applyText(canvas, textname);
     ctx.fillText(textname, 213, 121);
     ctx.font = 'bold 28px sans-serif';
-    let i = 1;
-    let j = 1;
-    Object.keys(users).map(key => ({
-        key: key, value: users[key]
-    })).sort((first, second) => (second.value.xp - first.value.xp)).forEach(sorteddata => {
-        if(sorteddata.key == member.id) j = i;
-        i++;
+    const sortedUsers = [];
+    Object.keys(users).forEach(key => {
+        if(users[key].xp > 2) sortedUsers.push({ key: key, value: users[key] });
     });
-    let canvasWidth = ctx.measureText(`#${j}`).width;
-    ctx.fillText(`#${j}`, 280, 65);
+    sortedUsers.sort((first, second) => (second.value.xp - first.value.xp));
+    const rankNumber = sortedUsers.findIndex(x => x.key == member.id) + 1;
+    let canvasWidth = ctx.measureText(`#${rankNumber}`).width;
+    ctx.fillText(`#${rankNumber}`, 280, 65);
     ctx.font = 'bold 28px sans-serif';
     canvasWidth = ctx.measureText(users[member.id].level).width;
     ctx.fillText(users[member.id].level, 460, 65);
