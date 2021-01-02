@@ -1,7 +1,5 @@
 const { MessageEmbed } = require('discord.js');
 const { client } = require('./jvm');
-const users = require('./assets/users.json');
-const fs = require('fs');
 
 function getMention(channel) {
     return client.channels.cache.get(channel).toString();
@@ -151,39 +149,6 @@ function doBackup() {
     client.channels.cache.get(client.config.channels.backup).send(`\`users.json\` **- Backup: ${getDate()}**`, { files: ['./assets/users.json'] });
 }
 
-function jingleMyBalls(connection, msg) {
-    const dispatcher = connection.play('./assets/honestly.ogg');
-    eventObj.eventDispatcher = dispatcher;
-    eventObj.running = true;
-    eventObj.msg = msg;
-    dispatcher.on('finish', () => {
-        for(const m in eventObj.listeners) {
-            if(!users[m]) {
-                users[m] = {
-                    eventStats: 1
-                };
-            }
-            else if(!users[m].eventStats) users[m].eventStats = 1;
-            else users[m].eventStats++;
-        }
-        eventObj.running = false;
-        fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-        msg.channel.send(new MessageEmbed()
-            .setTitle('Szám vége!')
-            .setDescription(eventObj.beautyListeners.map(l => l + ' + 1\n'))
-        );
-        dispatcher.player.voiceConnection.disconnect();
-    });
-}
-
-const eventObj = {
-    running: false,
-    eventDispatcher: null,
-    listeners: {},
-    msg: null,
-    beautyListeners: []
-};
-
 /**
  * Use this after a no args check.
  * @param { Object } command Refers to the ran command.
@@ -224,8 +189,6 @@ module.exports = {
     giveRandom: giveRandom,
     sortFields: sortFields,
     doBackup: doBackup,
-    jingleMyBalls: jingleMyBalls,
-    eventObj: eventObj,
     cmdUsage: cmdUsage,
     findMember: findMember
 };
