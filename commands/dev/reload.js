@@ -2,11 +2,14 @@ const { cmdUsage } = require('../../util');
 
 exports.run = (client, message, args) => {
     if(!args.length) return cmdUsage(this, message);
-    const commandName = args[0];
+    let commandName = args[0];
     let commandObject = client.commands.get(commandName);
-    if(commandObject) {
+    if(!commandObject) {
         client.aliases.forEach((cmdObject, alias) => {
-            if(alias.includes(commandName)) commandObject = client.commands.get(cmdObject.info.name);
+            if(alias.includes(commandName)) {
+                commandObject = client.commands.get(cmdObject.info.name);
+                commandName = cmdObject.info.name;
+            }
         });
         if(!commandObject) return message.reply('Ez a parancs nem létezik.');
     }
