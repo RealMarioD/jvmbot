@@ -179,6 +179,63 @@ function findMember(arg, message, returnUser) {
     return member;
 }
 
+function error(errorMsg, message) {
+    message.channel.send(new MessageEmbed()
+        .setTitle('❌ **| Hiba.**')
+        .setDescription(errorMsg)
+        .setColor('#CC0000')
+    );
+}
+
+const ytdl = require('ytdl-core-discord');
+async function play(connection, message) {
+    const mgm = message.guild.music;
+    const crQ = mgm.queue[0];
+    mgm.dispatcher = connection.play(await ytdl(crQ.url), { type: 'opus', volume: false, highWaterMark: 25 });
+    message.channel.send(new MessageEmbed()
+        .setAuthor(crQ.requestedBy.tag, crQ.requestedBy.displayAvatarURL({ format: 'png', dynamic: true }))
+        .setTitle(crQ.title)
+        .setURL(crQ.url)
+        .setThumbnail(crQ.thumbnail.url)
+        .setDescription('Most indult.')
+        .addField('Hossz:', beautifyDuration(crQ.length))
+        .setFooter(crQ.uploader.name, crQ.uploader.thumbnails[crQ.uploader.thumbnails.length - 1].url)
+    );
+    mgm.dispatcher.on('finish', () => dispatcherFinish(message));
+}
+
+function dispatcherFinish(message) {
+    const mgm = message.guild.music;
+    if(!mgm.loop) {
+        mgm.queue.splice(0, 1);
+        if(mgm.queue.length == 0) {
+            message.channel.send('⏹️ **| Lejátszási lista vége.**');
+            message.guild.voice.connection.disconnect();
+        }
+        else play(message.guild.voice.connection, message);
+    }
+    else if(mgm.loop == 'queue') {
+        mgm.queue.push(mgm.queue[0]);
+        mgm.queue = mgm.queue.splice(1);
+        play(message.guild.voice.connection, message);
+    }
+    else if(mgm.loop == 'song') play(message.guild.voice.connection, message);
+}
+
+/**
+ * Converts SECONDS to the following format: mm:ss
+ * E.g.: 06:30
+ * If a number's length is 1 a zero is always placed before that number.
+ * @param { Number } time The time in SECONDS.
+ */
+function beautifyDuration(time) {
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time) - minutes * 60;
+    if(`${minutes}`.length == 1) minutes = `0${minutes}`;
+    if(`${seconds}`.length == 1) seconds = `0${seconds}`;
+    return `${minutes}:${seconds}`;
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getMention: getMention,
@@ -190,5 +247,9 @@ module.exports = {
     sortFields: sortFields,
     doBackup: doBackup,
     cmdUsage: cmdUsage,
-    findMember: findMember
+    findMember: findMember,
+    error: error,
+    play: play,
+    dispatcherFinish: dispatcherFinish,
+    beautifyDuration
 };

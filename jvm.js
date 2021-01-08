@@ -15,9 +15,6 @@ fs.readdir('./events/', (err, files) => {
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
-client.queue = [];
-client.dispatcher = {};
-client.volume = 1;
 
 fs.readdir('./commands/', (err, folders) => {
     if(err) return console.error(err);
