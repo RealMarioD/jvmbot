@@ -17,6 +17,6 @@ exports.info = {
     category: 'music',
     syntax: '',
     description: 'Megállítja a zenét.',
-    requiredPerm: null,
+    requiredPerm: 'moderator',
 
 };

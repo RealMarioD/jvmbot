@@ -191,7 +191,7 @@ const ytdl = require('ytdl-core-discord');
 async function play(connection, message) {
     const mgm = message.guild.music;
     const crQ = mgm.queue[0];
-    mgm.dispatcher = connection.play(await ytdl(crQ.url), { type: 'opus', volume: false, highWaterMark: 25 });
+    mgm.dispatcher = connection.play(await ytdl(crQ.url), { type: 'opus', volume: false });
     message.channel.send(new MessageEmbed()
         .setAuthor(crQ.requestedBy.tag, crQ.requestedBy.displayAvatarURL({ format: 'png', dynamic: true }))
         .setTitle(crQ.title)
