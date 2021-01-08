@@ -6,6 +6,8 @@ exports.run = async (client, message, args) => {
 
     if(!args.length) cmdUsage(this, message);
     if(!message.member.voice.channelID) return error('Nem vagy bent egy voice channelben!', message);
+    const connection = client.voice.connections.get(message.guild.id);
+    if(connection && connection.channel.id != message.member.voice.channelID) return error('Nem ugyanabban a channelben vagyunk!', message);
     let ogMsg;
     const searchTerm = args.join(' ');
     if(!ytdl.validateURL(searchTerm)) {
@@ -20,8 +22,7 @@ exports.run = async (client, message, args) => {
                 });
             });
     }
-    const connection = client.voice.connections.get(message.guild.id);
-    if(connection && connection.channel.id != message.member.voice.channelID) return error('Nem ugyanabban a channelben vagyunk!', message);
+    else handlePlay(searchTerm);
 
     async function handlePlay(url) {
         const videoInfo = await ytdl.getBasicInfo(url);
