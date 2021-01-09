@@ -16,7 +16,7 @@ module.exports = (client, message) => {
     }
 
     if(message.author.bot) return;
-    if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return addXP();
+    if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return; // no xp to not fuck up roles and such
     if(client.user.id == client.config.normalID && !message.content.startsWith(client.config.prefix)) return addXP();
 
     const args = message.content.slice(1).trim().split(/ +/g);

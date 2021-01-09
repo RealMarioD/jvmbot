@@ -1,7 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const { cmdUsage, play, error, beautifyDuration, getEmoji } = require('../../util');
-const ytdl = require('ytdl-core-discord');
-const ytsr = require('ytsr');
+const { MessageEmbed } = require('discord.js'),
+    { cmdUsage, play, error, beautifyDuration, getEmoji } = require('../../util'),
+    ytdl = require('ytdl-core-discord'),
+    ytsr = require('ytsr'),
+    ytpl = require('ytpl');
 exports.run = async (client, message, args) => {
 
     if(!args.length) cmdUsage(this, message);
@@ -10,8 +11,9 @@ exports.run = async (client, message, args) => {
     if(connection && connection.channel.id != message.member.voice.channelID) return error('Nem ugyanabban a channelben vagyunk!', message);
     let ogMsg;
     const searchTerm = args.join(' ');
-    if(!ytdl.validateURL(searchTerm)) {
-        message.channel.send(`> ${getEmoji('loading').toString()} **| Keresés...**`)
+    if(!ytpl.validateID(searchTerm)) {
+        if(!ytdl.validateURL(searchTerm)) {
+            message.channel.send(`> ${getEmoji('loading').toString()} **| Keresés...**`)
             .then(async msg => {
                 ogMsg = msg;
                 await ytsr.getFilters(searchTerm)
@@ -21,29 +23,32 @@ exports.run = async (client, message, args) => {
                     error('Ismeretlen hiba, próbáld újra.', message);
                 });
             });
-    }
-    else handlePlay(searchTerm);
-
-    async function handlePlay(url) {
-        const videoInfo = await ytdl.getBasicInfo(url);
-        if(!message.guild.music) {
-            message.guild.music = {
-                queue: [],
-                dispatcher: null,
-                loop: null
-            };
         }
-        const mgm = message.guild.music;
-
-        mgm.queue.push({
-            url: url,
-            title: videoInfo.videoDetails.title,
-            uploader: videoInfo.videoDetails.author,
-            thumbnail: videoInfo.videoDetails.thumbnails[videoInfo.videoDetails.thumbnails.length - 1],
-            length: videoInfo.videoDetails.lengthSeconds,
-            requestedBy: message.author
+        else handlePlay(searchTerm);
+    }
+    else {
+        message.channel.send(`> ${getEmoji('loading').toString()} **| Lista összesítése...** \`Ha nem történik semmi egy rövid időn belül, próbáld újra!\``)
+        .then(async msg => {
+            ogMsg = msg;
+            await ytpl(searchTerm)
+            .then(playlist => handlePlaylist(playlist))
+            .catch(err => {
+                console.error(err);
+                error('Ismeretlen hiba történt, próbálj újra.', message);
+            });
         });
+    }
 
+    if(!message.guild.music) {
+        message.guild.music = {
+            queue: [],
+            dispatcher: null,
+            loop: null
+        };
+    }
+    const mgm = message.guild.music;
+
+    function connect() {
         if(!connection) {
             message.guild.channels.cache.get(message.member.voice.channelID).join()
             .then(newConnection => {
@@ -53,7 +58,7 @@ exports.run = async (client, message, args) => {
         else if(mgm.queue.length == 1) play(connection, message);
         else {
             const crQ = mgm.queue[mgm.queue.length - 1];
-            const vidDuration = beautifyDuration(videoInfo.videoDetails.lengthSeconds);
+            const vidDuration = beautifyDuration(crQ.length);
             const musicEmbed = new MessageEmbed()
                 .setAuthor(crQ.requestedBy.tag, crQ.requestedBy.displayAvatarURL({ format: 'png', dynamic: true }))
                 .setTitle(crQ.title)
@@ -61,11 +66,54 @@ exports.run = async (client, message, args) => {
                 .setThumbnail(crQ.thumbnail.url)
                 .setDescription('Hozzáadva a lejátszási listához.')
                 .addField('Hossz:', vidDuration)
-                .setFooter(crQ.uploader.name, crQ.uploader.thumbnails[crQ.uploader.thumbnails.length - 1].url);
+                .setFooter(crQ.uploader.name, crQ.uploader.thumbnail);
 
             if(!ogMsg) message.channel.send(musicEmbed);
             else ogMsg.edit('', musicEmbed);
         }
+    }
+
+    async function handlePlaylist(playlist) {
+        playlist.items.forEach(videoInfo => {
+            message.guild.music.queue.push({
+                url: videoInfo.shortUrl,
+                title: videoInfo.title,
+                uploader: {
+                    name: videoInfo.author.name,
+                    thumbnail: null,
+                    url: videoInfo.author.url
+                },
+                thumbnail: videoInfo.bestThumbnail.url,
+                length: videoInfo.durationSec,
+                requestedBy: message.author
+            });
+        });
+        ogMsg.edit(`> 🛂 **| \`${playlist.items.length}\` szám hozzáadva a lejátszási listához.**`);
+        if(!connection) {
+            message.guild.channels.cache.get(message.member.voice.channelID).join()
+            .then(newConnection => {
+                play(newConnection, message);
+            });
+        }
+    }
+
+    async function handlePlay(url) {
+        const videoInfo = await ytdl.getBasicInfo(url);
+
+        mgm.queue.push({
+            url: url,
+            title: videoInfo.videoDetails.title,
+            uploader: {
+                name: videoInfo.videoDetails.author.name,
+                thumbnail: videoInfo.videoDetails.author.thumbnails[videoInfo.videoDetails.author.thumbnails.length - 1].url,
+                url: videoInfo.videoDetails.author.channel_url
+            },
+            thumbnail: videoInfo.videoDetails.thumbnails[videoInfo.videoDetails.thumbnails.length - 1].url,
+            length: videoInfo.videoDetails.lengthSeconds,
+            requestedBy: message.author
+        });
+
+        connect();
     }
 
     async function handleFilters(filters) {
@@ -101,12 +149,56 @@ exports.run = async (client, message, args) => {
             .then(collected => {
                 const number = parseInt(collected.first().content);
                 if(isNaN(number) || number > 5 || number < 1) return ogMsg.edit(new MessageEmbed().setTitle(`${getEmoji('vidmanPanik')} **| Visszavonva.**`));
-                handlePlay(foundURLs[number - 1]);
+                handleResult(results.items[number - 1]);
             })
             .catch(() => {
                 return ogMsg.edit(new MessageEmbed().setTitle(`${getEmoji('vidmanAlmos')} **| Lejárt a válaszidő.**`));
             });
         });
+    }
+
+    function handleResult(videoInfo) {
+        const durationArray = videoInfo.duration.split(':');
+        let durationSeconds = 0;
+        for(let i = 0; i < durationArray.length; i++) {
+            if(durationArray.length == 3) { // meaning hh:mm:ss
+                switch(i) {
+                    case 0:
+                        durationSeconds += parseInt(durationArray[i]) * 60 * 60;
+                        break;
+                    case 1:
+                        durationSeconds += parseInt(durationArray[i]) * 60;
+                        break;
+                    case 2:
+                        durationSeconds += parseInt(durationArray[i]);
+
+                }
+            }
+            else {
+                switch(i) {
+                    case 0:
+                        durationSeconds += parseInt(durationArray[i]) * 60;
+                        break;
+                    case 1:
+                        durationSeconds += parseInt(durationArray[i]);
+                        break;
+                }
+            }
+        }
+        mgm.queue.push({
+            url: videoInfo.url,
+            title: videoInfo.title,
+            uploader: {
+                name: videoInfo.author.name,
+                thumbnail: videoInfo.author.bestAvatar.url,
+                url: videoInfo.author.url
+            },
+            thumbnail: videoInfo.bestThumbnail.url,
+            length: durationSeconds,
+            requestedBy: message.author
+        });
+
+        connect();
     }
 
 };

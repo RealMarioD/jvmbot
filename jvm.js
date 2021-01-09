@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, Collection } = require('discord.js');
+const client = new Client();
 const config = require('./config');
 const fs = require('fs');
 client.config = config;
@@ -13,8 +13,8 @@ fs.readdir('./events/', (err, files) => {
     });
 });
 
-client.commands = new Discord.Collection();
-client.aliases = new Discord.Collection();
+client.commands = new Collection();
+client.aliases = new Collection();
 
 fs.readdir('./commands/', (err, folders) => {
     if(err) return console.error(err);

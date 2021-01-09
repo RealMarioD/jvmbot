@@ -9,18 +9,18 @@ exports.run = async (client, message) => {
 
     const mgm = message.guild.music;
 
-    if(!mgm || !mgm.queue.length) return error('A lejátszási lista üres!');
+    if(!mgm || !mgm.queue.length) return error('A lejátszási lista üres!', message);
     let i = 0;
     list.setTitle(`Most szól:\n**${mgm.queue[i].title}**`)
         .setURL(mgm.queue[i].url)
-        .setDescription(`__Feltöltő:__ [${mgm.queue[i].uploader.name}](${mgm.queue[i].uploader.channel_url})\n__Kérte:__ ${mgm.queue[i].requestedBy.tag}\n__Hossz:__ ${beautifyDuration(mgm.queue[i].length)}`)
-        .setThumbnail(mgm.queue[i].thumbnail.url)
-        .setFooter('', mgm.queue[i].uploader.thumbnails[mgm.queue[i].uploader.thumbnails.length - 1].url);
+        .setDescription(`__Feltöltő:__ [${mgm.queue[i].uploader.name}](${mgm.queue[i].uploader.url})\n__Kérte:__ ${mgm.queue[i].requestedBy.tag}\n__Hossz:__ ${beautifyDuration(mgm.queue[i].length)}`)
+        .setThumbnail(mgm.queue[i].thumbnail)
+        .setFooter('', mgm.queue[i].uploader.thumbnail);
 
     for(i = 1; i < mgm.queue.length; i++) {
         fieldHolder.push({
             title: `__${i}:__ **${mgm.queue[i].title}**`,
-            desc: `__Feltöltő:__ [${mgm.queue[i].uploader.name}](${mgm.queue[i].uploader.channel_url})\n__Kérte:__ ${mgm.queue[i].requestedBy.tag}\n__Hossz:__ ${beautifyDuration(mgm.queue[i].length)}\n**[Link](${mgm.queue[i].url})**`
+            desc: `__Feltöltő:__ [${mgm.queue[i].uploader.name}](${mgm.queue[i].uploader.url})\n__Kérte:__ ${mgm.queue[i].requestedBy.tag}\n__Hossz:__ ${beautifyDuration(mgm.queue[i].length)}\n**[Video Link](${mgm.queue[i].url})**`
         });
     }
 

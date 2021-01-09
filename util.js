@@ -1,10 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { client } = require('./jvm');
 
-function getMention(channel) {
-    return client.channels.cache.get(channel).toString();
-}
-
 /**
  * Beautifies current date.
  * @param { Date } date If given, returns date beautified.
@@ -196,10 +192,10 @@ async function play(connection, message) {
         .setAuthor(crQ.requestedBy.tag, crQ.requestedBy.displayAvatarURL({ format: 'png', dynamic: true }))
         .setTitle(crQ.title)
         .setURL(crQ.url)
-        .setThumbnail(crQ.thumbnail.url)
+        .setThumbnail(crQ.thumbnail)
         .setDescription('Most indult.')
         .addField('Hossz:', beautifyDuration(crQ.length))
-        .setFooter(crQ.uploader.name, crQ.uploader.thumbnails[crQ.uploader.thumbnails.length - 1].url)
+        .setFooter(crQ.uploader.name, crQ.uploader.thumbnail)
     );
     mgm.dispatcher.on('finish', () => dispatcherFinish(message));
 }
@@ -238,7 +234,6 @@ function beautifyDuration(time) {
 
 module.exports = {
     getEmoji: getEmoji,
-    getMention: getMention,
     getDate: getDate,
     sleep: sleep,
     items: items,

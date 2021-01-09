@@ -1,4 +1,4 @@
-const { getEmoji, getMention } = require('../../util');
+const { getEmoji } = require('../../util');
 exports.run = (client, message) => {
     const member = message.guild.members.cache.get(message.author.id);
     if(member._roles.includes(client.config.roles.tag) !== true) {
@@ -6,7 +6,7 @@ exports.run = (client, message) => {
         .then(() => {
             message.author.send(`**Gratulálok, ${message.author.toString()}!**
             Mostmár láthatod a többi csatornát a szerveren és megkaptad a **Tag** rangot!
-            **Olvasd el a ${getMention('691625689463521290')} csatornát is!**\n\nJelenleg ${message.guild.members.cache.size} tag van a szerveren!
+            **Olvasd el a <#691625689463521290> csatornát is!**\n\nJelenleg ${message.guild.members.cache.size} tag van a szerveren!
             
             ${getEmoji('vidmanLogo')} __${message.guild.name}__`);
         });

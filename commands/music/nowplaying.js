@@ -16,9 +16,9 @@ exports.run = (client, message) => {
         .setAuthor(crQ.requestedBy.tag, crQ.requestedBy.displayAvatarURL({ format: 'png', dynamic: true }))
         .setTitle(crQ.title)
         .setURL(crQ.url)
-        .setThumbnail(crQ.thumbnail.url)
+        .setThumbnail(crQ.thumbnail)
         .setDescription(`**▬▬▬▬**${currentTime}/${beautifyDuration(crQ.length)}**▬▬▬▬**\n${percentHolder}`)
-        .setFooter(crQ.uploader.name, crQ.uploader.thumbnails[crQ.uploader.thumbnails.length - 1].url)
+        .setFooter(crQ.uploader.name, crQ.uploader.thumbnail)
     );
 };
 

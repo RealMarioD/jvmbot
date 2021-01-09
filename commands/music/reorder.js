@@ -6,13 +6,15 @@ exports.run = (client, message, args) => {
     if(!message.member.voice.channel || message.member.voice.channelID != client.voice.connections.get(message.guild.id).channel.id) return error('Nem vagy egy voice channelben a bottal!', message);
 
     const mgm = message.guild.music;
-    const numbertoMove = parseInt(args[0]);
-    if(!numbertoMove || numbertoMove > mgm.queue.length - 1) return error('Nincs ilyen szám!', message);
+    let numbertoMove;
+    if(args[0].toLowerCase() == 'last') numbertoMove = mgm.queue.length - 1;
+    else numbertoMove = parseInt(args[0]);
+    if(isNaN(numbertoMove) || !numbertoMove || numbertoMove > mgm.queue.length - 1) return error('Nincs ilyen szám!', message);
 
     let placeToMove = 1;
     if(args[1]) placeToMove = parseInt(args[1]);
     if(placeToMove == 0) placeToMove = 1;
-    if(isNaN(numbertoMove) || isNaN(placeToMove)) return error('Nem számot adtál meg!', message);
+    if(isNaN(placeToMove)) return error('Nem számot adtál meg!', message);
     if(placeToMove > mgm.queue.length - 1) placeToMove = mgm.queue.length - 1;
 
     mgm.queue.splice(placeToMove, 0, mgm.queue[numbertoMove]);
