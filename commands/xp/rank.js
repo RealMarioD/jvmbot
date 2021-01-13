@@ -9,6 +9,13 @@ function applyText(canvas, text) {
     return ctx.font;
 }
 
+function shadowColour(ogColour) {
+    const numbers = '0123456789abcdef';
+    let sum = 0;
+    for(let index = 0; index < 6; index++) sum += 15 - numbers.indexOf(ogColour[index]);
+    return Math.round(sum / 6) > 7 ? 'white' : 'black';
+}
+
 exports.run = async (client, message, args) => {
     message.guild.members.fetch();
     let member = message.member;
@@ -38,10 +45,26 @@ exports.run = async (client, message, args) => {
     ctx.fillRect(208 + (users[member.id].xp - toRemove) / (final - toRemove) * 659, 151, 659 - (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
     ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
     ctx.fillRect(208, 151, (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
-    const background = await Canvas.loadImage('./assets/imgs/card.png');
+    let background;
+    if(!users[member.id].bg) background = await Canvas.loadImage('./assets/imgs/card.png');
+    else background = await Canvas.loadImage(users[member.id].bg);
     const textname = member.user.tag;
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(background, 10, 33, background.width, background.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 23px sans-serif';
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 7;
+    ctx.lineWidth = 2;
+    ctx.strokeText('RANK', 200, 65);
+    ctx.strokeText('LEVEL', 362, 66);
+    ctx.fillText('RANK', 200, 65);
+    ctx.fillText('LEVEL', 362, 66);
+    ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
     ctx.font = applyText(canvas, textname);
+    ctx.globalAlpha = 0.8;
+    ctx.shadowColor = shadowColour(users[member.id].colour);
+    ctx.strokeText(textname, 213, 121);
+    ctx.globalAlpha = 1;
     ctx.fillText(textname, 213, 121);
     ctx.font = 'bold 28px sans-serif';
     const sortedUsers = [];
@@ -50,15 +73,18 @@ exports.run = async (client, message, args) => {
     });
     sortedUsers.sort((first, second) => (second.value.xp - first.value.xp));
     const rankNumber = sortedUsers.findIndex(x => x.key == member.id) + 1;
-    let canvasWidth = ctx.measureText(`#${rankNumber}`).width;
+    ctx.strokeText(`#${rankNumber}`, 280, 65);
     ctx.fillText(`#${rankNumber}`, 280, 65);
     ctx.font = 'bold 28px sans-serif';
-    canvasWidth = ctx.measureText(users[member.id].level).width;
+    ctx.strokeText(users[member.id].level, 460, 65);
     ctx.fillText(users[member.id].level, 460, 65);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px sans-serif';
-    canvasWidth = ctx.measureText(`${users[member.id].xp}/${final}`).width;
+    ctx.shadowColor = '#000000';
+    const canvasWidth = ctx.measureText(`${users[member.id].xp}/${final}`).width;
+    ctx.strokeText(`${users[member.id].xp}/${final}`, 812 - canvasWidth, 145);
     ctx.fillText(`${users[member.id].xp}/${final}`, 812 - canvasWidth, 145);
+    ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.arc(109, 110, 91, 0, Math.PI * 2, true);
     ctx.closePath();
@@ -73,7 +99,6 @@ exports.run = async (client, message, args) => {
     ctx.drawImage(avatar, 26, 27, 166, 166);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), './assets/imgs/level.png');
     message.channel.send('', attachment);
-
 };
 
 exports.info = {
