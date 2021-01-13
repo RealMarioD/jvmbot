@@ -72,7 +72,7 @@ module.exports = (client, message) => {
     function runCommand() {
         try {
             commandObject.run(client, message, args);
-            console.log(`${commandName} parancs futtatva @ ${getDate()}`);
+            console.log(`CMDRAN: ${commandObject.info.name} @ ${getDate()}`);
         }
         catch(err) {
             if(err.code == 'MODULE_NOT_FOUND') return;
@@ -95,30 +95,32 @@ module.exports = (client, message) => {
                 lastMessageTime: message.createdTimestamp
             };
         }
-        if(!users[message.author.id].lastMessageTime) {
-            users[message.author.id].lastMessageTime = message.createdTimestamp;
-            users[message.author.id].xp = 1;
-            users[message.author.id].level = 0;
+        const user = users[message.author.id];
+        if(!user.lastMessageTime) {
+            user.lastMessageTime = message.createdTimestamp;
+            user.xp = 1;
+            user.level = 0;
         }
-        else if(users[message.author.id].lastMessageTime + 4000 <= message.createdTimestamp) {
-            users[message.author.id].lastMessageTime = message.createdTimestamp;
-            users[message.author.id].xp++;
+        else if(user.lastMessageTime + 4000 <= message.createdTimestamp) {
+            user.lastMessageTime = message.createdTimestamp;
+            user.xp++;
             let final = 35;
-            for(let i = 1; i <= users[message.author.id].level; i++) final += (i - 1) * 40 + 20;
-            if(users[message.author.id].xp == final) {
-                users[message.author.id].level++;
+            for(let i = 1; i <= user.level; i++) final += (i - 1) * 40 + 20;
+            if(user.xp == final) {
+                user.level++;
+                console.log(`LVLUP: <${message.author.tag} (${message.author.id})> ${user.level - 1} => ${user.level}`);
                 client.channels.cache.get(client.config.channels.levelup).send(message.author.toString(), new MessageEmbed()
                     .setTitle('Szintlépés!')
                     .setDescription(`Gratulálunk ${message.author.toString()}, szintet léptél!`)
-                    .addField('Szinted:', users[message.author.id].level)
+                    .addField('Szinted:', user.level)
                     .setThumbnail(message.author.displayAvatarURL({ format: 'png', dynamic: true }))
                     .setColor('#00cc00')
                 );
-                message.member.roles.add(message.guild.roles.cache.find(x => x.name === `Lvl${users[message.author.id].level}`))
+                message.member.roles.add(message.guild.roles.cache.find(x => x.name === `Lvl${user.level}`))
                 .then(() => {
                     let roleHolder;
                     for(let i = 1; i < 6; i++) {
-                        roleHolder = message.guild.roles.cache.find(role => role.name == `Lvl${users[message.author.id].level - i}`);
+                        roleHolder = message.guild.roles.cache.find(role => role.name == `Lvl${user.level - i}`);
                         if(roleHolder && message.member._roles.includes(roleHolder.id)) {
                             message.member.roles.remove(roleHolder);
                             break;
