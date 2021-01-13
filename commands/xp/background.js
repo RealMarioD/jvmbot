@@ -5,11 +5,14 @@ const users = require('../../assets/users.json');
 const { cmdUsage } = require('../../util');
 
 exports.run = async (client, message, args) => {
-    if(!message.attachments.first() || (message.content.startsWith('/bg http') && message.content.match(/.(jpeg|jpg|gif|png)$/) != null)) return cmdUsage(this, message);
+    let toCheck = message.attachments.first();
+    if(toCheck) toCheck = toCheck.attachment;
+    if(!toCheck && args.length > 0) toCheck = args[0];
+    if(!toCheck.startsWith('http') || toCheck.match(/.(jpeg|jpg|gif|png)$/) == null) return cmdUsage(this, message);
     const canvas = Canvas.createCanvas(880, 155);
     const ctx = canvas.getContext('2d');
     try {
-        const background = await Canvas.loadImage(args[0] || message.attachments.first().attachment);
+        const background = await Canvas.loadImage(toCheck);
         const widthMulti = background.width / canvas.width;
         const heightMulti = background.height / canvas.height;
         if(widthMulti > heightMulti) ctx.drawImage(background, (background.width - canvas.width * heightMulti) / 2, 0, canvas.width * heightMulti, background.height, 0, 0, canvas.width, canvas.height);

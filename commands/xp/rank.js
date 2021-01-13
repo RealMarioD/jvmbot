@@ -13,7 +13,7 @@ function applyText(canvas, text) {
 function shadowColour(ogColour) {
     const numbers = '0123456789abcdef';
     let sum = 0;
-    for(let index = 0; index < 6; index++) sum += 15 - numbers.indexOf(ogColour[index]);
+    for(let i = 0; i < 6; i++) sum += 15 - numbers.indexOf(ogColour[i]);
     return Math.round(sum / 6) > 7 ? 'white' : 'black';
 }
 
@@ -60,7 +60,7 @@ exports.run = async (client, message, args) => {
     const textname = member.user.tag;
     ctx.font = applyText(canvas, textname);
     ctx.globalAlpha = 0.8;
-    ctx.shadowColor = shadowColour(users[member.id].colour);
+    ctx.shadowColor = shadowColour(users[member.id].colour || 'ffffff');
     ctx.strokeText(textname, 213, 121);
     ctx.globalAlpha = 1;
     ctx.fillText(textname, 213, 121);
