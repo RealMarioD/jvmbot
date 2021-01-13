@@ -1,6 +1,7 @@
 const users = require('../../assets/users.json');
 const Canvas = require('canvas');
-const Discord = require('discord.js');
+const { MessageAttachment } = require('discord.js');
+const { findMember } = require('../../util');
 function applyText(canvas, text) {
     const ctx = canvas.getContext('2d');
     let fontSize = 50;
@@ -18,19 +19,16 @@ function shadowColour(ogColour) {
 
 exports.run = async (client, message, args) => {
     message.guild.members.fetch();
-    let member = message.member;
-    if(args.length > 0) {
-        if(message.mentions.members.size > 0) member = message.mentions.members.first();
-        else if(message.guild.members.cache.find(x => x.user.id == args[0])) member = message.guild.members.cache.find(x => x.user.id == args[0]);
-        else if(message.guild.members.cache.find(x => x.user.username.toLowerCase().includes(args.join(' ').toLowerCase()))) member = message.guild.members.cache.find(x => x.user.username.toLowerCase().includes(args.join(' ').toLowerCase()));
-    }
+    let member;
+    if(args.length > 0) findMember(args[0], message);
+    if(!member) member = message.member;
     if(!users[member.id]) {
         users[member.id] = {
             xp: 0,
             level: 0
         };
     }
-    else if(users[member.id].level == undefined) {
+    else if(users[member.id].level === undefined) {
         users[member.id].xp = 0;
         users[member.id].level = 0;
     }
@@ -41,15 +39,14 @@ exports.run = async (client, message, args) => {
     if(users[member.id].level === 0) toRemove = 0;
     const canvas = Canvas.createCanvas(900, 220);
     const ctx = canvas.getContext('2d');
+    let background;
+    if(!users[member.id].bg) background = await Canvas.loadImage('./assets/imgs/card.png');
+    else background = await Canvas.loadImage(users[member.id].bg);
+    ctx.drawImage(background, 10, 33, background.width, background.height);
     ctx.fillStyle = '#7f7f7f';
     ctx.fillRect(208 + (users[member.id].xp - toRemove) / (final - toRemove) * 659, 151, 659 - (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
     ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
     ctx.fillRect(208, 151, (users[member.id].xp - toRemove) / (final - toRemove) * 659, 24);
-    let background;
-    if(!users[member.id].bg) background = await Canvas.loadImage('./assets/imgs/card.png');
-    else background = await Canvas.loadImage(users[member.id].bg);
-    const textname = member.user.tag;
-    ctx.drawImage(background, 10, 33, background.width, background.height);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 23px sans-serif';
     ctx.shadowColor = '#000000';
@@ -60,6 +57,7 @@ exports.run = async (client, message, args) => {
     ctx.fillText('RANK', 200, 65);
     ctx.fillText('LEVEL', 362, 66);
     ctx.fillStyle = `#${users[member.id].colour || 'ffffff'}`;
+    const textname = member.user.tag;
     ctx.font = applyText(canvas, textname);
     ctx.globalAlpha = 0.8;
     ctx.shadowColor = shadowColour(users[member.id].colour);
@@ -97,7 +95,7 @@ exports.run = async (client, message, args) => {
     ctx.clip();
     const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
     ctx.drawImage(avatar, 26, 27, 166, 166);
-    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), './assets/imgs/level.png');
+    const attachment = new MessageAttachment(canvas.toBuffer(), './assets/imgs/level.png');
     message.channel.send('', attachment);
 };
 
