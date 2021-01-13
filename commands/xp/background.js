@@ -8,6 +8,7 @@ exports.run = async (client, message, args) => {
     let toCheck = message.attachments.first();
     if(toCheck) toCheck = toCheck.attachment;
     if(!toCheck && args.length > 0) toCheck = args[0];
+    if(!toCheck) return cmdUsage(this, message);
     if(!toCheck.startsWith('http') || toCheck.match(/.(jpeg|jpg|gif|png)$/) == null) return cmdUsage(this, message);
     const canvas = Canvas.createCanvas(880, 155);
     const ctx = canvas.getContext('2d');
