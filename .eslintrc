@@ -8,6 +8,7 @@
 		"ecmaVersion": 2019
 	},
 	"rules": {
+		"arrow-spacing": ["error", { "before": true, "after": true }],
 		"brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
 		"comma-dangle": ["error", "only-multiline"],
 		"comma-spacing": ["error", { "before": false, "after": true }],
@@ -40,6 +41,7 @@
 		"quotes": ["error", "single"],
 		"require-atomic-updates": "off",
 		"semi": ["error", "always"],
+		"semi-spacing": ["error", { "before": false, "after": true }],
 		"space-before-blocks": "error",
 		"space-before-function-paren": ["error", {
 			"anonymous": "never",
