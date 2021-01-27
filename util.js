@@ -15,7 +15,8 @@ function getDate(date) {
  * @param { String } name
  */
 function getEmoji(name) {
-    return client.emojis.cache.find(e => e.name == name);
+    if(client.emojis.cache.find(e => e.name == name) && client.emojis.cache.find(e => e.name == name).available) return client.emojis.cache.find(e => e.name == name);
+    else return client.guilds.cache.find(x => x.id === '650353727991185430').emojis.cache.find(x => x.name === name);
 }
 
 /**
@@ -232,6 +233,31 @@ function beautifyDuration(time) {
     return `${minutes}:${seconds}`;
 }
 
+async function webHook(splitContent, message) {
+    let webhooks = await message.channel.fetchWebhooks();
+    let webhook = webhooks.first();
+    if(!webhook) {
+        message.channel.createWebhook('emoji');
+        webhooks = await message.channel.fetchWebhooks();
+        webhook = webhooks.first();
+    }
+    let content = '';
+    let lastEmoji = -1;
+    for(let index = 0; index < splitContent.length; index++) {
+        if(getEmoji(splitContent[index]) !== undefined) {
+            content += `${getEmoji(splitContent[index])}`;
+            lastEmoji = index;
+        }
+        else if(index > 0 && index > lastEmoji + 1) content += `:${splitContent[index]}`;
+        else content += splitContent[index];
+    }
+    message.delete();
+    await webhook.send(content, {
+        username: message.member.user.username,
+        avatarURL: message.member.user.displayAvatarURL()
+    });
+}
+
 module.exports = {
     getEmoji: getEmoji,
     getDate: getDate,
@@ -246,5 +272,6 @@ module.exports = {
     error: error,
     play: play,
     dispatcherFinish: dispatcherFinish,
-    beautifyDuration
+    beautifyDuration,
+    webHook: webHook
 };

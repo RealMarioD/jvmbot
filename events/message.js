@@ -1,4 +1,4 @@
-const { getDate, sleep } = require('../util.js');
+const { getDate, sleep, webHook } = require('../util.js');
 const users = require('../assets/users.json');
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
@@ -14,6 +14,8 @@ module.exports = (client, message) => {
             message.delete();
         });
     }
+    const splitContent = message.content.split(':');
+    if(!message.author.bot && splitContent.some(x => client.emojis.cache.find(e => e.name === x) && (!client.emojis.cache.find(e => e.name === x).available || client.emojis.cache.find(e => e.name === x).animated || client.emojis.cache.find(e => e.name === x).guild.name === 'j v m b o t'))) webHook(splitContent, message);
 
     if(message.author.bot) return;
     if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return; // no xp to not fuck up roles and such
@@ -132,4 +134,5 @@ module.exports = (client, message) => {
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
     }
+
 };
