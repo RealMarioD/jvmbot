@@ -20,7 +20,7 @@ function shadowColour(ogColour) {
 exports.run = async (client, message, args) => {
     message.guild.members.fetch();
     let member;
-    if(args.length > 0) findMember(args[0], message);
+    if(args.length > 0) member = findMember(args[0], message);
     if(!member) member = message.member;
     if(!users[member.id]) {
         users[member.id] = {
