@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
         const input = args.join(' ');
         let output = eval(input);
 
-        if(typeof output !== 'string') output = inspect(output, { depth: 0 });
+        if(typeof output !== 'string') output = inspect(output, { depth: depth });
 
         if(output.length > 1950) output = `${output.substr(0, 1950)} ...`;
 
