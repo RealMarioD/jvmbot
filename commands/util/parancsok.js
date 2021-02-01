@@ -34,10 +34,24 @@ exports.run = (client, message, args) => {
     }
     try {
         const commandFile = client.commands.get(args[0].toLowerCase());
+        let reqPerm;
+        switch(commandFile.info.requiredPerm) {
+            case 'developer':
+                reqPerm = 'fejlesztő';
+                break;
+
+            case 'moderator':
+                reqPerm = 'moderátor';
+                break;
+
+            case 'admin':
+                reqPerm = 'adminisztrátor';
+                break;
+        }
         message.channel.send(new MessageEmbed()
             .setColor('#56f442')
             .setTitle(`\`${client.config.prefix}${args[0].toLowerCase()}\``)
-            .setDescription(`${!commandFile.info.syntax ? '' : `**Értékek:** ${commandFile.info.syntax}\n`}${!commandFile.info.description ? '' : `**Információ:** ${commandFile.info.description}\n`}${!commandFile.info.aliases ? '' : `**Aliasok:** ${commandFile.info.aliases.map(c => '`' + c + '`').join(', ')}`}${!commandFile.info.requiredPerm ? '' : `__Ezt a parancsot csak ${commandFile.info.requiredPerm} rangúak tudják használni!__`}`)
+            .setDescription(`${!commandFile.info.syntax ? '' : `**Értékek:** ${commandFile.info.syntax}\n`}${!commandFile.info.description ? '' : `**Információ:** ${commandFile.info.description}\n`}${!commandFile.info.aliases ? '' : `**Aliasok:** ${commandFile.info.aliases.map(c => '`' + c + '`').join(', ')}`}\n${!reqPerm ? '' : `__Ezt a parancsot csak ${reqPerm} rangúak tudják használni!__`}`)
         );
     }
     catch(err) {
