@@ -63,8 +63,11 @@ exports.run = (client, message, args) => {
         if(counter >= Object.entries(players).length) {
             if(currentRound < rounds) {
                 currentRound++;
-                counter = -1;
-                return initGame();
+                if(newCardsEachRound) {
+                    counter = -1;
+                    return initGame();
+                }
+                else counter = 0;
             }
             else return getGameWinners();
         }
