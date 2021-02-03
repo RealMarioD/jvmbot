@@ -6,37 +6,38 @@ const { escapeMarkdown } = require('discord.js').Util;
 
 exports.run = (client, message, args) => {
     const players = new Collection();
-    let counter = -1;
-    let currentRound = 1;
-    let rounds = 1;
-    let newCardsEachRound = false;
+    let dealer,
+        counter = 0,
+        currentRound = 1,
+        rounds = 1,
+        newCardsEachRound = false;
     if(args.length > 0) {
         if(!isNaN(args[0]) && args[0] < 6 && args[0] > 0) rounds = args[0];
         else return cmdUsage(this, message);
         if(args.length > 1 && args[1] == 'i' || args[1] == 'igen' || args[1] == 'y' || args[1] == 'yes') newCardsEachRound = true;
     }
     let submissions = [];
-    let dealer;
-    let question;
+    const questions = [];
+    let currentQ;
     message.channel.send(new MessageEmbed()
         .setTitle('Üdvözlünk minden bátor játékost!')
         .setDescription('**Privát üzeneteket szükségesek a játékhoz, ha nem tudok neked írni nem fogsz tudni részt venni!**\n\nA játékoz való csatlakozáshoz kérlek reagálj erre az üzenetre!\nLegalább 3, de inkább több játékos kell egy játékhoz!')
-        .setFooter(`**Körök száma:** ${rounds} | **Új fehér kártyák körönként:** ${newCardsEachRound ? 'Be' : 'Ki'}kapcsolva`)
+        .setFooter(`Körök száma: ${rounds} | Új fehér kártyák körönként: ${newCardsEachRound ? 'Be' : 'Ki'}kapcsolva`)
     )
     .then(msg => {
         msg.react(getEmoji('bazisugroKatica'));
         const filter = (reaction) => reaction.emoji.name == 'bazisugroKatica';
-        msg.awaitReactions(filter, { time: 7500 })
+        msg.awaitReactions(filter, { time: 15000 })
         .catch(err => {
             console.error(err);
-            msg.edit('Ehh, valami probléma történt... MARIOOO', { embeds: [] });
+            return msg.edit(`Ehh, valami probléma történt... <@${client.config.ownerID}>!!!`, { embeds: [] });
         })
         .then(collected => {
             collected.forEach(reaction => {
                 reaction.users.cache.forEach(user => {
-                    if(user.id != '711630742114926632') {
+                    if(user.id != client.config.normalID && user.id != client.config.devID) {
                         players[user.id] = {
-                            uData: user,
+                            uData: user, // idfk why i named it uData, stays because lazy to change
                             cards: [],
                             points: 0
                         };
@@ -49,43 +50,74 @@ exports.run = (client, message, args) => {
                     .setDescription('Egy játékhoz legalább 3 játékos kell, de jobb ha többen vagytok!')
                 );
             }
-            initGame(players);
+            else if(Object.entries(players).length > 10 && rounds > 5) {
+                return msg.edit(new MessageEmbed()
+                    .setTitle('Nos...')
+                    .setDescription('Az a baj, hogy a kártyaszettünk nem bírna el ennyi embert! Mivel kedves fejlesztőnk, Mario egy lusta D, ezért az egész bot meghalna, ha ti most az emberiség ellen fordítanátok a kártyapaklit. Nyomjatok egy kevesebb körös játékot!')
+                );
+            }
+
+            /**
+             * Fills questions[] with non-repeating questions.
+             * Will actually break if 11 people attempt to play a 5 round game.
+             * (as of 03/02/2021: 54 questions only, 11 * 5 = 55, meaning the do..while loop would infinitely loop because every black card would be used up.)
+             */
+            for(let i = 0; i < rounds; i++) {
+                for(let j = 0; j < Object.entries(players).length; j++) {
+                    let testQ;
+                    do testQ = escapeMarkdown(blackCards[giveRandom(blackCards.length)], { bold: true, italic: true, underline: true });
+                    while(questions.includes(testQ));
+                    questions.push(testQ);
+                }
+            }
+
+            drawWhiteC(players);
         });
     });
 
-    function initGame() {
+    // returns 10 white cards in an array
+    function initWhiteC() {
+        const cards = [];
+        let crCard;
+        for(let i = 0; i < 10; i++) {
+            do crCard = whiteCards[giveRandom(whiteCards.length)];
+            while(cards.includes(crCard));
+            cards.push(crCard);
+        }
+        return cards;
+    }
+
+    function drawWhiteC() {
+        counter--; // game():1 && game():5 for reason
         for(const player in players) players[player].cards = initWhiteC();
         game();
     }
 
     function game() {
-        counter++;
-        if(counter >= Object.entries(players).length) {
+        counter++; // :1
+        if(counter >= Object.entries(players).length * currentRound) {
             if(currentRound < rounds) {
                 currentRound++;
-                if(newCardsEachRound) {
-                    counter = -1;
-                    return initGame();
-                }
-                else counter = 0;
+                if(newCardsEachRound) return drawWhiteC(); // :5
             }
             else return getGameWinners();
         }
         submissions = [];
-        dealer = Object.entries(players)[counter][1].uData;
-        question = escapeMarkdown(blackCards[giveRandom(blackCards.length)], { bold: true, italic: true, underline: true });
+        dealer = Object.entries(players)[counter - (Object.entries(players).length * (currentRound - 1))][1].uData; // really shitty way to basically never have to reset the counter and still be in array length
+        currentQ = questions[counter]; // why we never reset the counter
         message.channel.send(new MessageEmbed()
-            .setTitle(question)
+            .setTitle(currentQ)
             .setDescription('Az opciókat megkapjátok DM-ben!')
-            .addField('A fekete kártytát osztotta:', dealer.toString())
+            .addField('A fekete kártyát osztotta:', dealer.toString())
+            .setFooter(`Kör: ${currentRound}/${rounds}`)
         )
-        .then(() => {
+        .then(() => { // prepare for hell
             for(const player in players) {
                 if(player != dealer.id) {
                     let i = 0;
                     players[player].uData.send(new MessageEmbed()
-                        .setTitle(question)
-                        .setDescription(`${players[player].cards.map((card) => { i++; return `**${i}.** ${card}\n`; }).join('')}\n**Választáshoz: \`.submit 1-10\`**`)
+                        .setTitle(currentQ)
+                        .setDescription(`${players[player].cards.map((card) => { i++; return `**${i}.** ${card}\n`; }).join('')}\n**Választáshoz: \`.submit 1-10\`**`) // i love this line (just maps the white cards to be fancy, ugly but compact method)
                     )
                     .then(msg => collectSubmission(msg, players[player].uData))
                     .catch(() => message.channel.send(`${players[player].uData}, nem tudtam elküldeni a kártyáid!`));
@@ -95,22 +127,21 @@ exports.run = (client, message, args) => {
     }
 
     function collectSubmission(msg, user, penalty) {
-        const filter = m => m.content.startsWith('.submit');
-        msg.channel.awaitMessages(filter, { max: 1, time: 45000, errors: [ 'time' ] })
+        msg.channel.awaitMessages(m => m.content.startsWith('.submit'), { max: 1, time: 45000, errors: [ 'time' ] })
         .then(collected => {
-            const cMsg = collected.first();
-            const option = parseInt(cMsg.content.split(' ')[1]);
+            const subMsg = collected.first();
+            const option = parseInt(subMsg.content.split(' ')[1]);
             if(isNaN(option) || option < 1 || option > 10) {
                 msg.channel.send('Hmm... Valami nem stimmel. Újrapróbálnád?');
-                return collectSubmission(msg, submissions);
+                return collectSubmission(msg, user);
             }
-            const answer = players[cMsg.author.id].cards[option - 1];
-            submissions.push({ player: cMsg.author, answer: answer });
-            let crCard;
-            do crCard = whiteCards[giveRandom(whiteCards.length)];
-            while(players[cMsg.author.id].cards.includes(crCard));
-            players[cMsg.author.id].cards[option - 1] = crCard;
-            cMsg.react('✅');
+            const answer = players[subMsg.author.id].cards[option - 1];
+            submissions.push({ player: subMsg.author, answer: answer });
+            let replaceCard;
+            do replaceCard = whiteCards[giveRandom(whiteCards.length)];
+            while(players[subMsg.author.id].cards.includes(replaceCard));
+            players[subMsg.author.id].cards[option - 1] = replaceCard;
+            subMsg.react('✅');
             checkSubs(submissions);
         })
         .catch(() => {
@@ -120,17 +151,19 @@ exports.run = (client, message, args) => {
                 checkSubs(submissions);
             }
             msg.channel.send('Helló... Kérlek válassz egy opciót! `.submit 1-10`');
-            return collectSubmission(msg, submissions, true);
+            return collectSubmission(msg, user, true); // this is where the penalty var is used, prevents game getting stuck because of afk player. still shows up as undef in voting list and is voteable, dont know if it breaks anything, didnt test
         });
     }
 
+    // this one fucking line absolutely needed to be in a fuction yes, still rather see only a function name then a fat fucking if
     function checkSubs() {
         if(submissions.length == Object.entries(players).length - 1) beginVote();
     }
 
+    // makes funky embed and starts awaiting the vote (awaiting is in getWinner() dont get confused)
     function beginVote() {
         const voteEmbed = (new MessageEmbed()
-            .setTitle(question)
+            .setTitle(currentQ)
             .setDescription(`A \`.vote 1-${submissions.length}\` paranccsal tudod kiválasztani a nyertest.`)
         );
         for(let i = 0; i < submissions.length; i++) voteEmbed.addField(`**${i + 1}.:**`, submissions[i].answer);
@@ -140,14 +173,13 @@ exports.run = (client, message, args) => {
     }
 
     function getWinner(msg, penalty) {
-        const filter = m => m.content.startsWith('.vote');
-        msg.channel.awaitMessages(filter, { max: 1, time: 45000, errors: [ 'time' ] })
+        msg.channel.awaitMessages(m => m.content.startsWith('.vote'), { max: 1, time: 45000, errors: [ 'time' ] })
         .then(collected => {
-            const cMsg = collected.first();
-            const option = parseInt(cMsg.content.slice(cMsg.content.length - 2));
+            const voteMsg = collected.first();
+            const option = parseInt(voteMsg.content.slice(voteMsg.content.length - 2));
             if(isNaN(option) || option < 1 || option > submissions.length) {
                 msg.channel.send('Hmm... Valami nem stimmel. Újrapróbálnád?');
-                return collectSubmission(msg, submissions);
+                return getWinner(msg);
             }
             const winner = submissions[option - 1];
             players[winner.player.id].points++;
@@ -157,14 +189,15 @@ exports.run = (client, message, args) => {
         .catch(err => {
             console.error(err);
             if(penalty) {
-                message.channel.send('Nem sikerült időben válaszolnod, ezért a játékmenet megőrzéséért érvénytelen szavazással, nyertes nélkül folytatódik a játék.');
+                message.channel.send(`${dealer.toString()} nem válaszolt időben, ezért a játékmenet megőrzéséért érvénytelen szavazással, nyertes nélkül folytatódik a játék.`);
                 return game();
             }
             message.channel.send(`Helló ${dealer.toString()}... Kérlek válassz egy opciót! \`.vote 1-${submissions.length}\``);
-            return getWinner(msg, true);
+            return getWinner(msg, true); // same penalty shit as before
         });
     }
 
+    // called when last round ends, shows winners
     function getGameWinners() {
         const sortedP = Object.entries(players).sort((a, b) => (b[1].points - a[1].points));
         const winnerEmbed = (new MessageEmbed()
@@ -176,16 +209,6 @@ exports.run = (client, message, args) => {
         message.channel.send(winnerEmbed);
     }
 
-    function initWhiteC() {
-        const cards = [];
-        let crCard;
-        for(let i = 0; i < 10; i++) {
-            do crCard = whiteCards[giveRandom(whiteCards.length)];
-            while(cards.includes(crCard));
-            cards.push(crCard);
-        }
-        return cards;
-    }
 };
 
 exports.info = {
