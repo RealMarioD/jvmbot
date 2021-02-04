@@ -14,7 +14,9 @@ exports.run = async (client, message, args) => {
     member.roles.cache.sort((r, r2) => r2.position - r.position).forEach(role => {
         if(role.name !== '@everyone') userRoles.push(role);
     });
-    const highest = userRoles.find(r => r.hexColor !== '#000000').hexColor;
+    let highest;
+    if(userRoles.some(r => r.hexColor !== '#000000')) highest = userRoles.find(r => r.hexColor !== '#000000').hexColor;
+    else highest = '#000000';
     const embed = new MessageEmbed()
         .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setThumbnail(member.user.displayAvatarURL())
