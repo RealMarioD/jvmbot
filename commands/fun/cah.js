@@ -10,11 +10,12 @@ exports.run = (client, message, args) => {
         counter = 0,
         currentRound = 1,
         rounds = 1,
-        newCardsEachRound = false;
+        newCardsEachRound = true,
+        toRemove = 0;
     if(args.length > 0) {
         if(!isNaN(args[0]) && args[0] < 6 && args[0] > 0) rounds = args[0];
         else return cmdUsage(this, message);
-        if(args.length > 1 && args[1] == 'i' || args[1] == 'igen' || args[1] == 'y' || args[1] == 'yes') newCardsEachRound = true;
+        if(args.length > 1 && args[1] == 'n' || args[1] == 'nem' || args[1] == 'no') newCardsEachRound = false;
     }
     let submissions = [];
     const questions = [];
@@ -94,6 +95,7 @@ exports.run = (client, message, args) => {
     }
 
     function game() {
+        toRemove = 0;
         counter++; // :1
         if(counter >= Object.entries(players).length * currentRound) {
             if(currentRound < rounds) {
@@ -147,8 +149,8 @@ exports.run = (client, message, args) => {
         .catch(() => {
             if(penalty) {
                 msg.channel.send('Nem sikerült időben válaszolnod, ezért a játékmenet megőrzéséért érvénytelen a válaszod.');
-                submissions.push({ player: user, answer: undefined });
-                checkSubs(submissions);
+                ++toRemove;
+                return checkSubs(submissions);
             }
             msg.channel.send('Helló... Kérlek válassz egy opciót! `.submit 1-10`');
             return collectSubmission(msg, user, true); // this is where the penalty var is used, prevents game getting stuck because of afk player. still shows up as undef in voting list and is voteable, dont know if it breaks anything, didnt test
@@ -157,7 +159,7 @@ exports.run = (client, message, args) => {
 
     // this one fucking line absolutely needed to be in a fuction yes, still rather see only a function name then a fat fucking if
     function checkSubs() {
-        if(submissions.length == Object.entries(players).length - 1) beginVote();
+        if(submissions.length == Object.entries(players).length - 1 - toRemove) beginVote();
     }
 
     // makes funky embed and starts awaiting the vote (awaiting is in getWinner() dont get confused)
