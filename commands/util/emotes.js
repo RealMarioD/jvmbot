@@ -25,7 +25,7 @@ exports.run = (client, message) => {
 exports.info = {
 
     name: 'emotes',
-    category: 'szórakozás',
+    category: 'egyéb',
     syntax: '',
     description: 'Megmutatja, milyen emote-okat használhatsz a szerveren',
     requiredPerm: null,
