@@ -11,11 +11,13 @@ exports.run = (client, message, args) => {
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    punished.ban(reason);
+    punished.ban(reason)
+    .then(() => {
+        log('Ban', message.author, punished, reason);
 
-    log('Ban', message.author, punished, reason);
-
-    message.channel.send(`✅ **| ${punished.user.tag} bannolva lett${reason ? `: ${reason}` : '.'}**`);
+        message.channel.send(`✅ **| ${punished.user.tag} bannolva lett${reason ? `: ${reason}` : '.'}**`);
+    })
+    .catch(() => message.channel.send(`❌ **| Nem tudom bannolni ${punished.user.tag}-t!**`));
 
 };
 

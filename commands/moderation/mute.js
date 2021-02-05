@@ -8,6 +8,8 @@ exports.run = (client, message, args) => {
     const punished = findMember(args[0], message);
     if(!punished) return message.channel.send('❌ **| Nincs ilyen tag!**');
 
+    if(punished._roles.includes(client.config.roles.muted)) return message.channel.send('❌ **| Ez a tag már némítva van!**');
+
     args.shift();
 
     let i = 0;
@@ -27,11 +29,12 @@ exports.run = (client, message, args) => {
     let reason;
     if(args.length) reason = args.join(' ');
 
-    punished.roles.add(client.config.roles.muted, reason);
-
-    log('Mute', message.author, punished, reason, totalTimeout);
-
-    message.channel.send(`✅ **| ${punished.user.tag} muteolva lett ${totalTimeout / 1000 / 60} percre${reason ? `: ${reason}` : '.'}**`);
+    punished.roles.add(client.config.roles.muted, reason)
+    .then(() => {
+        log('Mute', message.author, punished, reason, totalTimeout);
+        message.channel.send(`✅ **| ${punished.user.tag} muteolva lett ${totalTimeout / 1000 / 60} percre${reason ? `: ${reason}` : '.'}**`);
+    })
+    .catch(() => message.channel.send(`❌ **| Nem tudom muteolni ${punished.user.tag}-t!**`));
 
 };
 

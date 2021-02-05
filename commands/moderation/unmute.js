@@ -11,11 +11,12 @@ exports.run = (client, message, args) => {
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    punished.roles.remove(client.config.roles.muted, reason);
-
-    log('Unmute', message.author, punished, reason);
-
-    message.channel.send(`✅ **| ${punished.user.tag} unmuteolva lett`);
+    punished.roles.remove(client.config.roles.muted, reason)
+    .then(() => {
+        log('Unmute', message.author, punished, reason);
+        message.channel.send(`✅ **| ${punished.user.tag} unmuteolva lett`);
+    })
+    .catch(() => message.channel.send(`❌ **| Nem tudom muteolni ${punished.user.tag}-t!**`));
 
 };
 

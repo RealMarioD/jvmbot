@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const modCases = require('./assets/modCases.json');
 const { client } = require('./jvm');
 const fs = require('fs');
+const awaitingUnmutes = {};
 
 function log(moderationType, moderator, punished, reason, timeout) {
 
@@ -54,6 +55,7 @@ function log(moderationType, moderator, punished, reason, timeout) {
 }
 
 function handleUnmute(punished) {
+    delete awaitingUnmutes[punished.id];
     delete modCases.mutes[punished.id];
     fs.writeFileSync('./assets/modCases.json', JSON.stringify(modCases, null, 2));
 }
@@ -64,10 +66,14 @@ function handleMute(muteWhen, muteDuration, muteWho) {
         muteLength: muteDuration
     };
     fs.writeFileSync('./assets/modCases.json', JSON.stringify(modCases, null, 2));
-    setTimeout(() => {
-        muteWho.roles.remove(client.config.roles.muted);
-        log('Unmute', client.user.toString(), muteWho, 'Auto');
-    }, muteDuration);
+    awaitingUnmutes[muteWho.id] = setTimeout(() => unmute(muteWho), muteDuration);
+}
+
+function unmute(muteWho) {
+    muteWho.roles.remove(client.config.roles.muted)
+    .then(() => log('Unmute', client.user.toString(), muteWho, 'Auto'))
+    .catch(() => log('Unmute', client.user.toString(), muteWho, 'Auto (SIKERTELEN)'));
+    handleUnmute(muteWho);
 }
 
 function initMute() {
@@ -79,13 +85,8 @@ function initMute() {
             const currentUser = client.guilds.cache.get(client.config.serverID).members.cache.get(key);
             if(!currentUser) break;
 
-            if(value.mutedAt + value.muteDuration >= Date.now()) currentUser.roles.remove(client.config.roles.muted);
-            else {
-                setTimeout(() => {
-                    currentUser.roles.remove(client.config.roles.muted);
-                    log('Unmute', client.user.toString(), currentUser, 'Auto');
-                }, Date.now() - (value.mutedAt + value.muteDuration));
-            }
+            if(value.mutedAt + value.muteDuration >= Date.now()) unmute(currentUser);
+            else setTimeout(() => unmute(currentUser), Date.now() - (value.mutedAt + value.muteDuration));
 
         }
     }
@@ -94,5 +95,6 @@ function initMute() {
 
 module.exports = {
     log: log,
-    initMute: initMute
+    initMute: initMute,
+    awaitingUnmutes: awaitingUnmutes
 };

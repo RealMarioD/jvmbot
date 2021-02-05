@@ -11,11 +11,13 @@ exports.run = (client, message, args) => {
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    punished.kick(reason);
+    punished.kick(reason)
+    .then(() => {
+        log('Kick', message.author, punished, reason);
 
-    log('Kick', message.author, punished, reason);
-
-    message.channel.send(`✅ **| ${punished.user.tag} kickelve lett${reason ? `: ${reason}` : '.'}**`);
+        message.channel.send(`✅ **| ${punished.user.tag} kickelve lett${reason ? `: ${reason}` : '.'}**`);
+    })
+    .catch(() => message.channel.send(`❌ **| Nem tudom kickelni ${punished.user.tag}-t!**`));
 
 };
 
