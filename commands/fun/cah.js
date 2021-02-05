@@ -122,7 +122,7 @@ exports.run = (client, message, args) => {
                         .setDescription(`${players[player].cards.map((card) => { i++; return `**${i}.** ${card}\n`; }).join('')}\n**Választáshoz: \`.submit 1-10\`**`) // i love this line (just maps the white cards to be fancy, ugly but compact method)
                     )
                     .then(msg => collectSubmission(msg, players[player].uData))
-                    .catch(() => message.channel.send(`${players[player].uData}, nem tudtam elküldeni a kártyáid!`));
+                    .catch(() => message.channel.send(`${players[player].uData}, nem tudtam elküldeni a kártyáid! Büntetésből a fejlesztő nem foglalkozott azzal, hogy újrapróbálkozzak, szóval ez a menet másfél perc múlva folytatódik, ha csak nem szeretnél vakon bedobni egy kártyát.\nDM-ben:\`.submit 1-10\``));
                 }
             }
         });
@@ -149,7 +149,7 @@ exports.run = (client, message, args) => {
         .catch(() => {
             if(penalty) {
                 msg.channel.send('Nem sikerült időben válaszolnod, ezért a játékmenet megőrzéséért érvénytelen a válaszod.');
-                ++toRemove;
+                toRemove++;
                 return checkSubs(submissions);
             }
             msg.channel.send('Helló... Kérlek válassz egy opciót! `.submit 1-10`');
