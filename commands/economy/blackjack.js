@@ -18,14 +18,15 @@ exports.run = async (client, message, args) => {
     }
 
     if(!args.length) return cmdUsage(this, message);
-    else if(isNaN(parseInt(args[0]))) return message.channel.send('> ❌ **Megadott érték nem szám.**');
-    else if(users[message.author.id].money < args[0]) return message.channel.send('> ❌ Nincs annyi pénzed, mint amennyit fel akarsz tenni!');
-    if(args[0] < 50 || args[0] > 10000) {
+    const bet = parseInt(args[0]);
+    if(isNaN(bet)) return message.channel.send('> ❌ **Megadott érték nem szám.**');
+    if(users[message.author.id].money < bet) return message.channel.send('> ❌ Nincs annyi pénzed, mint amennyit fel akarsz tenni!');
+    if(bet < 50 || bet > 10000) {
         if(!users[message.author.id].collection || !users[message.author.id].collection['penthouse']) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
-        else if(users[message.author.id].collection['penthouse'].amount < 1) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
+        if(users[message.author.id].collection['penthouse'].amount < 1) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
     }
 
-    const bet = parseInt(args[0]);
+    users[message.author.id].money -= bet;
 
     const gameCards = {
         dealer: [],
@@ -94,7 +95,6 @@ exports.run = async (client, message, args) => {
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó'))
                 .then((msg) => {
                     if(countCards(gameCards['player'], 'player') > 21) {
-                        users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n Túl sok pontod van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);
                     }
@@ -109,21 +109,23 @@ exports.run = async (client, message, args) => {
                 passedMsg.edit(determineHand(gameCards['player'], countCards(gameCards['player'], 'player'), `${originalMessage.author.username}`) + determineHand(gameCards['dealer'], countCards(gameCards['dealer'], 'dealer'), 'Az osztó'))
                 .then(msg => {
                     if(finalDealerTotal > 21) {
-                        users[message.author.id].money += bet;
+                        users[message.author.id].money += bet * 2;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Az osztónak túl sok van! \`(${finalDealerTotal})\` Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
                     else if(finalPlayerTotal > finalDealerTotal) {
-                        users[message.author.id].money += bet;
+                        users[message.author.id].money += bet * 2;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Visszakaptad a felrakott tétet és nyertél \`+${bet}\` ${getEmoji('vidmani')}-t!`);
                     }
                     else if(finalPlayerTotal < finalDealerTotal) {
-                        users[message.author.id].money -= bet;
                         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
                         return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Elvesztetted a felrakott tétet. \`-${bet}\` ${getEmoji('vidmani')}`);
                     }
-                    else return msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Döntetlen! Visszakaptad a felrakott tétet.`);
+                    else {
+                        users[message.author.id].money += bet;
+                        msg.edit(msg.content + `\n\n> Neked összesen ${finalPlayerTotal} pontod, míg az osztónak ${finalDealerTotal} pontja van. Döntetlen! Visszakaptad a felrakott tétet.`);
+                    }
                 });
                 }
                 break;
