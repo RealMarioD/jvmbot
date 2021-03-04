@@ -14,14 +14,11 @@ exports.run = async (client, message, args) => {
     member.roles.cache.sort((r, r2) => r2.position - r.position).forEach(role => {
         if(role.name !== '@everyone') userRoles.push(role);
     });
-    let highest;
-    if(userRoles.some(r => r.hexColor !== '#000000')) highest = userRoles.find(r => r.hexColor !== '#000000').hexColor;
-    else highest = '#000000';
     const embed = new MessageEmbed()
         .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setThumbnail(member.user.displayAvatarURL())
         .setDescription(member)
-        .setColor(highest)
+        .setColor(member.displayHexColor)
         .addField('Csatlakozási hely', position, true)
         .addField('Csatlakozás ideje', getDate(new Date(member.joinedTimestamp)), true)
         .addField('Regisztrálás ideje', getDate(new Date(member.user.createdTimestamp)), true)
