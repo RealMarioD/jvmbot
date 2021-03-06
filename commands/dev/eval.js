@@ -1,7 +1,7 @@
 const { inspect } = require('util');
 const { cmdUsage } = require('../../util');
 
-exports.run = (client, message, args) => {
+exports.run = async (client, message, args) => {
 
     try {
         if(!args.length) return cmdUsage(this, message);
@@ -12,7 +12,7 @@ exports.run = (client, message, args) => {
             args.shift();
         }
         const input = args.join(' ');
-        let output = eval(input);
+        let output = await eval('(async () => {' + input + '})()');
 
         if(typeof output !== 'string') output = inspect(output, { depth: depth });
 
