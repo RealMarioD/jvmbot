@@ -11,7 +11,7 @@ exports.run = (client, message, args) => {
     args.shift();
     if(args.length) reason = args.join(' ');
 
-    punished.ban(reason)
+    punished.ban({ days: 7, reason: reason })
     .then(() => {
         log('Ban', message.author, punished, reason);
 
