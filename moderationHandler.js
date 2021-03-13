@@ -19,7 +19,7 @@ function log(moderationType, moderator, punished, reason, timeout) {
         .setTimestamp();
 
     switch(moderationType) {
-        case 'Kick': case 'Ban':
+        case 'Kick': case 'Ban': case 'Softban':
             logMessage.setColor('#EE2500');
             break;
 
