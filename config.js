@@ -4,7 +4,7 @@ module.exports = {
   normalID: '585811477601189889',
   devID: '711630742114926632',
   prefix: '.',
-  devPrefix: '/',
+  devPrefix: '-',
   serverID: '584337831254818816',
   ownerID: '254714656336248833',
   roles: {
