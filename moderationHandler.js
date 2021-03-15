@@ -3,6 +3,7 @@ const modCases = require('./assets/modCases.json');
 const { client } = require('./jvm');
 const fs = require('fs');
 const awaitingUnmutes = {};
+const pardon = [];
 
 function log(moderationType, moderator, punished, reason, timeout) {
 
@@ -94,6 +95,7 @@ function initMute() {
 }
 
 module.exports = {
+    pardon: pardon,
     log: log,
     initMute: initMute,
     awaitingUnmutes: awaitingUnmutes
