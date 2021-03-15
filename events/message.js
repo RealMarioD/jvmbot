@@ -118,18 +118,20 @@ module.exports = (client, message) => {
                     .setThumbnail(message.author.displayAvatarURL({ format: 'png', dynamic: true }))
                     .setColor('#00cc00')
                 );
-                message.member.roles.add(message.guild.roles.cache.find(x => x.name === `Lvl${user.level}`))
-                .then(() => {
-                    let roleHolder;
-                    for(let i = 1; i < 6; i++) {
-                        roleHolder = message.guild.roles.cache.find(role => role.name == `Lvl${user.level - i}`);
-                        if(roleHolder && message.member._roles.includes(roleHolder.id)) {
-                            message.member.roles.remove(roleHolder);
-                            break;
+                const newRole = message.guild.roles.cache.find(x => x.name === `Lvl${user.level}`);
+                if(newRole) {
+                    message.member.roles.add(newRole)
+                    .then(() => {
+                        let roleHolder;
+                        for(let i = 1; i < 6; i++) {
+                            roleHolder = message.guild.roles.cache.find(role => role.name == `Lvl${user.level - i}`);
+                            if(roleHolder && message.member._roles.includes(roleHolder.id)) {
+                                message.member.roles.remove(roleHolder);
+                                break;
+                            }
                         }
-                    }
-                })
-                .catch();
+                    });
+                }
             }
         }
         fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
