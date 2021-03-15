@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 const { getEmoji, cmdUsage, findMember } = require('../../util');
 exports.run = (client, message, args) => {
 
-    if(args.length < 2) cmdUsage(this, message);
+    if(args.length < 2) return cmdUsage(this, message);
 
     const userToPay = findMember(args[0], message, true);
     if(!userToPay) return message.channel.send('> ❌ **| Nincs ilyen tag!**');
