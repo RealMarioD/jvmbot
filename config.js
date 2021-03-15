@@ -1,6 +1,4 @@
 module.exports = {
-  token: 'NTg1ODExNDc3NjAxMTg5ODg5.XPf5jg.UFNqN2_3CN1bKP9_bZhJ-QuGbZ8',
-  devToken: 'NzExNjMwNzQyMTE0OTI2NjMy.XsFzyw.1EM_nJhdVUTrBMmQvGu8GrtmIpo',
   normalID: '585811477601189889',
   devID: '711630742114926632',
   prefix: '.',

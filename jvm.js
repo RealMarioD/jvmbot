@@ -32,8 +32,9 @@ fs.readdir('./commands/', (err, folders) => {
     });
 });
 
-client.login(config.token);
-// client.login(config.devToken);
+const tokens = require('./tokens');
+client.login(tokens.main);
+// client.login(tokens.dev);
 
 module.exports = {
   client: client
