@@ -11,8 +11,14 @@ exports.run = async (client, message, args) => {
             if(isNaN(depth)) depth = 0;
             args.shift();
         }
-        const input = args.join(' ');
-        let output = await eval('(async () => {' + input + '})()');
+        let input = args.join(' ');
+        let output;
+        if(args[0].startsWith('asyncpls')) {
+            args.shift();
+            input = args.join(' ');
+            output = await eval('(async () => {' + input + '})()');
+        }
+        else output = eval(input);
 
         if(typeof output !== 'string') output = inspect(output, { depth: depth });
 
