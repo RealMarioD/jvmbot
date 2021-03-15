@@ -4,7 +4,9 @@ exports.run = async (client, message, args) => {
 
     if(!args.length) return cmdUsage(this, message);
 
-    const punished = await client.users.fetch(args[0]);
+    const punished = await client.users.fetch(args[0]).catch(() => {
+        return undefined;
+    });
     if(!punished) return message.channel.send('❌ **| Nincs ilyen tag!**');
     punished.user = punished;
 
