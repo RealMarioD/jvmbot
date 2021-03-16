@@ -13,6 +13,7 @@ exports.run = async (client, message, args) => {
         if(!users[message.author.id].collection ||
            !users[message.author.id].collection['penthouse'] ||
             users[message.author.id].collection['penthouse'].amount < 1) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(50-10000)`');
+        else if(bet < 1 || bet > 1000000) return message.channel.send('> ❌ Túl sokat vagy túl keveset akarsz felrakni! `(1-1000000)`');
     }
 
     users[message.author.id].money -= bet;
