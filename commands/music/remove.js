@@ -16,7 +16,7 @@ exports.info = {
 
     name: 'remove',
     category: 'music',
-    syntax: '',
+    syntax: '<zene száma a lejátszási listán>',
     description: 'Ezzel a paranccsal videókat lehet eltávolítani a lejátszási listáról.',
     requiredPerm: null,
 

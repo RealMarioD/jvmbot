@@ -84,7 +84,7 @@ function giveRandom(max, min) {
  * Use this if you would like to setup a page embed.
  * @param { Number } startIndex Leave this on 0 unless you want to start from a different position.
  * @param { MessageEmbed } list This is supposed to be the embed. It's named list because copypasta.
- * @param { Array } fieldHolder Put your fields into an array with 'title' and 'description'. E.g.: [{ title: 'Field Title', description: 'Ery nice.' }]
+ * @param { Array } fieldHolder Put your fields into an array with 'title' and 'description'. E.g.: [{ title: 'Field Title', desc: 'Ery nice.' }]
  * @param { Message } passedMsg Since you have to make the "please wait" message, this is that message's object holder.
  * @param { Message } message Author's message.
  * @param { Number } [pageSize] Defaults to 5. Optional.
@@ -155,7 +155,7 @@ function cmdUsage(command, message) {
     const cmdInfo = command.info;
     message.channel.send(new MessageEmbed()
         .setTitle('❌ **| Helytelen használat.**')
-        .setDescription(`\`.${cmdInfo.name} ${cmdInfo.syntax}\``)
+        .setDescription(`\`.parancsok ${cmdInfo.name}\``)
         .setColor('#CC0000')
     );
 }

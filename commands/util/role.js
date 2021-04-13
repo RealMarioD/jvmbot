@@ -51,7 +51,7 @@ exports.info = {
 
     name: 'role',
     category: 'egyéb',
-    syntax: '<role>',
+    syntax: '[role]',
     description: 'Ezzel a paranccsal tudsz role-okat szerezni.',
     requiredPerm: null
 

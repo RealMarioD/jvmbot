@@ -37,22 +37,28 @@ exports.run = (client, message, args) => {
         let reqPerm;
         switch(commandFile.info.requiredPerm) {
             case 'developer':
-                reqPerm = 'fejlesztő';
+                reqPerm = 'Fejlesztői';
                 break;
 
             case 'moderator':
-                reqPerm = 'moderátor';
+                reqPerm = 'Moderátori';
                 break;
 
             case 'admin':
-                reqPerm = 'adminisztrátor';
+                reqPerm = 'Adminisztrátori';
                 break;
         }
-        message.channel.send(new MessageEmbed()
-            .setColor('#56f442')
-            .setTitle(`\`${client.config.prefix}${args[0].toLowerCase()}\``)
-            .setDescription(`${!commandFile.info.syntax ? '' : `**Értékek:** ${commandFile.info.syntax}\n`}${!commandFile.info.description ? '' : `**Információ:** ${commandFile.info.description}\n`}${!commandFile.info.aliases ? '' : `**Aliasok:** ${commandFile.info.aliases.map(c => '`' + c + '`').join(', ')}`}\n${!reqPerm ? '' : `__Ezt a parancsot csak ${reqPerm} rangúak tudják használni!__`}`)
-        );
+        const cmdEmbed = new MessageEmbed()
+            .setTitle(`\`${client.config.prefix}${args[0].toLowerCase()}\` ${reqPerm ? `- __${reqPerm}__ parancs` : ''}`);
+
+        if(typeof commandFile.info.syntax == 'string') {
+            if(commandFile.info.syntax) cmdEmbed.addField('Változók:', `\`.${commandFile.info.name} ${commandFile.info.syntax}\``);
+        }
+        else cmdEmbed.addField('Változók:', commandFile.info.syntax.map(s => `\`.${commandFile.info.name} ${s.syn}\` - ${s.desc}`).join('\n'));
+        if(commandFile.info.description) cmdEmbed.addField('Információ:', commandFile.info.description); !reqPerm ? '' : `__Ezt a parancsot csak ${reqPerm} rangúak tudják használni!__`;
+        if(commandFile.info.aliases) cmdEmbed.addField('Aliasok:', commandFile.info.aliases.map(c => '`' + c + '`').join(', '));
+
+        message.channel.send(cmdEmbed);
     }
     catch(err) {
         message.channel.send('> ❌ **| Ez a parancs nem létezik!**');
@@ -63,9 +69,11 @@ exports.info = {
 
     name: 'parancsok',
     category: 'egyéb',
-    syntax: '<parancs>',
+    syntax: [
+        { syn: '[parancs]', desc: 'A parancs amiről infót szeretnél lekérdezni.' }
+    ],
     description: 'Visszaadja az összes parancsot.',
     requiredPerm: null,
-    aliases: ['parancs', 'commands', 'com', 'comm', 'command', 'help']
+    aliases: ['parancs', 'commands', 'command', 'help', 'hlep']
 
 };

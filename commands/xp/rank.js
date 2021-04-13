@@ -18,7 +18,6 @@ function shadowColour(ogColour) {
 }
 
 exports.run = async (client, message, args) => {
-    message.guild.members.fetch();
     let member;
     if(args.length > 0) member = findMember(args[0], message);
     if(!member) member = message.member;
@@ -103,7 +102,7 @@ exports.info = {
 
     name: 'rank',
     category: 'xp',
-    syntax: '',
+    syntax: '[tag]',
     description: 'Kiírja, mennyi XP-d van.',
     requiredPerm: null,
     aliases: ['xp', 'szint']

@@ -32,7 +32,7 @@ exports.info = {
 
     name: 'userinfo',
     category: 'egyéb',
-    syntax: '',
+    syntax: '[tag]',
     description: 'Információt nyújt rólad',
     requiredPerm: null,
     aliases: ['whois']

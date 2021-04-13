@@ -30,7 +30,9 @@ exports.info = {
 
     name: 'ping',
     category: 'egyéb',
-    syntax: '',
+    syntax: [
+        { syn: '[tag]', desc: 'Nem egy "easter egg" minigame... 👀' }
+    ],
     description: 'Megmondja a válaszidőt.',
     requiredPerm: null
 };

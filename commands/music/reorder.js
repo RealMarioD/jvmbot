@@ -28,8 +28,10 @@ exports.info = {
 
     name: 'reorder',
     category: 'music',
-    syntax: '',
-    description: 'A listát lehet módosítani ezzel a paranccsal.',
+    syntax: [
+        { syn: '<zene száma a lejátszási listán> [célhely]', desc: 'Ha nincs célhely megadva, alapból az első helyre mozgatja az adott számot.' }
+    ],
+    description: 'A lista sorrendjén lehet módosítani ezzel a paranccsal.',
     requiredPerm: null,
     aliases: ['order', 'move']
 

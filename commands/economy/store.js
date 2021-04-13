@@ -12,31 +12,8 @@ exports.run = (client, message, args) => {
             const amt = parseInt(args[2]);
             if(amt > 0 || args[0] == 'inv' || args[0] == 'list') {
                 switch(args[0]) {
-                    case 'buy': {
-                        const totalAmount = items[key].price * amt;
-                        if(user.money >= totalAmount) {
-                            if(!user.collection) {
-                                user.collection = {};
-                                user.collection[key] = {
-                                    amount: amt
-                                };
-                                user.money -= totalAmount;
-                            }
-                            else if(!user.collection[key]) {
-                                user.collection[key] = {
-                                    amount: amt
-                                };
-                                user.money -= totalAmount;
-                            }
-                            else {
-                                user.collection[key].amount += amt;
-                                user.money -= items[key].price * amt;
-                            }
-                            fs.writeFileSync('./assets/users.json', JSON.stringify(users, null, 2));
-                            message.channel.send(`>>> ✅ **| Vettél ${amt}db-ot \`${totalAmount}vm\`-ért ebből: \`${items[key].name}\`**`);
-                        }
-                        else message.channel.send('>>> ❌ **| Nincs elegendő pénzed!**');
-                    }
+                    case 'buy':
+                        message.channel.send('> ❌ **| Ez a parancs a kihasználatlansága miatt törölve lesz, az inventory rendszerrel együtt, így már nem lehet vásárolni.');
                         break;
 
                     case 'sell': {

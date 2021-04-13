@@ -7,17 +7,21 @@ module.exports = (client, message) => {
     if(message.content == '<@!585811477601189889>' || message.content == '<@585811477601189889>') message.channel.send('A prefixem `.`\nA `.parancsok`-al megismerheted az összes parancsom!');
 
     // Deletes every message in igazol unless author is admin
-    if(message.channel.id == client.config.channels.igazol &&
-    !message.member._roles.includes(client.config.roles.admin)) {
+    if(message.channel.id == client.config.channels.igazol && !message.member._roles.includes(client.config.roles.admin)) {
         sleep(1000)
         .then(() => {
             message.delete();
         });
     }
-    const splitContent = message.content.split(':');
-    if(!message.author.bot && splitContent.some(x => client.emojis.cache.find(e => e.name === x) && (!client.emojis.cache.find(e => e.name === x).available || client.emojis.cache.find(e => e.name === x).animated || client.emojis.cache.find(e => e.name === x).guild.name === 'j v m b o t'))) webHook(splitContent, message);
 
     if(message.author.bot) return;
+
+    const splitContent = message.content.split(':');
+    if(splitContent.some(x => client.emojis.cache.find(e => e.name == x) &&
+        (!client.emojis.cache.find(e => e.name == x).available ||
+        client.emojis.cache.find(e => e.name == x).animated ||
+        client.emojis.cache.find(e => e.name == x).guild.name == 'j v m b o t'))) webHook(splitContent, message);
+
     if(client.user.id == client.config.devID && !message.content.startsWith(client.config.devPrefix)) return; // no xp to not fuck up roles and such
     if(client.user.id == client.config.normalID && !message.content.startsWith(client.config.prefix)) return addXP();
 

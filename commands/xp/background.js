@@ -34,7 +34,7 @@ exports.info = {
 
     name: 'background',
     category: 'xp',
-    syntax: '<kép>',
+    syntax: '<kép URL|csatolva>',
     description: 'Megváltoztatja a profilod háttérképét',
     requiredPerm: null,
     aliases: ['bg']

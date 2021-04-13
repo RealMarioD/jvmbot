@@ -67,7 +67,7 @@ exports.info = {
 
     name: 'cases',
     category: 'admin',
-    syntax: '<case id> <bool> <notes>',
+    syntax: '<caseID> [delete|elfogadva|megvalósítva|elutasítva|...] [megjegyzés]',
     description: 'Ezzel a paranccsal lehet kezelni az ötleteket és hibákat.',
     requiredPerm: 'admin'
 

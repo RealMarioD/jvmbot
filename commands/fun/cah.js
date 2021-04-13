@@ -217,7 +217,9 @@ exports.info = {
 
     name: 'cah',
     category: 'szórakozás',
-    syntax: '[körök száma 1-5] [körönként új kártyák?]',
+    syntax: [
+        { syn: '[körök száma 1-5] [körönként új kártyák?]', desc: 'Körönként alapból új kártyák kerülnek kiosztásra, egy "nem" válasz kikapcsolja ezt.' }
+    ],
     description: 'Emberiség-ellenes-kártyák, aka Cards Against Humanity. Minden játékos kap 10 fehér kártyát, amivel a furcsábbnál furcsább fekete kártyákra kell válaszolni. Akinél éppen fekete kártya van, azaz osztó, a beadott fehér kártyák közül kell kiválasztania a számára legtetszőbbet, a választott pedig pontot kap. A játék végén a legtöbb pontot szerző játékos nyer.',
     requiredPerm: 'moderator',
     aliases: ['eek']

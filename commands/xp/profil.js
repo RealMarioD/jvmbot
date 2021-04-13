@@ -16,11 +16,11 @@ exports.run = (client, message, args) => {
 
 exports.info = {
 
-    name: 'profil',
+    name: 'profilcolor',
     category: 'xp',
     syntax: '<hex szín>',
     description: 'Megváltoztatja a profilod színét',
     requiredPerm: null,
-    aliases: ['profile']
+    aliases: ['profilcolour']
 
 };
